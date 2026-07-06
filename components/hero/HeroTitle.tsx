@@ -2,14 +2,9 @@ import { identity } from "@/content/identity";
 
 export function HeroTitle() {
   return (
-    <div className="flex flex-col gap-5">
-      <p className="text-label font-medium text-muted-foreground">
-        {identity.name}
-      </p>
-      <h1
-        id="hero-heading"
-        className="max-w-reading text-hero font-semibold text-balance text-foreground"
-      >
+    <div className="hero-title-group">
+      <p className="hero-eyebrow">{identity.name}</p>
+      <h1 id="hero-heading" className="hero-headline">
         {identity.headline}
       </h1>
     </div>
