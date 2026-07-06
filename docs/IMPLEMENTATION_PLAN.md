@@ -232,7 +232,7 @@ Core constraints:
 | Dependencies | Milestones 1-14 |
 | Deliverables | Production build audit, static route validation, bundle review, font loading review, image handling review, dependency audit, Lighthouse pass. |
 | Files affected | Build configuration, asset configuration, font setup, component imports, performance test setup. |
-| Acceptance Criteria | No unnecessary client components. No unapproved heavy animation libraries. No unused routes or assets. Static pages render without layout shift from missing media. Numeric Lighthouse targets are `MISSING INFORMATION`, but architecture should aim for high scores and resolve measurable gaps before production. |
+| Acceptance Criteria | No unnecessary client components. No unapproved heavy animation libraries. No unused routes or assets. Static pages render without layout shift from missing media. Production Lighthouse scores target 90+ for Performance, Accessibility, Best Practices, and SEO. |
 | Estimated Complexity | Medium |
 | Risk Level | Medium |
 | Rollback Strategy | Revert individual optimization changes if visual or content regressions occur. |
@@ -684,7 +684,7 @@ Visual regression should be introduced once core UI is stable:
 |---|---|
 | Production build | Must pass before merge and deployment. |
 | Bundle analysis | Review before production release. |
-| Lighthouse | Run before production release; numeric targets remain `MISSING INFORMATION`. |
+| Lighthouse | Run before production release; target 90+ for Performance, Accessibility, Best Practices, and SEO. |
 | Core Web Vitals | Validate architecture supports good LCP, CLS, and INP. |
 | Static export | Validate if selected deployment target requires fully static output. |
 

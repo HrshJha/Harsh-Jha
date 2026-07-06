@@ -227,7 +227,7 @@ No component may own unrelated copy, data transformation, navigation state, anim
 
 | Component | Purpose | Inputs | Behavior | Accessibility | Responsive Behavior | Animation | Acceptance Criteria |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `404` | Unknown route page. | Copy MISSING INFORMATION. | App Router not-found surface. | Proper heading and navigation path once copy approved. | Mobile readable. | None. | Exists structurally; visible copy must be approved. |
+| `404` | Unknown route page. | Approved copy: "Page not found." | App Router not-found surface. | Proper heading and navigation path to Home or Projects. | Mobile readable. | None. | Exists structurally with source-backed system copy. |
 | `ImageFallback` | Handle broken image. | Fallback copy/image MISSING INFORMATION. | Future-only. | Must not announce decorative fallback. | Preserves layout. | None. | Not needed until images approved. |
 | `UnavailableDemo` | Demo unavailable state. | Demo copy MISSING INFORMATION. | Not implemented; demo URLs missing. | Not applicable. | Not applicable. | None. | Must not appear for MVP. |
 | `UnknownError` | Unexpected runtime error surface. | Error copy MISSING INFORMATION. | App error boundary if needed. | Proper alert/heading if implemented. | Mobile readable. | None. | Does not invent error copy. |
