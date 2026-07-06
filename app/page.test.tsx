@@ -38,19 +38,19 @@ describe("Home", () => {
 
   it("renders the approved social links", () => {
     render(<Home />);
-    const socialProfiles = screen.getByRole("list", { name: "Social profiles" });
+    const socialProfiles = screen.getByRole("list", {
+      name: "Social profiles",
+    });
 
-    expect(within(socialProfiles).getByRole("link", { name: "GitHub" })).toHaveAttribute(
-      "href",
-      "https://github.com/HrshJha",
-    );
+    expect(
+      within(socialProfiles).getByRole("link", { name: "GitHub" }),
+    ).toHaveAttribute("href", "https://github.com/HrshJha");
     expect(
       within(socialProfiles).getByRole("link", { name: "LinkedIn" }),
     ).toHaveAttribute("href", "https://www.linkedin.com/in/hrshjha/");
-    expect(within(socialProfiles).getByRole("link", { name: "X" })).toHaveAttribute(
-      "href",
-      "https://x.com/m_eharsh",
-    );
+    expect(
+      within(socialProfiles).getByRole("link", { name: "X" }),
+    ).toHaveAttribute("href", "https://x.com/m_eharsh");
   });
 
   it("renders the static hero systems visual", () => {
