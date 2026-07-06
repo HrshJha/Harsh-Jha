@@ -1,13 +1,12 @@
-import type { ElementType, ReactNode } from "react";
+import type { ElementType, HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
 type CardVariant = "default" | "raised" | "inset";
 
-interface CardProps {
+interface CardProps extends HTMLAttributes<HTMLElement> {
   readonly as?: ElementType;
   readonly variant?: CardVariant;
   readonly interactive?: boolean;
-  readonly className?: string;
   readonly children: ReactNode;
 }
 
@@ -23,11 +22,13 @@ export function Card({
   interactive = false,
   className,
   children,
+  ...props
 }: CardProps) {
   const Component = as ?? "div";
 
   return (
     <Component
+      {...props}
       className={cn(
         "rounded-md border p-6",
         VARIANT_STYLES[variant],

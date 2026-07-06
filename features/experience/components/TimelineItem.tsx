@@ -2,6 +2,8 @@
 
 import { useId, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { TechnologyList } from "@/components/experience/TechnologyList";
 import type { ExperienceRole } from "@/types/experience";
 
@@ -41,8 +43,10 @@ export function TimelineItem({ entry }: TimelineItemProps) {
   const contentId = useId();
 
   return (
-    <article
-      className="flex flex-col gap-5 rounded-lg border border-border p-6"
+    <Card
+      as="article"
+      variant="default"
+      className="flex flex-col gap-5"
       aria-label={entry.company}
     >
       <div className="flex flex-col gap-4">
@@ -77,15 +81,16 @@ export function TimelineItem({ entry }: TimelineItemProps) {
           </div>
         </dl>
 
-        <button
-          type="button"
+        <Button
           aria-expanded={isExpanded}
           aria-controls={contentId}
           onClick={() => setIsExpanded((current) => !current)}
-          className="inline-flex h-10 w-fit items-center justify-center rounded-md border border-border px-4 text-sm font-medium text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          variant="secondary"
+          size="sm"
+          className="w-fit"
         >
           {isExpanded ? "Hide Details" : "Expand Experience"}
-        </button>
+        </Button>
       </div>
 
       {isExpanded ? (
@@ -97,7 +102,7 @@ export function TimelineItem({ entry }: TimelineItemProps) {
             {entry.about.map((paragraph) => (
               <p
                 key={paragraph}
-                className="max-w-text text-body leading-7 text-muted-foreground"
+                className="max-w-text text-body leading-(--leading-body) text-muted-foreground"
               >
                 {paragraph}
               </p>
@@ -141,12 +146,12 @@ export function TimelineItem({ entry }: TimelineItemProps) {
           </DetailSection>
 
           <DetailSection title="Impact">
-            <p className="max-w-text text-body leading-7 text-muted-foreground">
+            <p className="max-w-text text-body leading-(--leading-body) text-muted-foreground">
               {entry.impact}
             </p>
           </DetailSection>
         </div>
       ) : null}
-    </article>
+    </Card>
   );
 }

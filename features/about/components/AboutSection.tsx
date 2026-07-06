@@ -33,7 +33,7 @@ function SectionBlock({
 
   return (
     <section className="flex flex-col gap-4 border-b border-border pb-8 last:border-b-0 last:pb-0">
-      <HeadingTag className="text-section-heading font-semibold text-foreground ">
+      <HeadingTag className="text-section-heading font-semibold text-foreground">
         {title}
       </HeadingTag>
       {children}
@@ -56,8 +56,8 @@ export function AboutSection({
           id={headingId}
           className={
             headingLevel === 1
-              ? "text-page-title font-semibold text-foreground "
-              : "text-section-heading font-semibold text-foreground "
+              ? "text-page-title font-semibold text-foreground"
+              : "text-section-heading font-semibold text-foreground"
           }
         >
           {heading}
@@ -65,13 +65,13 @@ export function AboutSection({
       ) : null}
 
       <SectionBlock title="About Me" headingLevel={sectionBlockHeadingLevel}>
-        <p className="max-w-text text-body leading-7 text-muted-foreground">
+        <p className="max-w-text text-body leading-(--leading-body) text-muted-foreground">
           I&apos;m Harsh Kumar Jha, an Electronics &amp; Communication
           Engineering student at Maharaja Surajmal Institute of Technology with
           a strong interest in AI systems, machine learning, and production
           engineering.
         </p>
-        <p className="max-w-text text-body leading-7 text-muted-foreground">
+        <p className="max-w-text text-body leading-(--leading-body) text-muted-foreground">
           I enjoy turning research ideas into real software by combining
           engineering fundamentals, scalable system design, and practical
           implementation. My goal is to build AI products that are reliable,
@@ -83,7 +83,7 @@ export function AboutSection({
         title="Engineering Philosophy"
         headingLevel={sectionBlockHeadingLevel}
       >
-        <p className="max-w-text text-body leading-7 text-muted-foreground">
+        <p className="max-w-text text-body leading-(--leading-body) text-muted-foreground">
           The principles that guide how I approach engineering and problem
           solving.
         </p>

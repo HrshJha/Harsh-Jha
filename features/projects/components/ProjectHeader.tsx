@@ -12,10 +12,12 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
     <header className="flex flex-col gap-6 border-b border-border pb-10">
       <div className="flex flex-wrap items-center gap-2">
         <StatusBadge status={project.status} />
-        <span className="text-label text-muted-foreground">{project.category}</span>
+        <span className="text-label text-muted-foreground">
+          {project.category}
+        </span>
       </div>
-      <div className="flex max-w-4xl flex-col gap-4">
-        <h1 className="text-page-title font-semibold text-foreground ">
+      <div className="flex max-w-reading flex-col gap-4">
+        <h1 className="text-page-title font-semibold text-foreground">
           {project.name}
         </h1>
         <p className="text-section-heading font-medium text-foreground">
@@ -34,7 +36,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
           target="_blank"
           rel="noreferrer"
           variant="secondary"
-          className="h-10 px-4 text-sm"
+          size="sm"
         >
           GitHub
         </Button>
