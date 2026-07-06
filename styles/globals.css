@@ -83,8 +83,7 @@
   color-scheme: light;
   --font-interface: var(--font-geist-sans), ui-sans-serif, system-ui,
     -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-technical: var(--font-geist-mono), "SFMono-Regular", Consolas,
-    "Liberation Mono", monospace;
+  --font-technical: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --leading-display: 1.05;
   --leading-heading: 1.15;
   --leading-body: 1.6;
