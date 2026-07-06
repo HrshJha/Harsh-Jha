@@ -21,24 +21,24 @@ Core constraints:
 
 ## 2. Milestones
 
-| Milestone | Name | Primary Outcome | Dependency |
-|---|---|---|---|
-| 1 | Project Initialization | Production-ready Next.js, TypeScript, Tailwind, linting, formatting, and folder baseline. | Source documents |
-| 2 | Core Architecture | Routes, layouts, content model, metadata foundation, and shared primitives. | Milestone 1 |
-| 3 | Navigation | Desktop and mobile navigation with source-backed labels and accessible behavior. | Milestone 2 |
-| 4 | Hero | Homepage entry section with approved messaging and CTAs. | Milestones 2-3 |
-| 5 | Projects | Project overview, featured cards, minimal project detail pages, and project status. | Milestones 2-4 |
-| 6 | Experience | Experience section and route using approved roles, companies, and highlights. | Milestone 2 |
-| 7 | About | About route and sections using approved identity, philosophy, values, and focus areas. | Milestone 2 |
-| 8 | Skills | Skills section and route content using approved categories and skills only. | Milestone 2 |
-| 9 | Education | Education section and route using approved institution, degree, graduation year, and CGPA. | Milestone 2 |
-| 10 | Resume | Resume route and CTA handling, with asset-dependent download/open behavior deferred until resume asset/path exists. | Milestones 2-4 |
-| 11 | Contact | Contact route and direct contact links with no backend form. | Milestone 2 |
-| 12 | Animations | Purposeful transitions and reduced-motion behavior. | Milestones 3-11 |
-| 13 | Accessibility | Full accessibility pass across routes and components. | Milestones 3-12 |
-| 14 | SEO | Metadata, structured data, sitemap, robots, and canonical handling where source-backed. | Milestones 2-13 |
-| 15 | Optimization | Performance, bundle, image, font, and static export validation. | Milestones 1-14 |
-| 16 | Deployment | Preview and production deployment with rollback process. | Milestones 1-15 |
+| Milestone | Name | Primary Outcome | Dependency | Status |
+|---|---|---|---|---|
+| 1 | Project Initialization | Production-ready Next.js, TypeScript, Tailwind, linting, formatting, and folder baseline. | Source documents | Complete (2026-07-06) |
+| 2 | Core Architecture | Routes, layouts, content model, metadata foundation, and shared primitives. | Milestone 1 | Complete (2026-07-06) |
+| 3 | Navigation | Desktop and mobile navigation with source-backed labels and accessible behavior. | Milestone 2 | Complete (2026-07-06) |
+| 4 | Hero | Homepage entry section with approved messaging and CTAs. | Milestones 2-3 | Complete (2026-07-06) |
+| 5 | Projects | Project overview, featured cards, minimal project detail pages, and project status. | Milestones 2-4 | Not started |
+| 6 | Experience | Experience section and route using approved roles, companies, and highlights. | Milestone 2 | Not started |
+| 7 | About | About route and sections using approved identity, philosophy, values, and focus areas. | Milestone 2 | Not started |
+| 8 | Skills | Skills section and route content using approved categories and skills only. | Milestone 2 | Not started |
+| 9 | Education | Education section and route using approved institution, degree, graduation year, and CGPA. | Milestone 2 | Not started |
+| 10 | Resume | Resume route and CTA handling, with asset-dependent download/open behavior deferred until resume asset/path exists. | Milestones 2-4 | Not started |
+| 11 | Contact | Contact route and direct contact links with no backend form. | Milestone 2 | Not started |
+| 12 | Animations | Purposeful transitions and reduced-motion behavior. | Milestones 3-11 | Not started |
+| 13 | Accessibility | Full accessibility pass across routes and components. | Milestones 3-12 | Not started |
+| 14 | SEO | Metadata, structured data, sitemap, robots, and canonical handling where source-backed. | Milestones 2-13 | Not started |
+| 15 | Optimization | Performance, bundle, image, font, and static export validation. | Milestones 1-14 | Not started |
+| 16 | Deployment | Preview and production deployment with rollback process. | Milestones 1-15 | Not started |
 
 ## 3. Feature Breakdown
 
