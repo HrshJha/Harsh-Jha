@@ -1,23 +1,28 @@
 import { HeroTitle } from "@/components/hero/HeroTitle";
 import { HeroSubtitle } from "@/components/hero/HeroSubtitle";
 import { CTAGroup } from "@/components/hero/CTAGroup";
+import { HeroTrustRow } from "@/components/hero/HeroTrustRow";
 import { SocialLinks } from "@/components/hero/SocialLinks";
 import { HeroVisual } from "@/components/hero/HeroVisual";
 
 export function HeroSection() {
   return (
-    <div className="grid items-center gap-12 py-12 lg:grid-cols-2 lg:py-16">
-      <div className="flex max-w-reading flex-col gap-8">
-        <div className="flex flex-col gap-6">
+    <div className="hero-shell">
+      <div className="hero-depth" aria-hidden="true" />
+      <div className="hero-layout">
+        <div className="hero-copy">
           <HeroTitle />
           <HeroSubtitle />
-        </div>
-        <div className="flex flex-col gap-6">
           <CTAGroup />
+          <HeroTrustRow />
           <SocialLinks />
         </div>
+        <HeroVisual />
       </div>
-      <HeroVisual />
+      <div className="hero-scroll-indicator" aria-hidden="true">
+        <span>Scroll to explore</span>
+        <span>↓</span>
+      </div>
     </div>
   );
 }
