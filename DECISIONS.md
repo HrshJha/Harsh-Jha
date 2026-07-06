@@ -324,3 +324,142 @@ must not compete with primary navigation." Social/contact links belong to
 Milestone 11 (Contact) and the Footer tasks, not Milestone 3.
 
 **Trade-offs:** None; this is the documented scope boundary.
+
+---
+
+## 2026-07-06 — Milestone 4: `docs/DESIGN_SYSTEM.md`'s MVP token baseline was never actually wired
+
+**Decision:** Before implementing Hero, added a Tailwind v4 `@theme` block
+to `styles/globals.css` mapping the concrete color, typography, radius,
+container-width, and motion values from `docs/DESIGN_SYSTEM.md` §2-4, §12.
+
+**Reason:** Milestones 1-3 comments (`components/ui/Container.tsx`,
+`Grid.tsx`, `components/layout/PageWrapper.tsx`) asserted these token
+values were `MISSING INFORMATION`. That's false — `docs/DESIGN_SYSTEM.md`
+§2 "Design Tokens" opens with "Token values below define the MVP
+implementation baseline" and lists real hex/rem/ms values throughout §2-4
+and §12 (Motion Tokens). Only a handful of narrow items (Loading button
+state, badge text like "Featured", form validation copy, image assets) are
+actually marked `MISSING INFORMATION` in that document. Hero needed real
+colors and a heading type scale to comply with the Styling Rule "Always
+use semantic design tokens," so this had to be resolved before Hero, not
+deferred again. Flagged to you before starting; you asked to wire tokens
+now.
+
+**Trade-offs:** This is a foundational, cross-cutting change (touches the
+one global stylesheet), not a Hero-only change — by definition broader
+than `docs/IMPLEMENTATION_PLAN.md`'s Milestone 4 file list. I did not
+retrofit `Grid.tsx` or `PageWrapper.tsx` to use the now-available tokens,
+since neither is used by Hero; their "missing token" comments are now
+known to be inaccurate and should be corrected when a milestone actually
+exercises them (`Grid.tsx` most likely in Milestone 5 Projects). I did fix
+`Container.tsx`'s max-width (see next entry) since Hero renders through it
+immediately on every page.
+
+---
+
+## 2026-07-06 — Milestone 4: spacing, radius, and button-size tokens use Tailwind's built-in scale, not custom theme entries
+
+**Decision:** `styles/globals.css`'s new `@theme` block does not define
+custom `space.*` or `button.size.*` tokens, and only explicitly restates
+`radius.sm` (the one value that actually differs from Tailwind's default).
+
+**Reason:** `docs/DESIGN_SYSTEM.md`'s spacing scale (`space.1`...`space.8`
+= 0.25rem, 0.5rem, 0.75rem, 1rem, 1.5rem, 2rem, 3rem, 4rem) is generated
+by Tailwind v4's own dynamic spacing utilities (base unit `--spacing:
+0.25rem`) at different index numbers — `space.5` (1.5rem) is Tailwind's
+`p-6`, `space.6` (2rem) is `p-8`, `space.7` (3rem) is `p-12`, `space.8`
+(4rem) is `p-16`. Button heights match the same way: `button.size.md`
+(2.5rem) is Tailwind's `h-10`, `button.size.lg` (3rem) is `h-12` — both
+exact. Radius mostly matches too (`radius.md`/6px = `rounded-md`,
+`radius.lg`/8px = `rounded-lg`, `radius.full` = `rounded-full`); only
+`radius.sm` differs (doc: 4px, Tailwind default: 2px), so that one is
+explicitly overridden in `@theme`. Adding redundant named tokens for
+values Tailwind's numeric scale already produces exactly would just be
+duplication with a second name to keep in sync.
+
+**Trade-offs:** Anyone reading `Button.tsx`/`Container.tsx` needs this
+mapping to trust that e.g. `h-12` really is `button.size.lg` and not an
+arbitrary guess — this file is the place that mapping is recorded.
+
+---
+
+## 2026-07-06 — Milestone 4: no real Geist font is loaded
+
+**Decision:** `--font-sans` in the new theme block is the literal
+fallback stack from `docs/DESIGN_SYSTEM.md` §4 ("Geist Sans", "Inter",
+ui-sans-serif, system-ui, sans-serif), but no font is actually loaded —
+"Geist Sans" and "Inter" both resolve past to `system-ui`/`sans-serif` in
+every browser today.
+
+**Reason:** Geist isn't on Google Fonts, so `next/font/google` can't load
+it; loading it for real requires either the `geist` npm package or local
+font files, and no font asset/package exists in this repo yet.
+`CLAUDE.md`'s Completion Rules require your approval before adding a
+dependency, and Milestone 1 already made the equivalent call (removing
+the scaffold's Geist integration) for the same reason. This preserves
+that call rather than quietly reversing it.
+
+**Trade-offs:** The site currently renders in each OS's default UI font,
+not Geist/Inter. Say the word and I'll add the `geist` package (or local
+font files if you have them) and wire it through `next/font`.
+
+---
+
+## 2026-07-06 — Milestone 4: professional headline uses the larger `type.hero` scale, not the H1
+
+**Decision:** `HeroTitle` renders the approved H1 ("Harsh Kumar Jha") at
+`type.pageTitle` size (2rem/2.5rem) and the professional headline
+("Building AI Products, Open Source & Real-World Solutions") at the
+larger `type.hero` size (2.5rem/3.5rem) below it — visually inverted from
+what "H1 is the biggest text" intuition would suggest.
+
+**Reason:** `docs/DESIGN_SYSTEM.md` §4 labels the `type.hero` token's own
+usage as "Hero headline," and `type.pageTitle`'s usage as "Page-level
+title... Clear identity or page purpose" — the document's own token names
+map the professional headline to `type.hero` and the name/identity to
+`type.pageTitle`. `docs/CONTENT_SPEC.md` §4 separately requires the H1 to
+be exactly "Harsh Kumar Jha" for SEO, but heading level and visual size
+are independent concerns: the H1 stays first in the DOM and is the
+correct heading level regardless of its rendered font size.
+
+**Trade-offs:** Judgment call, not explicitly specified — flag if you
+want the name rendered larger than the headline instead.
+
+---
+
+## 2026-07-06 — Milestone 4: `Button` primary/secondary hover treatment
+
+**Decision:** Primary button hovers from `color.primary` (#111827) to
+`color.secondary` (#374151); secondary (outline) button hovers from
+transparent to `color.state.hover` (#f3f4f6).
+
+**Reason:** `docs/DESIGN_SYSTEM.md` §7/§390 requires buttons to "confirm
+interactivity without layout shift" on hover but doesn't specify an exact
+per-variant hover recipe. Reusing already-semantic tokens (`color.state.hover`
+for the light/outline button, `color.secondary` — literally "Secondary
+interface emphasis" — for the dark filled button) avoids inventing a new
+color while still giving each variant a visible, restrained hover state.
+
+**Trade-offs:** Judgment call — flag if you'd rather use opacity-only
+hover feedback instead.
+
+---
+
+## 2026-07-06 — Milestone 4: `SocialLinks` lives in `components/hero/`, not a shared folder
+
+**Decision:** `SocialLinks` is `components/hero/SocialLinks.tsx`, scoped
+to Hero, even though `docs/COMPONENT_SPEC.md`'s component tree also shows
+it composed under future Contact/Footer sections.
+
+**Reason:** Milestone 4's own `docs/IMPLEMENTATION_PLAN.md` file list only
+names `components/hero/`; no `components/shared/` folder exists yet (see
+the Milestone 2 folder-ownership decision above), and Hero is the only
+consumer today. Mirrors how Milestone 3 scoped `Logo`/`NavItem` to
+`components/navigation/` despite their reuse potential.
+
+**Trade-offs:** When Milestone 11 (Contact) or the Footer tasks need
+this component, it will likely move to a shared location and both call
+sites will need updating — cheap now (one file, no other consumers),
+more disruptive later. Flag if you'd rather place it in a shared location
+now to avoid that move.

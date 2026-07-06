@@ -139,3 +139,55 @@ file.
 
 **Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
 `pnpm test` (7 test files, 11 tests passing), `pnpm build`.
+
+---
+
+## 2026-07-06 — Milestone 4: Hero
+
+**Added:**
+
+- Tailwind v4 `@theme` block in `styles/globals.css` wiring the MVP token
+  baseline from `docs/DESIGN_SYSTEM.md` §2-4, §12: colors, typography
+  scale (`type.hero`, `type.pageTitle`, `type.body` with paired line
+  heights), border radius, container widths, and motion (duration/easing)
+  tokens. Milestones 1-3 had wrongly treated these as `MISSING
+INFORMATION`; see `DECISIONS.md`.
+- `types/home.ts`, `content/home.ts` (+ `content/home.test.ts`) — hero CTA
+  labels/destinations (`View Projects` → `/projects`, `Resume` →
+  `/resume`).
+- `components/ui/Button.tsx` — base action primitive (`variant`: primary/
+  secondary; renders as a link when `href` is given, otherwise a native
+  `button`), keyboard-focusable with a visible focus ring.
+- `components/hero/`: `HeroTitle` (H1 "Harsh Kumar Jha" + professional
+  headline), `HeroSubtitle` (hero statement), `CTAGroup` (View
+  Projects/Resume buttons), `SocialLinks` (GitHub/LinkedIn/X as text
+  links, no icons), `HeroSection` (composes all four).
+
+**Modified:**
+
+- `components/ui/Container.tsx` — now applies `max-w-content` (72rem) and
+  responsive horizontal padding, since the container-width tokens it was
+  waiting on turned out to already be defined.
+- `app/page.tsx` — renders `HeroSection` instead of the Milestone 1/2
+  placeholder heading.
+- `app/page.test.tsx` — extended to also assert the professional headline,
+  hero statement, both CTA destinations, and all three social link URLs.
+
+**Not implemented (explicitly deferred):** `Grid.tsx`/`PageWrapper.tsx`
+retrofits (tokens now available but neither is used by Hero — deferred to
+whichever milestone first exercises them), real Geist font loading (would
+require a new dependency or font asset, not yet approved), any hover/
+focus motion beyond color/opacity transitions (purposeful only, no
+section-entry animation — that's Milestone 12).
+
+**Judgment calls made** (see `DECISIONS.md` for full reasoning): the
+professional headline renders larger (`type.hero`) than the H1
+(`type.pageTitle`); `Button` primary/secondary hover colors; `SocialLinks`
+scoped to `components/hero/` rather than a shared folder.
+
+**Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
+`pnpm test` (8 test files, 15 tests passing), `pnpm build` (all 12 routes
+prerendered statically). Also spot-checked the compiled production CSS to
+confirm the new `@theme` tokens and the `duration-(--duration-fast)`/
+`ease-(--ease-standard)` arbitrary-value syntax actually compiled to the
+expected declarations rather than being silently dropped.
