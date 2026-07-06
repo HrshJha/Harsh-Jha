@@ -2,12 +2,15 @@ import type { MouseEventHandler, ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
 
-type ButtonVariant = "primary" | "secondary";
+type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 interface BaseButtonProps {
   readonly variant?: ButtonVariant;
+  readonly size?: ButtonSize;
   readonly className?: string;
   readonly ariaLabel?: string;
+  readonly loading?: boolean;
   readonly children: ReactNode;
 }
 
@@ -17,7 +20,7 @@ interface LinkButtonProps extends BaseButtonProps {
   readonly target?: string;
   readonly rel?: string;
   readonly onClick?: undefined;
-  readonly disabled?: undefined;
+  readonly disabled?: boolean;
 }
 
 interface ActionButtonProps extends BaseButtonProps {
@@ -31,31 +34,47 @@ interface ActionButtonProps extends BaseButtonProps {
 
 type ButtonProps = LinkButtonProps | ActionButtonProps;
 
-// DESIGN_SYSTEM.md §7 Button Variants/Sizes. `button.size.lg` (3rem) and
-// its padding use Tailwind's default h-12/px-8, which already match the
-// documented rem values 1:1 (see DECISIONS.md).
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
-  primary: "bg-primary text-surface-base hover:bg-secondary",
+  primary:
+    "border border-accent bg-accent text-accent-foreground hover:border-accent hover:bg-accent active:shadow-none",
   secondary:
-    "border border-primary bg-transparent text-primary hover:bg-state-hover",
+    "border border-border-strong bg-surface text-foreground hover:border-accent hover:bg-muted active:bg-surface-inset",
+  ghost:
+    "border border-transparent bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground active:bg-surface-inset",
+};
+
+const SIZE_STYLES: Record<ButtonSize, string> = {
+  sm: "min-h-10 px-4 text-label",
+  md: "min-h-11 px-6 text-label",
+  lg: "min-h-12 px-8 text-body-small",
+  icon: "size-11 px-0 text-label",
 };
 
 const BASE_STYLES = cn(
-  "inline-flex h-12 items-center justify-center rounded-md px-8",
-  "text-base font-medium",
-  "transition-colors duration-(--duration-fast) ease-(--ease-standard)",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus",
-  "disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-sm font-medium",
+  "transition-[background-color,border-color,color,box-shadow,transform] duration-(--duration-fast) ease-(--ease-standard)",
+  "hover:shadow-subtle active:translate-y-px",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+  "disabled:pointer-events-none disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
+  "aria-disabled:pointer-events-none aria-disabled:border-border aria-disabled:bg-muted aria-disabled:text-muted-foreground aria-disabled:shadow-none",
 );
 
 export function Button({
   variant = "primary",
+  size = "md",
   className,
   ariaLabel,
+  loading = false,
   children,
   ...props
 }: ButtonProps) {
-  const classes = cn(BASE_STYLES, VARIANT_STYLES[variant], className);
+  const isDisabled = Boolean(props.disabled || loading);
+  const classes = cn(
+    BASE_STYLES,
+    VARIANT_STYLES[variant],
+    SIZE_STYLES[size],
+    className,
+  );
 
   if (props.href !== undefined) {
     if (props.download || props.target) {
@@ -66,6 +85,7 @@ export function Button({
           target={props.target}
           rel={props.rel}
           aria-label={ariaLabel}
+          aria-disabled={isDisabled || undefined}
           className={classes}
         >
           {children}
@@ -73,7 +93,12 @@ export function Button({
       );
     }
     return (
-      <Link href={props.href} aria-label={ariaLabel} className={classes}>
+      <Link
+        href={props.href}
+        aria-label={ariaLabel}
+        aria-disabled={isDisabled || undefined}
+        className={classes}
+      >
         {children}
       </Link>
     );
@@ -83,8 +108,9 @@ export function Button({
     <button
       type="button"
       onClick={props.onClick}
-      disabled={props.disabled}
+      disabled={isDisabled}
       aria-label={ariaLabel}
+      aria-busy={loading || undefined}
       className={classes}
     >
       {children}

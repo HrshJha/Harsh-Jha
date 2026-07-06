@@ -15,11 +15,10 @@ export function NavItem({ label, href, isActive, onClick }: NavItemProps) {
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "relative inline-flex min-h-11 w-full items-center justify-center rounded-md px-3 text-label font-medium tracking-normal md:w-auto",
-        "text-text-secondary",
-        "transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus",
-        isActive &&
-          "border border-border-subtle bg-surface-raised text-text-primary",
+        "relative inline-flex min-h-11 w-full items-center justify-center rounded-sm px-3 text-label font-medium tracking-normal md:w-auto",
+        "text-muted-foreground",
+        "transition-[background-color,color,border-color] duration-(--duration-fast) ease-(--ease-standard) hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        isActive && "bg-surface-raised text-foreground",
       )}
     >
       <span>{label}</span>

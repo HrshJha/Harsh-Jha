@@ -13,7 +13,7 @@ export function ActiveIndicator({ isActive }: ActiveIndicatorProps) {
   return (
     <span
       aria-hidden="true"
-      className="absolute bottom-1.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-text-muted"
+      className="absolute inset-x-3 bottom-1 h-px rounded-sm bg-accent"
     />
   );
 }
