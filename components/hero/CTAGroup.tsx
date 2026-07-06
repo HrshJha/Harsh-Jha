@@ -8,13 +8,16 @@ export function CTAGroup() {
         href={heroCtas.primary.href}
         variant="primary"
         size="lg"
+        className="hero-primary-cta"
       >
         {heroCtas.primary.label}
       </Button>
       <Button
         href={heroCtas.secondary.href}
+        download={heroCtas.secondary.download}
         variant="secondary"
         size="lg"
+        className="hero-secondary-cta"
       >
         {heroCtas.secondary.label}
       </Button>
