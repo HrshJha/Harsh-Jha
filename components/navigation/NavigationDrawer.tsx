@@ -75,14 +75,12 @@ export function NavigationDrawer({
       className="fixed inset-0 z-50 flex flex-col bg-background-page px-4 py-5"
     >
       <div className="flex items-center justify-between border-b border-border-subtle pb-4">
-        <p className="text-[0.9375rem] font-semibold text-text-primary">
-          Navigation
-        </p>
+        <p className="text-body font-semibold text-text-primary">Navigation</p>
         <button
           type="button"
           onClick={onClose}
           aria-label="Close navigation"
-          className="inline-flex h-10 items-center rounded-md px-3 text-[0.875rem] font-medium text-text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+          className="inline-flex h-11 items-center rounded-md px-3 text-label font-medium text-text-secondary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
         >
           Close
         </button>

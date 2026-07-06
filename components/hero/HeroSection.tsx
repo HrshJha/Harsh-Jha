@@ -6,7 +6,7 @@ import { SocialLinks } from "@/components/hero/SocialLinks";
 function HeroVisual() {
   return (
     <div
-      className="relative hidden min-h-[30rem] items-center justify-center lg:flex"
+      className="relative hidden min-h-[28rem] items-center justify-center lg:flex"
       aria-hidden="true"
     >
       <div className="absolute inset-6 rounded-lg border border-border-subtle bg-surface-raised/50" />
@@ -59,14 +59,7 @@ function HeroVisual() {
             d="M116 332 C170 232 220 208 304 242 C354 262 382 226 420 150"
             stroke="url(#hero-line)"
             strokeWidth="2"
-          >
-            <animate
-              attributeName="stroke-dasharray"
-              values="0 560;220 340;0 560"
-              dur="10s"
-              repeatCount="indefinite"
-            />
-          </path>
+          />
           <path
             d="M118 184 C180 142 244 148 292 196 C340 244 388 272 430 250"
             stroke="currentColor"
@@ -100,14 +93,7 @@ function HeroVisual() {
               r={r}
               fill="url(#hero-node)"
               opacity={index === 3 ? "0.95" : "0.72"}
-            >
-              <animate
-                attributeName="opacity"
-                values="0.5;0.95;0.5"
-                dur={`${5 + index}s`}
-                repeatCount="indefinite"
-              />
-            </circle>
+            />
           ))}
         </g>
 
@@ -138,10 +124,6 @@ function HeroVisual() {
           />
         </g>
       </svg>
-      <div className="absolute bottom-10 left-10 rounded-md border border-border-subtle bg-surface-base px-4 py-3 shadow-sm">
-        <p className="text-label font-medium text-text-primary">AI Systems</p>
-        <p className="text-label text-text-muted">Research to Engineering</p>
-      </div>
     </div>
   );
 }

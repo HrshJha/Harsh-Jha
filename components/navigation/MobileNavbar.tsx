@@ -23,7 +23,7 @@ export function MobileNavbar() {
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-label="Open navigation"
-        className="inline-flex h-10 items-center gap-2 rounded-md border border-border-subtle px-3 text-[0.875rem] font-medium text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border-subtle px-3 text-label font-medium text-text-primary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
       >
         <span>Menu</span>
         <span className="flex flex-col gap-1" aria-hidden="true">

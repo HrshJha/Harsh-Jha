@@ -54,10 +54,12 @@ export default async function ProjectDetailPage({
 
   return (
     <PageWrapper>
-      <Section className="flex flex-col gap-10 py-12 md:py-16">
-        <ProjectHeader project={project} />
-        <ProjectCaseStudyContent project={project} />
-        <NavigationBetweenProjects currentSlug={project.slug} />
+      <Section className="py-12 md:py-16">
+        <div className="flex flex-col gap-10">
+          <ProjectHeader project={project} />
+          <ProjectCaseStudyContent project={project} />
+          <NavigationBetweenProjects currentSlug={project.slug} />
+        </div>
       </Section>
     </PageWrapper>
   );

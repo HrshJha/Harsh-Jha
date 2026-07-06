@@ -7,6 +7,7 @@ type ButtonVariant = "primary" | "secondary";
 interface BaseButtonProps {
   readonly variant?: ButtonVariant;
   readonly className?: string;
+  readonly ariaLabel?: string;
   readonly children: ReactNode;
 }
 
@@ -50,6 +51,7 @@ const BASE_STYLES = cn(
 export function Button({
   variant = "primary",
   className,
+  ariaLabel,
   children,
   ...props
 }: ButtonProps) {
@@ -63,6 +65,7 @@ export function Button({
           download={props.download}
           target={props.target}
           rel={props.rel}
+          aria-label={ariaLabel}
           className={classes}
         >
           {children}
@@ -70,18 +73,18 @@ export function Button({
       );
     }
     return (
-      <Link href={props.href} className={classes}>
+      <Link href={props.href} aria-label={ariaLabel} className={classes}>
         {children}
       </Link>
     );
   }
-
 
   return (
     <button
       type="button"
       onClick={props.onClick}
       disabled={props.disabled}
+      aria-label={ariaLabel}
       className={classes}
     >
       {children}

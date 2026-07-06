@@ -30,25 +30,53 @@ describe("Home", () => {
       "href",
       "/projects",
     );
-    expect(screen.getByRole("link", { name: "Resume" })).toHaveAttribute(
-      "href",
-      "/resume",
-    );
+    expect(
+      screen
+        .getAllByRole("link", { name: "Resume" })
+        .some((link) => link.getAttribute("href") === "/resume"),
+    ).toBe(true);
   });
 
   it("renders the approved social links", () => {
     render(<Home />);
-    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-      "href",
-      "https://github.com/HrshJha",
-    );
-    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
-      "href",
-      "https://www.linkedin.com/in/hrshjha/",
-    );
-    expect(screen.getByRole("link", { name: "X" })).toHaveAttribute(
-      "href",
-      "https://x.com/m_eharsh",
-    );
+    expect(
+      screen
+        .getAllByRole("link", { name: "GitHub" })
+        .some(
+          (link) => link.getAttribute("href") === "https://github.com/HrshJha",
+        ),
+    ).toBe(true);
+    expect(
+      screen
+        .getAllByRole("link", { name: "LinkedIn" })
+        .some(
+          (link) =>
+            link.getAttribute("href") ===
+            "https://www.linkedin.com/in/hrshjha/",
+        ),
+    ).toBe(true);
+    expect(
+      screen
+        .getAllByRole("link", { name: "X" })
+        .some((link) => link.getAttribute("href") === "https://x.com/m_eharsh"),
+    ).toBe(true);
+  });
+
+  it("renders the full evaluation journey after the hero", () => {
+    render(<Home />);
+
+    for (const heading of [
+      "Featured Projects",
+      "Experience",
+      "About",
+      "Skills",
+      "Education",
+      "Resume",
+      "Contact",
+    ]) {
+      expect(
+        screen.getByRole("heading", { level: 2, name: heading }),
+      ).toBeInTheDocument();
+    }
   });
 });

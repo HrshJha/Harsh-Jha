@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
 import { NavigationLayout } from "@/components/layout/NavigationLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { Footer } from "@/components/layout/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = buildMetadata({
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NavigationLayout />
         <MainLayout>{children}</MainLayout>
+        <Footer />
       </body>
     </html>
   );

@@ -15,9 +15,9 @@ export function NavItem({ label, href, isActive, onClick }: NavItemProps) {
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "relative inline-flex min-h-10 w-full items-center justify-center rounded-md px-3 text-[0.875rem] font-medium tracking-normal md:w-auto",
+        "relative inline-flex min-h-11 w-full items-center justify-center rounded-md px-3 text-label font-medium tracking-normal md:w-auto",
         "text-text-secondary",
-        "hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus",
+        "transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus",
         isActive &&
           "border border-border-subtle bg-surface-raised text-text-primary",
       )}

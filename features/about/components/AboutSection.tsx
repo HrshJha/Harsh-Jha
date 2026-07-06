@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 interface AboutSectionProps {
   readonly heading?: string;
   readonly headingId?: string;
+  readonly headingLevel?: 1 | 2;
 }
 
 const CURRENTLY_EXPLORING = [
@@ -21,34 +22,49 @@ const CURRENTLY_EXPLORING = [
 
 function SectionBlock({
   title,
+  headingLevel,
   children,
 }: {
   readonly title: string;
+  readonly headingLevel: 2 | 3;
   readonly children: ReactNode;
 }) {
+  const HeadingTag = headingLevel === 2 ? "h2" : "h3";
+
   return (
     <section className="flex flex-col gap-4 border-b border-border-subtle pb-8 last:border-b-0 last:pb-0">
-      <h2 className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
+      <HeadingTag className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
         {title}
-      </h2>
+      </HeadingTag>
       {children}
     </section>
   );
 }
 
-export function AboutSection({ heading, headingId }: AboutSectionProps) {
+export function AboutSection({
+  heading,
+  headingId,
+  headingLevel = 1,
+}: AboutSectionProps) {
+  const HeadingTag = headingLevel === 1 ? "h1" : "h2";
+  const sectionBlockHeadingLevel = headingLevel === 1 ? 2 : 3;
+
   return (
     <div className="flex flex-col gap-10">
       {heading ? (
-        <h1
+        <HeadingTag
           id={headingId}
-          className="text-page-title font-semibold text-text-primary md:text-page-title-desktop"
+          className={
+            headingLevel === 1
+              ? "text-page-title font-semibold text-text-primary md:text-page-title-desktop"
+              : "text-section-heading font-semibold text-text-primary md:text-section-heading-desktop"
+          }
         >
           {heading}
-        </h1>
+        </HeadingTag>
       ) : null}
 
-      <SectionBlock title="About Me">
+      <SectionBlock title="About Me" headingLevel={sectionBlockHeadingLevel}>
         <p className="max-w-text text-body leading-7 text-text-secondary">
           I&apos;m Harsh Kumar Jha, an Electronics &amp; Communication
           Engineering student at Maharaja Surajmal Institute of Technology with
@@ -63,7 +79,10 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
         </p>
       </SectionBlock>
 
-      <SectionBlock title="Engineering Philosophy">
+      <SectionBlock
+        title="Engineering Philosophy"
+        headingLevel={sectionBlockHeadingLevel}
+      >
         <p className="max-w-text text-body leading-7 text-text-secondary">
           The principles that guide how I approach engineering and problem
           solving.
@@ -77,7 +96,7 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
         </ul>
       </SectionBlock>
 
-      <SectionBlock title="Education">
+      <SectionBlock title="Education" headingLevel={sectionBlockHeadingLevel}>
         <dl className="grid gap-4 md:grid-cols-2">
           <div>
             <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
@@ -114,7 +133,10 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
         </dl>
       </SectionBlock>
 
-      <SectionBlock title="Currently Exploring">
+      <SectionBlock
+        title="Currently Exploring"
+        headingLevel={sectionBlockHeadingLevel}
+      >
         <ul className="flex flex-wrap gap-2" aria-label="Currently exploring">
           {CURRENTLY_EXPLORING.map((item) => (
             <li key={item}>

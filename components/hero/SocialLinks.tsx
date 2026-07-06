@@ -45,7 +45,7 @@ export function SocialLinks() {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex h-11 items-center gap-2 rounded-md border border-border-subtle bg-surface-base px-4 text-label font-medium text-text-secondary transition-all duration-(--duration-fast) ease-(--ease-standard) hover:-translate-y-0.5 hover:border-border-strong hover:text-text-primary hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+            className="inline-flex h-11 items-center gap-2 rounded-md border border-border-subtle bg-surface-base px-4 text-label font-medium text-text-secondary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
           >
             <SocialIcon label={link.label} />
             <span>{link.label}</span>
