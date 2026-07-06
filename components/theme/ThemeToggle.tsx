@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 
 type Theme = "light" | "dark";
 
@@ -42,16 +43,20 @@ export function ThemeToggle() {
 
   const isDark = theme === "dark";
 
+  const Icon = isDark ? Sun : Moon;
+  const label = isDark ? "Switch to Lightbox mode" : "Switch to Darkroom mode";
+  const visibleLabel = isDark ? "Lightbox" : "Darkroom";
+
   return (
     <button
       type="button"
       onClick={handleToggle}
-      aria-label={isDark ? "Switch to light mode" : "Switch to night mode"}
+      aria-label={label}
       suppressHydrationWarning
-      className="inline-flex h-11 items-center gap-2 rounded-md border border-border-subtle bg-surface-base px-3 text-label font-medium text-text-secondary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+      className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-border bg-surface px-3 text-label font-medium text-muted-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
-      <span aria-hidden="true">{isDark ? "N" : "L"}</span>
-      <span>{isDark ? "Night" : "Light"}</span>
+      <Icon aria-hidden="true" className="size-4" strokeWidth={2} />
+      <span className="hidden sm:inline">{visibleLabel}</span>
     </button>
   );
 }

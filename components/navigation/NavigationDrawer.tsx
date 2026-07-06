@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { X } from "lucide-react";
 import { NavItem } from "@/components/navigation/NavItem";
 import { navigationLinks } from "@/content/navigation";
 import { isNavItemActive } from "@/utils/isNavItemActive";
@@ -72,17 +73,17 @@ export function NavigationDrawer({
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
-      className="fixed inset-0 z-50 flex flex-col bg-background-page px-4 py-5"
+      className="fixed inset-0 z-50 flex flex-col bg-background px-4 py-5"
     >
-      <div className="flex items-center justify-between border-b border-border-subtle pb-4">
-        <p className="text-body font-semibold text-text-primary">Navigation</p>
+      <div className="flex items-center justify-between border-b border-border pb-4">
+        <p className="text-body font-semibold text-foreground">Navigation</p>
         <button
           type="button"
           onClick={onClose}
           aria-label="Close navigation"
-          className="inline-flex h-11 items-center rounded-md px-3 text-label font-medium text-text-secondary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+          className="inline-flex size-11 items-center justify-center rounded-sm text-muted-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
-          Close
+          <X aria-hidden="true" className="size-5" strokeWidth={2} />
         </button>
       </div>
       <nav aria-label="Primary" className="pt-6">

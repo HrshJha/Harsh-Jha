@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
 import { NavigationDrawer } from "@/components/navigation/NavigationDrawer";
 
 export function MobileNavbar() {
@@ -23,14 +24,10 @@ export function MobileNavbar() {
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-label="Open navigation"
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border-subtle px-3 text-label font-medium text-text-primary transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:bg-state-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+        className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-border bg-surface px-3 text-label font-medium text-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <span>Menu</span>
-        <span className="flex flex-col gap-1" aria-hidden="true">
-          <span className="block h-px w-4 bg-current" />
-          <span className="block h-px w-4 bg-current" />
-          <span className="block h-px w-4 bg-current" />
-        </span>
+        <Menu aria-hidden="true" className="size-4" strokeWidth={2} />
       </button>
       <NavigationDrawer
         isOpen={isOpen}
