@@ -191,3 +191,62 @@ prerendered statically). Also spot-checked the compiled production CSS to
 confirm the new `@theme` tokens and the `duration-(--duration-fast)`/
 `ease-(--ease-standard)` arbitrary-value syntax actually compiled to the
 expected declarations rather than being silently dropped.
+
+---
+
+## 2026-07-06 — Milestone 5: Projects
+
+**Added:**
+
+- `components/ui/Badge.tsx` — generic compact status/tag primitive.
+- `features/projects/components/`: `StatusBadge` (project status via
+  `Badge`), `ProjectTags` (renders each project's only approved tag, its
+  status), `ProjectCard` (name linking to its detail route, one-line
+  description, status — `article` semantics), `ProjectGrid` (responsive
+  1/2-column layout), `ProjectsSection` (optional heading, used with
+  "Featured Projects" on the homepage and headless on `/projects`),
+  `ProjectHeader` (detail-page name/description/status), and
+  `NavigationBetweenProjects` (previous/next links sourced from the
+  static project order in `content/projects.ts`, no wrap-around).
+- Additional typography tokens in `styles/globals.css`'s `@theme` block:
+  `type.sectionHeading` and `type.cardTitle` (with paired line-heights)
+  and `type.label`, from `docs/DESIGN_SYSTEM.md` §4.
+- Tests: `features/projects/components/NavigationBetweenProjects.test.tsx`,
+  `app/projects/page.test.tsx`; extended `app/page.test.tsx` (Featured
+  Projects section) and converted `app/projects/[slug]/page.test.ts` to
+  `.test.tsx` to add rendering assertions (approved name/description/
+  status only, correct prev/next links).
+
+**Modified:**
+
+- `app/projects/page.tsx` — renders `ProjectsSection` (all four approved
+  projects as cards) under the existing "Projects" H1.
+- `app/projects/[slug]/page.tsx` — renders `ProjectHeader` +
+  `NavigationBetweenProjects` instead of the Milestone 2 placeholder
+  heading. `generateStaticParams`/`dynamicParams` unchanged.
+- `app/page.tsx` — adds a "Featured Projects" section (all four projects)
+  below Hero.
+
+**Not implemented (explicitly excluded, no source content exists):**
+repository/demo links, screenshots, diagrams, code snippets, architecture,
+metrics, outcomes, a separate "Technical Focus" section on project detail
+pages (`docs/CONTENT_SPEC.md` §6 lists it as a required section, but no
+source document defines its content — see `DECISIONS.md`), and a distinct
+`FeaturedProjectCard` component (see `DECISIONS.md`).
+
+**Judgment calls made** (see `DECISIONS.md` for full reasoning): Projects
+feature components placed under `features/projects/components/` per
+`docs/TECH_SPEC.md` §5 (correcting the Milestone 4 precedent of
+`components/hero/`, which is left as-is); implemented `ProjectHeader` and
+`NavigationBetweenProjects` for MVP despite `docs/COMPONENT_SPEC.md`'s
+composition-tree diagram listing them under a "Future-only dependency
+graph" heading, which conflicts with that same document's own row-level
+component table; no `FeaturedProjectCard` (all four projects are equally
+"featured," so there's no differentiated layout for it to serve).
+
+**Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
+`pnpm test` (10 test files, 23 tests passing), `pnpm build` (all 12
+routes prerendered statically, including exactly the four approved
+project detail slugs). Manually grepped the new Projects code for
+repo/demo/screenshot/metric/"coming soon"/download-style language —
+none found.

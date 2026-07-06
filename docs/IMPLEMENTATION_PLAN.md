@@ -27,7 +27,7 @@ Core constraints:
 | 2 | Core Architecture | Routes, layouts, content model, metadata foundation, and shared primitives. | Milestone 1 | Complete (2026-07-06) |
 | 3 | Navigation | Desktop and mobile navigation with source-backed labels and accessible behavior. | Milestone 2 | Complete (2026-07-06) |
 | 4 | Hero | Homepage entry section with approved messaging and CTAs. | Milestones 2-3 | Complete (2026-07-06) |
-| 5 | Projects | Project overview, featured cards, minimal project detail pages, and project status. | Milestones 2-4 | Not started |
+| 5 | Projects | Project overview, featured cards, minimal project detail pages, and project status. | Milestones 2-4 | Complete (2026-07-06) |
 | 6 | Experience | Experience section and route using approved roles, companies, and highlights. | Milestone 2 | Not started |
 | 7 | About | About route and sections using approved identity, philosophy, values, and focus areas. | Milestone 2 | Not started |
 | 8 | Skills | Skills section and route content using approved categories and skills only. | Milestone 2 | Not started |

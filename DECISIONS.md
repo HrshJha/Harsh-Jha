@@ -463,3 +463,106 @@ this component, it will likely move to a shared location and both call
 sites will need updating — cheap now (one file, no other consumers),
 more disruptive later. Flag if you'd rather place it in a shared location
 now to avoid that move.
+
+---
+
+## 2026-07-06 — Milestone 5: Projects feature components live in `features/projects/components/`, not `components/projects/`
+
+**Decision:** `ProjectsSection`, `ProjectGrid`, `ProjectCard`, `ProjectTags`,
+`ProjectHeader`, `NavigationBetweenProjects`, and `StatusBadge` are all
+under `features/projects/components/`. `Badge` (the generic, content-agnostic
+primitive they're built on) is `components/ui/Badge.tsx`.
+
+**Reason:** `docs/TECH_SPEC.md` §5 "Component Layers" table is explicit and
+unambiguous: `Badge` is listed under Primitives (`components/ui/`), and
+`ProjectsSection` is listed by name under Feature components
+(`features/*/components/`). Per `CLAUDE.md`'s documentation hierarchy,
+`TECH_SPEC.md` outranks both `docs/COMPONENT_SPEC.md` and
+`docs/IMPLEMENTATION_PLAN.md`, whose file lists say `components/projects/`
+and `features/projects/` respectively — the same three-way naming
+disagreement already flagged for `Container`/`Section`/`Grid` in the
+Milestone 2 entry above, resolved the same way (highest-ranked document
+wins).
+
+**Trade-offs:** This does not match Milestone 4's placement of Hero's
+section components under `components/hero/` rather than
+`features/home/components/` — that was an inconsistency I introduced
+without documenting it at the time, and I'm not correcting it now per
+your instruction not to modify completed milestones unless required. Flag
+if you'd like Milestone 4 retroactively moved to match; until then the two
+milestones use different conventions for the same layer.
+
+---
+
+## 2026-07-06 — Milestone 5: implemented `ProjectHeader` and `NavigationBetweenProjects` despite a "future-only" label
+
+**Decision:** Built `ProjectHeader` and `NavigationBetweenProjects` now,
+as real MVP components on the project detail route.
+
+**Reason:** `docs/COMPONENT_SPEC.md`'s ASCII composition-tree diagram (the
+"Future-only dependency graph" section) lists `ProjectHeader` as the parent
+of `ProjectGallery`, `ArchitectureDiagram`, `MetricsSection`,
+`FutureWorkSection`, and `NavigationBetweenProjects` — all under one
+"future-only" heading. But that same document's own row-level component
+table (§5) describes `ProjectHeader` and `NavigationBetweenProjects` with
+concrete, presently-implementable specs ("Project name, description,
+status"; "Only appears when detail routes are implemented") and, unlike
+every genuinely-deferred row in that table (`ProjectGallery`,
+`ArchitectureDiagram`, `FutureWorkSection`, all explicitly "Not implemented
+for MVP"), neither row carries that phrase. `docs/TECH_SPEC.md` §4
+(higher-ranked) separately and explicitly permits project detail pages
+now, instructing to "render only project name, one-line description, and
+status." `docs/IMPLEMENTATION_PLAN.md` schedules exactly this
+(PROJ-07/PROJ-08) for Milestone 5, and you explicitly asked for PROJ-07
+and PROJ-08 to be completed in this pass. Read together, the diagram
+heading reads as grouping "detail-page enrichment features" for
+convenience rather than deferring the header/nav-between-projects
+themselves.
+
+**Trade-offs:** This is a real internal inconsistency inside
+`docs/COMPONENT_SPEC.md` (diagram vs. its own table), not a clean-cut
+call. Flagging it here rather than silently resolving it — say the word if
+you'd rather these two components wait for a future milestone instead.
+
+---
+
+## 2026-07-06 — Milestone 5: no separate `FeaturedProjectCard`
+
+**Decision:** Both the homepage's "Featured Projects" section and the
+`/projects` overview route render the same `ProjectCard`; no distinct
+`FeaturedProjectCard` component was built.
+
+**Reason:** `docs/COMPONENT_SPEC.md` describes `FeaturedProjectCard` as
+"Higher-emphasis project card **if layout differentiates featured
+cards**" (conditional). `docs/CONTENT_SPEC.md` §6 states all four projects
+are featured projects, and the homepage's "Featured Projects" content is
+the same four projects as the overview page — there is no subset or
+higher-emphasis treatment for any of them to justify a visually distinct
+card. Building `FeaturedProjectCard` as a duplicate of `ProjectCard` today
+would be an unused abstraction.
+
+**Trade-offs:** None currently; if a future milestone introduces a reason
+to visually differentiate featured projects (e.g., a larger subset of
+non-featured projects), `FeaturedProjectCard` can be added then.
+
+---
+
+## 2026-07-06 — Milestone 5: no "Technical Focus" or "Missing Information" section on project detail pages
+
+**Decision:** `ProjectHeader` renders only name, one-line description, and
+status — no "Technical Focus" section and no explicit "here's what's
+missing" notice, even though `docs/CONTENT_SPEC.md` §6 lists "Technical
+Focus" and "Missing Information" among each project's "Required Sections."
+
+**Reason:** No source document (`docs/FOUNDATION.md` Part 4, the only
+place project content originates) defines any technical-focus content per
+project — it's genuinely absent, not just unformatted, so per `CLAUDE.md`
+("do not guess... block implementation until missing information is
+supplied") it must stay absent rather than be invented. `docs/TECH_SPEC.md`
+§4 independently confirms this: "Render only project name, one-line
+description, and status... Do not add 'coming soon' copy unless approved."
+An explicit "missing information" notice would itself be exactly the kind
+of copy that instruction rules out.
+
+**Trade-offs:** None; this is the conservative, literal reading of both
+documents agreeing with each other.

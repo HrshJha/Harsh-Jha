@@ -1,9 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import ProjectDetailPage, {
-  generateStaticParams,
-  dynamicParams,
-} from "./page";
+import ProjectDetailPage, { generateStaticParams, dynamicParams } from "./page";
 
 describe("project detail route", () => {
   it("generates static params for exactly the four approved project slugs", async () => {

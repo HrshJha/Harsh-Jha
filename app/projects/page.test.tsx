@@ -12,16 +12,16 @@ describe("ProjectsPage", () => {
 
     const expected = [
       ["FrameOS", "/projects/frameos"],
-      ["Candidate Intelligence System", "/projects/candidate-intelligence-system"],
+      [
+        "Candidate Intelligence System",
+        "/projects/candidate-intelligence-system",
+      ],
       ["AppForge AI", "/projects/appforge-ai"],
       ["Hallucination Hunter", "/projects/hallucination-hunter"],
     ] as const;
 
     for (const [name, href] of expected) {
-      expect(screen.getByRole("link", { name })).toHaveAttribute(
-        "href",
-        href,
-      );
+      expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
     }
   });
 

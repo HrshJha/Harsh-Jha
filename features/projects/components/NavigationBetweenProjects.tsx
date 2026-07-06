@@ -30,10 +30,8 @@ export function NavigationBetweenProjects({
     >
       {previous ? (
         <Link href={`/projects/${previous.slug}`} className={LINK_STYLES}>
-          <span className="text-label text-text-muted">Previous</span>
-          <span className="text-body text-text-primary">
-            {previous.name}
-          </span>
+          <span className="text-label text-text-muted">Previous</span>{" "}
+          <span className="text-body text-text-primary">{previous.name}</span>
         </Link>
       ) : (
         <span />
@@ -43,7 +41,7 @@ export function NavigationBetweenProjects({
           href={`/projects/${next.slug}`}
           className={`${LINK_STYLES} items-end text-right`}
         >
-          <span className="text-label text-text-muted">Next</span>
+          <span className="text-label text-text-muted">Next</span>{" "}
           <span className="text-body text-text-primary">{next.name}</span>
         </Link>
       ) : (

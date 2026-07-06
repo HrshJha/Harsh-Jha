@@ -69,10 +69,7 @@ describe("Home", () => {
     ] as const;
 
     for (const [name, href] of expected) {
-      expect(screen.getByRole("link", { name })).toHaveAttribute(
-        "href",
-        href,
-      );
+      expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
     }
   });
 });
