@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
-type ContainerSize = "text" | "reading" | "content" | "wide" | "full";
+type ContainerSize = "text" | "reading" | "content" | "wide" | "hero" | "full";
 
 interface ContainerProps {
   readonly size?: ContainerSize;
@@ -14,6 +14,7 @@ const SIZE_STYLES: Record<ContainerSize, string> = {
   reading: "max-w-reading",
   content: "max-w-content",
   wide: "max-w-wide",
+  hero: "max-w-hero",
   full: "max-w-none",
 };
 
