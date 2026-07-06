@@ -3,7 +3,7 @@ import { Geist } from "next/font/google";
 import { buildMetadata } from "@/lib/metadata";
 import { NavigationLayout } from "@/components/layout/NavigationLayout";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { Footer } from "@/components/layout/Footer";
+import { RouteAwareFooter } from "@/components/layout/RouteAwareFooter";
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -57,7 +57,7 @@ export default function RootLayout({
         </a>
         <NavigationLayout />
         <MainLayout>{children}</MainLayout>
-        <Footer />
+        <RouteAwareFooter />
       </body>
     </html>
   );

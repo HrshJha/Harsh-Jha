@@ -60,4 +60,21 @@ describe("Home", () => {
       screen.getByRole("img", { name: "AI systems focus map" }),
     ).toBeInTheDocument();
   });
+
+  it("keeps the home page focused on the hero only", () => {
+    render(<Home />);
+
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Featured Projects" }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Experience" }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "About" }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Contact" }),
+    ).toBeNull();
+  });
 });

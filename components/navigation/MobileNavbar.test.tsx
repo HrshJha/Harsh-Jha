@@ -19,10 +19,7 @@ describe("MobileNavbar", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Navigation menu" });
     expect(dialog).toBeInTheDocument();
-    expect(within(dialog).getByRole("link", { name: "Resume" })).toHaveAttribute(
-      "href",
-      "/resume",
-    );
+    expect(within(dialog).queryByRole("link", { name: "Resume" })).toBeNull();
 
     fireEvent.keyDown(document, { key: "Escape" });
 

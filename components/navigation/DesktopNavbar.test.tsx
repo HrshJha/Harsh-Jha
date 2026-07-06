@@ -19,7 +19,6 @@ describe("DesktopNavbar", () => {
       "Projects",
       "Experience",
       "About",
-      "Resume",
       "Contact",
     ]);
 
