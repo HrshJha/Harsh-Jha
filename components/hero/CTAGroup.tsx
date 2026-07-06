@@ -7,14 +7,14 @@ export function CTAGroup() {
       <Button
         href={heroCtas.primary.href}
         variant="primary"
-        className="h-14 px-7"
+        size="lg"
       >
         {heroCtas.primary.label}
       </Button>
       <Button
         href={heroCtas.secondary.href}
         variant="secondary"
-        className="h-14 border-border-strong bg-surface-base px-7 hover:border-primary"
+        size="lg"
       >
         {heroCtas.secondary.label}
       </Button>

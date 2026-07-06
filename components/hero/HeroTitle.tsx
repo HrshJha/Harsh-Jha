@@ -9,10 +9,10 @@ import { identity } from "@/content/identity";
 export function HeroTitle() {
   return (
     <div className="flex flex-col gap-5">
-      <h1 id="hero-heading" className="text-label font-medium text-text-muted">
+      <h1 id="hero-heading" className="text-label font-medium text-muted-foreground">
         {identity.name}
       </h1>
-      <p className="max-w-4xl text-hero font-semibold text-balance text-text-primary md:text-hero-desktop">
+      <p className="max-w-reading text-hero font-semibold text-balance text-foreground">
         {identity.headline}
       </p>
     </div>

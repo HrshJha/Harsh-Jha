@@ -6,13 +6,13 @@ import { HeroVisual } from "@/components/hero/HeroVisual";
 
 export function HeroSection() {
   return (
-    <div className="grid min-h-[calc(100vh-8rem)] items-center gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)] lg:gap-16">
-      <div className="flex max-w-3xl flex-col gap-9">
-        <div className="flex flex-col gap-7">
+    <div className="grid items-center gap-12 py-16 lg:grid-cols-2 lg:py-24">
+      <div className="flex max-w-reading flex-col gap-8">
+        <div className="flex flex-col gap-6">
           <HeroTitle />
           <HeroSubtitle />
         </div>
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-6">
           <CTAGroup />
           <SocialLinks />
         </div>
