@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home from "./page";
 
@@ -50,5 +50,19 @@ describe("Home", () => {
       "href",
       "https://x.com/m_eharsh",
     );
+  });
+
+  it("makes the hero visual interactive", () => {
+    render(<Home />);
+
+    const heroGraphButton = screen.getByRole("button", {
+      name: "Activate hero graph",
+    });
+
+    expect(heroGraphButton).toHaveAttribute("aria-pressed", "false");
+
+    fireEvent.click(heroGraphButton);
+
+    expect(heroGraphButton).toHaveAttribute("aria-pressed", "true");
   });
 });
