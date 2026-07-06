@@ -43,6 +43,13 @@
   --text-page-title-desktop--line-height: 1.15;
   --text-body: 1rem;
   --text-body--line-height: 1.55;
+  --text-section-heading: 1.5rem;
+  --text-section-heading--line-height: 1.15;
+  --text-section-heading-desktop: 2rem;
+  --text-section-heading-desktop--line-height: 1.15;
+  --text-card-title: 1.125rem;
+  --text-card-title--line-height: 1.15;
+  --text-label: 0.875rem;
 
   /* Border Radius Scale (§2) */
   --radius-none: 0px;

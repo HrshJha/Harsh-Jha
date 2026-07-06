@@ -51,4 +51,28 @@ describe("Home", () => {
       "https://x.com/m_eharsh",
     );
   });
+
+  it("renders the Featured Projects section with all four approved projects", () => {
+    render(<Home />);
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Featured Projects" }),
+    ).toBeInTheDocument();
+
+    const expected = [
+      ["FrameOS", "/projects/frameos"],
+      [
+        "Candidate Intelligence System",
+        "/projects/candidate-intelligence-system",
+      ],
+      ["AppForge AI", "/projects/appforge-ai"],
+      ["Hallucination Hunter", "/projects/hallucination-hunter"],
+    ] as const;
+
+    for (const [name, href] of expected) {
+      expect(screen.getByRole("link", { name })).toHaveAttribute(
+        "href",
+        href,
+      );
+    }
+  });
 });

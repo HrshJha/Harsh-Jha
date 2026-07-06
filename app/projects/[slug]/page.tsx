@@ -4,6 +4,8 @@ import { buildMetadata } from "@/lib/metadata";
 import { projects } from "@/content/projects";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { Section } from "@/components/ui/Section";
+import { ProjectHeader } from "@/features/projects/components/ProjectHeader";
+import { NavigationBetweenProjects } from "@/features/projects/components/NavigationBetweenProjects";
 
 interface ProjectDetailPageProps {
   readonly params: Promise<{ slug: string }>;
@@ -46,10 +48,9 @@ export default async function ProjectDetailPage({
 
   return (
     <PageWrapper>
-      <Section ariaLabelledBy="project-detail-heading">
-        <h1 id="project-detail-heading" className="text-2xl font-semibold">
-          {project.name}
-        </h1>
+      <Section className="flex flex-col gap-10 py-12 md:py-16">
+        <ProjectHeader project={project} />
+        <NavigationBetweenProjects currentSlug={project.slug} />
       </Section>
     </PageWrapper>
   );
