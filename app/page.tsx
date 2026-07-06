@@ -1,11 +1,12 @@
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { Section } from "@/components/ui/Section";
+import { HeroSection } from "@/components/hero/HeroSection";
 
 export default function Home() {
   return (
-    <PageWrapper className="flex-1 items-center justify-center">
-      <Section className="flex items-center justify-center">
-        <h1 className="text-2xl font-semibold">Harsh Kumar Jha</h1>
+    <PageWrapper>
+      <Section className="py-12 md:py-16">
+        <HeroSection />
       </Section>
     </PageWrapper>
   );

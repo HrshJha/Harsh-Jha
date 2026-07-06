@@ -1,0 +1,20 @@
+import { identity } from "@/content/identity";
+
+// DESIGN_SYSTEM.md §4 labels `type.hero` as the "Hero headline" scale and
+// `type.pageTitle` as the "Page-level title" scale. The approved H1
+// ("Harsh Kumar Jha", CONTENT_SPEC.md §4 SEO Notes) is page identity, so it
+// takes `type.pageTitle`; the professional headline is the prominent
+// visual hero statement, so it takes the larger `type.hero` scale. Visual
+// size and heading level are independent — the H1 stays first and correct.
+export function HeroTitle() {
+  return (
+    <div className="flex flex-col gap-3">
+      <h1 className="text-page-title font-semibold text-text-primary md:text-page-title-desktop">
+        {identity.name}
+      </h1>
+      <p className="text-hero font-semibold text-text-primary md:text-hero-desktop">
+        {identity.headline}
+      </p>
+    </div>
+  );
+}
