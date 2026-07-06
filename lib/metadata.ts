@@ -14,8 +14,7 @@ export function buildMetadata({
   path,
 }: BuildMetadataInput): Metadata {
   const metadata: Metadata = {
-    title:
-      title === siteConfig.name ? title : `${title} - ${siteConfig.name}`,
+    title: title === siteConfig.name ? title : `${title} - ${siteConfig.name}`,
     description: description ?? identity.coreMessage,
     openGraph: {
       title,
@@ -26,6 +25,10 @@ export function buildMetadata({
       card: "summary",
       title,
       description: description ?? identity.coreMessage,
+    },
+    icons: {
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
     },
   };
 

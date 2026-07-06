@@ -166,6 +166,296 @@ body {
   outline-offset: 2px;
 }
 
+.ai-systems-panel {
+  --graph-edge-width: 1.5px;
+  --graph-node-size: var(--spacing-3);
+  --graph-node-x: 50%;
+  --graph-node-y: 50%;
+  --graph-motion-slow: calc(var(--duration-slow) * 28);
+  --graph-motion-base: calc(var(--duration-slow) * 18);
+  --graph-motion-fast: calc(var(--duration-slow) * 12);
+  position: relative;
+  min-height: calc(var(--spacing-32) * 3);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 48% 42%, rgb(240 166 111 / 0.16), transparent 34%),
+    linear-gradient(135deg, var(--surface), var(--background));
+  box-shadow: var(--elevation-subtle);
+  isolation: isolate;
+}
+
+.ai-systems-grid,
+.ai-systems-glow,
+.ai-systems-graph,
+.ai-systems-focus,
+.ai-systems-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.ai-systems-grid {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: var(--spacing-8) var(--spacing-8);
+  opacity: 0.22;
+  mask-image: radial-gradient(circle at center, black 48%, transparent 78%);
+}
+
+.ai-systems-glow {
+  background:
+    radial-gradient(circle at 32% 58%, rgb(240 166 111 / 0.16), transparent 22%),
+    radial-gradient(circle at 72% 44%, rgb(255 253 250 / 0.08), transparent 26%);
+  filter: blur(var(--spacing-6));
+  transform: translate3d(0, 0, 0);
+  animation: ai-graph-drift var(--graph-motion-slow) var(--ease-standard)
+    infinite alternate;
+}
+
+.ai-systems-graph {
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  color: var(--accent);
+  padding: var(--spacing-8);
+}
+
+.ai-systems-edge {
+  stroke: currentColor;
+  stroke-width: var(--graph-edge-width);
+  stroke-dasharray: var(--spacing-3) var(--spacing-4);
+  stroke-dashoffset: 0;
+  transform: translate3d(0, 0, 0);
+  animation: ai-edge-flow var(--graph-motion-base) var(--ease-standard) infinite;
+}
+
+.ai-systems-edge-primary {
+  opacity: 0.62;
+}
+
+.ai-systems-edge-secondary {
+  opacity: 0.42;
+}
+
+.ai-systems-edge-tertiary {
+  opacity: 0.28;
+}
+
+.ai-systems-edge-delayed {
+  animation-delay: calc(var(--duration-slow) * -8);
+}
+
+.ai-systems-edge-offset {
+  animation-delay: calc(var(--duration-slow) * -14);
+}
+
+.ai-systems-core {
+  color: var(--accent);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ai-core-breathe var(--graph-motion-fast) var(--ease-enter) infinite
+    alternate;
+}
+
+.ai-systems-core circle:first-child {
+  fill: currentColor;
+  opacity: 0.08;
+}
+
+.ai-systems-core circle:nth-child(2) {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--graph-edge-width);
+  opacity: 0.54;
+}
+
+.ai-systems-core circle:last-child {
+  fill: currentColor;
+  opacity: 0.72;
+}
+
+.ai-systems-focus {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ai-systems-focus > span,
+.ai-systems-focus > strong {
+  display: block;
+}
+
+.ai-systems-focus > span {
+  margin-bottom: var(--spacing-2);
+  color: var(--muted-foreground);
+  font-size: var(--text-label);
+  font-weight: 500;
+  line-height: var(--leading-label);
+}
+
+.ai-systems-focus > strong {
+  max-width: calc(var(--spacing-32) * 2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow: var(--elevation-interactive);
+  color: var(--foreground);
+  font-size: var(--text-card-title);
+  font-weight: 650;
+  line-height: var(--leading-heading);
+  padding: var(--spacing-4) var(--spacing-6);
+  text-align: center;
+  backdrop-filter: blur(var(--spacing-3));
+}
+
+.ai-systems-nodes {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ai-system-node {
+  position: absolute;
+  left: var(--graph-node-x);
+  top: var(--graph-node-y);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-height: calc(var(--spacing-8) + var(--spacing-2));
+  transform: translate3d(-50%, -50%, 0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--background) 82%, transparent);
+  box-shadow: var(--elevation-subtle);
+  color: var(--foreground);
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: var(--leading-label);
+  padding: var(--spacing-2) var(--spacing-3);
+  backdrop-filter: blur(var(--spacing-2));
+  animation: ai-node-float var(--graph-motion-slow) var(--ease-standard) infinite
+    alternate;
+}
+
+.ai-system-node-active {
+  border-color: var(--accent);
+  box-shadow: var(--elevation-interactive);
+}
+
+.ai-system-node-dot {
+  width: var(--graph-node-size);
+  height: var(--graph-node-size);
+  flex: 0 0 var(--graph-node-size);
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 var(--spacing-2) rgb(240 166 111 / 0.12);
+  animation: ai-node-pulse var(--graph-motion-fast) var(--ease-enter) infinite;
+}
+
+.ai-node-data {
+  --graph-node-x: 14%;
+  --graph-node-y: 54%;
+}
+
+.ai-node-models {
+  --graph-node-x: 46%;
+  --graph-node-y: 18%;
+  animation-delay: calc(var(--duration-slow) * -4);
+}
+
+.ai-node-agents {
+  --graph-node-x: 84%;
+  --graph-node-y: 52%;
+  animation-delay: calc(var(--duration-slow) * -8);
+}
+
+.ai-node-evaluation {
+  --graph-node-x: 46%;
+  --graph-node-y: 84%;
+  animation-delay: calc(var(--duration-slow) * -12);
+}
+
+.ai-node-deployment {
+  --graph-node-x: 18%;
+  --graph-node-y: 82%;
+  animation-delay: calc(var(--duration-slow) * -16);
+}
+
+@keyframes ai-edge-flow {
+  to {
+    stroke-dashoffset: calc(var(--spacing-8) * -1);
+  }
+}
+
+@keyframes ai-core-breathe {
+  to {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes ai-node-float {
+  to {
+    transform: translate3d(-50%, calc(-50% - var(--spacing-2)), 0);
+  }
+}
+
+@keyframes ai-node-pulse {
+  50% {
+    box-shadow: 0 0 0 var(--spacing-3) rgb(240 166 111 / 0.08);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes ai-graph-drift {
+  to {
+    transform: translate3d(var(--spacing-2), calc(var(--spacing-2) * -1), 0)
+      scale(1.03);
+  }
+}
+
+@media (max-width: 63.999rem) {
+  .ai-systems-panel {
+    min-height: calc(var(--spacing-32) * 2.5);
+  }
+
+  .ai-systems-graph {
+    padding: var(--spacing-6);
+  }
+
+  .ai-systems-focus > strong {
+    max-width: calc(var(--spacing-32) + var(--spacing-24));
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .ai-node-data {
+    --graph-node-x: 18%;
+    --graph-node-y: 32%;
+  }
+
+  .ai-node-models {
+    --graph-node-x: 52%;
+    --graph-node-y: 16%;
+  }
+
+  .ai-node-agents {
+    --graph-node-x: 82%;
+    --graph-node-y: 38%;
+  }
+
+  .ai-node-evaluation {
+    --graph-node-x: 62%;
+    --graph-node-y: 84%;
+  }
+
+  .ai-node-deployment {
+    --graph-node-x: 22%;
+    --graph-node-y: 78%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

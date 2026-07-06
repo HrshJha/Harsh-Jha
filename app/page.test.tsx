@@ -3,10 +3,13 @@ import { describe, expect, it } from "vitest";
 import Home from "./page";
 
 describe("Home", () => {
-  it("renders the documented identity as the H1", () => {
+  it("renders the professional headline as the H1", () => {
     render(<Home />);
     expect(
-      screen.getByRole("heading", { level: 1, name: "Harsh Kumar Jha" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Building Intelligent Products Through Machine Learning & Engineering",
+      }),
     ).toBeInTheDocument();
   });
 
