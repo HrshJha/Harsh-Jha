@@ -4,7 +4,58 @@ Record of implementation changes, per `CLAUDE.md`.
 
 ---
 
+## 2026-07-06 — Milestone 6: Experience
+
+**Added:**
+
+- `components/experience/TechnologyList.tsx` — renders source-backed role
+  highlights as a semantic wrapped list. No unlisted technologies are inferred.
+- `components/experience/RoleCard.tsx` — displays a role title (styled `p`)
+  and its `TechnologyList`. `DurationBadge` is intentionally absent for MVP
+  because dates are `MISSING INFORMATION` (COMPONENT_SPEC.md §6).
+- `components/experience/CompanyCard.tsx` — company-level `article` grouping
+  with an `h3` heading. `h3` is used so heading hierarchy is valid both on the
+  dedicated `/experience` route (h1 → h3) and on the homepage where a section
+  `h2` sits above it (h1 → h2 → h3).
+- `features/experience/components/TimelineItem.tsx` — composes `CompanyCard`
+  and `RoleCard` for a single experience entry.
+- `features/experience/components/Timeline.tsx` — ordered list of
+  `TimelineItem` components, using `<ol>` to reflect chronological ordering.
+- `features/experience/components/ExperienceSection.tsx` — composes the
+  optional section heading and `Timeline`. Section introduction is
+  `MISSING INFORMATION` and is intentionally absent.
+- `content/experience.test.ts` — 6 tests validating that the experience
+  content module contains exactly the two approved companies, correct role
+  titles, approved highlights only, and no `dates`, `location`, or
+  `achievements` fields (EXP-06).
+
+**Changed:**
+
+- `app/experience/page.tsx` — replaced route skeleton with `ExperienceSection`
+  beneath a proper `h1` "Experience" with page-title typography tokens.
+- `app/page.tsx` — added experience preview section ("Experience" heading,
+  `experience-preview-heading` id) after the Featured Projects section,
+  matching the CONTENT_SPEC.md §4 Experience Preview and recruiter journey.
+
+**Blocked (unchanged):**
+
+- `DurationBadge` — not implemented; dates are `MISSING INFORMATION`.
+- Section introduction — not implemented; copy is `MISSING INFORMATION`.
+- Employer URLs — not implemented; links are `MISSING INFORMATION`.
+- Achievements beyond documented highlights — not implemented;
+  achievements are `MISSING INFORMATION`.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 29/29 tests passed (6 new experience content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
 ## 2026-07-06 — Milestone 1: Project Initialization
+
 
 **Added:**
 

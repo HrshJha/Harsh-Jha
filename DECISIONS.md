@@ -4,7 +4,42 @@ Record of decisions made during implementation, per `CLAUDE.md`.
 
 ---
 
+## 2026-07-06 — Milestone 6: Experience
+
+**Decision:** `CompanyCard` uses `h3` for the company name, and `RoleCard`
+uses a styled `p` (not a heading) for the role title.
+
+**Reason:** `ExperienceSection` is reused in two contexts: (a) the dedicated
+`/experience` route, where the page `h1` is "Experience" and no intermediate
+heading exists between h1 and the company cards; and (b) the homepage, where
+the section heading "Experience" is rendered as an `h2` above the cards.
+If `CompanyCard` used `h2`, it would be at the same heading level as the
+section heading on the homepage (both h2), breaking document structure.
+Using `h3` keeps the hierarchy valid in both contexts:
+- Dedicated route: h1 (Experience) → h3 (Company)
+- Homepage: h1 (Harsh Kumar Jha) → h2 (Experience section) → h3 (Company)
+
+The role title inside `RoleCard` is a sub-detail of the company card and does
+not warrant its own heading level (it would require h4, which adds unnecessary
+depth). A styled `p` with `font-medium` conveys the visual hierarchy without
+structural overhead.
+
+**Alternatives considered:**
+
+- Passing a `headingLevel` prop to make heading level dynamic. Rejected as
+  overly complex for two static use cases and harder to review/audit.
+- Using `h2` for company and `h3` for role. Rejected because it breaks the
+  homepage hierarchy where "Experience" is already an `h2`.
+- Accepting the heading-skip on the dedicated route (h1 → h3 skips h2).
+  Technically permitted by WCAG but not ideal. The `article` landmark with
+  `aria-label` on each company card compensates for assistive-technology users.
+
+**Date:** 2026-07-06
+
+---
+
 ## 2026-07-06 — Milestone 1: Project Initialization
+
 
 **Decision:** Scaffold with `create-next-app` (Next.js App Router, TypeScript
 strict, Tailwind CSS v4), package-managed with pnpm, then strip all
