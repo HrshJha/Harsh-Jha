@@ -29,8 +29,8 @@ Core constraints:
 | 4 | Hero | Homepage entry section with approved messaging and CTAs. | Milestones 2-3 | Complete (2026-07-06) |
 | 5 | Projects | Project overview, featured cards, minimal project detail pages, and project status. | Milestones 2-4 | Complete (2026-07-06) |
 | 6 | Experience | Experience section and route using approved roles, companies, and highlights. | Milestone 2 | Complete (2026-07-06) |
-| 7 | About | About route and sections using approved identity, philosophy, values, and focus areas. | Milestone 2 | Not started |
-| 8 | Skills | Skills section and route content using approved categories and skills only. | Milestone 2 | Not started |
+| 7 | About | About route and sections using approved identity, philosophy, values, and focus areas. | Milestone 2 | Complete (2026-07-06) |
+| 8 | Skills | Skills section and route content using approved categories and skills only. | Milestone 2 | Complete (2026-07-06) |
 | 9 | Education | Education section and route using approved institution, degree, graduation year, and CGPA. | Milestone 2 | Not started |
 | 10 | Resume | Resume route and CTA handling, with asset-dependent download/open behavior deferred until resume asset/path exists. | Milestones 2-4 | Not started |
 | 11 | Contact | Contact route and direct contact links with no backend form. | Milestone 2 | Not started |

@@ -4,7 +4,103 @@ Record of implementation changes, per `CLAUDE.md`.
 
 ---
 
+## 2026-07-06 — Milestone 8: Skills
+
+**Added:**
+
+- `components/skills/CategoryHeader.tsx` — renders a category name as an `h3`
+  heading, consistent with the site-wide heading hierarchy.
+- `components/skills/TechnologyBadge.tsx` — thin wrapper over the shared
+  `Badge` primitive for skill labels. No proficiency ranking implied.
+- `components/skills/SkillItem.tsx` — single skill as a `li` containing a
+  `TechnologyBadge`. No proficiency claim, bar, or percentage.
+- `components/skills/SkillCategory.tsx` — groups `CategoryHeader` and a
+  flex-wrap `ul` of `SkillItem` entries. No category descriptions
+  (`MISSING INFORMATION`). `ProjectReference` not implemented (MVP exclusion).
+- `features/skills/components/SkillsSection.tsx` — composes all four skill
+  categories in approved order (Programming, Libraries, Backend, Developer
+  Tools) with an optional section heading.
+- `content/skills.test.ts` — 7 tests validating exact category order, exact
+  skills per category, and that proficiency levels, percentages, and category
+  descriptions are absent (SKILL-05).
+
+**Changed:**
+
+- `app/page.tsx` — added Skills section (`heading="Skills"`,
+  `headingId="skills-preview-heading"`) after the About section, extending
+  the recruiter journey (Hero → Projects → Experience → About → Skills).
+- `app/about/page.tsx` — added Skills section (`heading="Skills"`,
+  `headingId="about-skills-heading"`) per CONTENT_SPEC.md §8 placement
+  rule ("Homepage / About").
+
+**Blocked (unchanged):**
+
+- `ProjectReference` — not implemented; project-skill mapping is
+  `MISSING INFORMATION` (COMPONENT_SPEC.md §8).
+- Category descriptions — not implemented; `MISSING INFORMATION`.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 45/45 tests passed (7 new skills content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
+## 2026-07-06 — Milestone 7: About
+
+
+**Added:**
+
+- `content/about.ts` — source-backed about content module derived from
+  `identity.ts`. Biography paragraph, photo, and competitive advantages are
+  explicitly absent (`MISSING INFORMATION`).
+- `components/about/Biography.tsx` — renders approved structured identity facts
+  (coreMessage, degree, institution, graduation, CGPA) as a `dl`. No biography
+  paragraph or `ProfessionalPhoto` — both are `MISSING INFORMATION`.
+- `components/about/EngineeringPhilosophy.tsx` — renders all 6 approved
+  engineering philosophy statements as a semantic `ul`. No statement
+  descriptions (`MISSING INFORMATION`).
+- `components/about/LearningPhilosophy.tsx` — renders the 3 approved learning
+  philosophy items as a `ul`. Expanded paragraph is `MISSING INFORMATION`.
+- `components/about/ValuesGrid.tsx` — renders all 8 approved core values as
+  `Badge` labels in a flex-wrap `ul`. No value descriptions (`MISSING INFORMATION`).
+- `features/about/components/AboutSection.tsx` — composes Biography,
+  EngineeringPhilosophy, LearningPhilosophy, ValuesGrid with an optional
+  section heading (same heading-optional pattern as ExperienceSection).
+  `ProfessionalPhoto` and `CompetitiveAdvantages` are not implemented.
+- `content/about.test.ts` — 9 tests validating identity fields, exact
+  philosophy statements, exact core values, and that biography, photo, and
+  competitive advantages fields are absent (ABOUT-06).
+
+**Changed:**
+
+- `app/about/page.tsx` — replaced route skeleton with `AboutSection` beneath
+  a proper `h1` "About" with page-title typography tokens.
+- `app/page.tsx` — added about preview section ("About" heading,
+  `about-preview-heading` id) after the Experience section, extending the
+  recruiter journey (Hero → Projects → Experience → About).
+
+**Blocked (unchanged):**
+
+- `ProfessionalPhoto` — not implemented; asset and alt text are `MISSING INFORMATION`.
+- `CompetitiveAdvantages` — not implemented; content is `MISSING INFORMATION`.
+- Biography paragraph — not implemented; copy is `MISSING INFORMATION`.
+- Value descriptions — not implemented; descriptions are `MISSING INFORMATION`.
+- Expanded learning philosophy paragraph — not implemented; `MISSING INFORMATION`.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 38/38 tests passed (9 new about content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
 ## 2026-07-06 — Milestone 6: Experience
+
 
 **Added:**
 
