@@ -1,15 +1,15 @@
 import { ProjectCard } from "@/features/projects/components/ProjectCard";
-import type { Project } from "@/types/project";
+import type { ProjectCaseStudy } from "@/types/project";
 
 interface ProjectGridProps {
-  readonly projects: readonly Project[];
+  readonly projects: readonly ProjectCaseStudy[];
 }
 
-// Mobile single column, tablet/desktop comparison layout
-// (COMPONENT_SPEC.md §5 ProjectGrid; DESIGN_SYSTEM.md §13).
+// Markdown-backed project previews are intentionally denser than the original
+// summary cards, so the grid stays single-column until wide desktop.
 export function ProjectGrid({ projects }: ProjectGridProps) {
   return (
-    <ul className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <ul className="grid grid-cols-1 gap-6 xl:grid-cols-2">
       {projects.map((project) => (
         <li key={project.slug}>
           <ProjectCard project={project} />

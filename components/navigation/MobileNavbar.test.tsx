@@ -11,7 +11,7 @@ describe("MobileNavbar", () => {
   it("opens the drawer, closes on Escape, and returns focus to the trigger", () => {
     render(<MobileNavbar />);
 
-    const trigger = screen.getByRole("button", { name: "Menu" });
+    const trigger = screen.getByRole("button", { name: "Open navigation" });
     expect(trigger).toHaveAttribute("aria-expanded", "false");
 
     fireEvent.click(trigger);

@@ -1,5 +1,5 @@
 import { ProjectGrid } from "@/features/projects/components/ProjectGrid";
-import { projects } from "@/content/projects";
+import { getProjectCaseStudies } from "@/lib/projectMarkdown";
 
 interface ProjectsSectionProps {
   readonly heading?: string;
@@ -10,8 +10,10 @@ interface ProjectsSectionProps {
 // (CONTENT_SPEC.md §4), while the standalone /projects route already has
 // its own "Projects" H1 and doesn't need a second, duplicate heading.
 export function ProjectsSection({ heading, headingId }: ProjectsSectionProps) {
+  const projects = getProjectCaseStudies();
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {heading ? (
         <h2
           id={headingId}

@@ -8,11 +8,11 @@ import { identity } from "@/content/identity";
 // size and heading level are independent — the H1 stays first and correct.
 export function HeroTitle() {
   return (
-    <div className="flex flex-col gap-3">
-      <h1 className="text-page-title font-semibold text-text-primary md:text-page-title-desktop">
+    <div className="flex flex-col gap-5">
+      <h1 id="hero-heading" className="text-label font-medium text-text-muted">
         {identity.name}
       </h1>
-      <p className="text-hero font-semibold text-text-primary md:text-hero-desktop">
+      <p className="max-w-4xl text-hero font-semibold text-balance text-text-primary md:text-hero-desktop">
         {identity.headline}
       </p>
     </div>

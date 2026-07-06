@@ -4,11 +4,10 @@ import { HeroSection } from "@/components/hero/HeroSection";
 
 export default function Home() {
   return (
-    <PageWrapper className="flex-1 justify-center py-12 md:py-16">
-      <Section>
+    <PageWrapper className="min-h-screen flex-1 justify-center py-12 md:py-16">
+      <Section ariaLabelledBy="hero-heading">
         <HeroSection />
       </Section>
     </PageWrapper>
   );
 }
-

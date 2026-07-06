@@ -22,8 +22,15 @@ export function MobileNavbar() {
         onClick={() => setIsOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
+        aria-label="Open navigation"
+        className="inline-flex h-10 items-center gap-2 rounded-md border border-border-subtle px-3 text-[0.875rem] font-medium text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
       >
-        Menu
+        <span>Menu</span>
+        <span className="flex flex-col gap-1" aria-hidden="true">
+          <span className="block h-px w-4 bg-current" />
+          <span className="block h-px w-4 bg-current" />
+          <span className="block h-px w-4 bg-current" />
+        </span>
       </button>
       <NavigationDrawer
         isOpen={isOpen}

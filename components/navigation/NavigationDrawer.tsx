@@ -14,10 +14,9 @@ interface NavigationDrawerProps {
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-// Traps focus while open, closes on Escape. Focus is returned to the
+// Traps focus while open and closes on Escape. Focus is returned to the
 // trigger by the caller's `onClose` (see MobileNavbar), not here, so this
-// effect doesn't fire on initial mount. Open/close motion is deliberately
-// absent — that's Milestone 12 (task MOT-03), which depends on this one.
+// effect doesn't fire on initial mount.
 export function NavigationDrawer({
   isOpen,
   onClose,
@@ -73,21 +72,34 @@ export function NavigationDrawer({
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
-      className="fixed inset-0 z-50 flex flex-col"
+      className="fixed inset-0 z-50 flex flex-col bg-background-page px-4 py-5"
     >
-      <button type="button" onClick={onClose} aria-label="Close menu">
-        Close
-      </button>
-      <nav aria-label="Primary" className="flex flex-col">
-        {navigationLinks.map((item) => (
-          <NavItem
-            key={item.href}
-            label={item.label}
-            href={item.href}
-            isActive={isNavItemActive(pathname, item.href)}
-            onClick={onClose}
-          />
-        ))}
+      <div className="flex items-center justify-between border-b border-border-subtle pb-4">
+        <p className="text-[0.9375rem] font-semibold text-text-primary">
+          Navigation
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close navigation"
+          className="inline-flex h-10 items-center rounded-md px-3 text-[0.875rem] font-medium text-text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+        >
+          Close
+        </button>
+      </div>
+      <nav aria-label="Primary" className="pt-6">
+        <ul className="flex flex-col gap-1">
+          {navigationLinks.map((item) => (
+            <li key={item.href}>
+              <NavItem
+                label={item.label}
+                href={item.href}
+                isActive={isNavItemActive(pathname, item.href)}
+                onClick={onClose}
+              />
+            </li>
+          ))}
+        </ul>
       </nav>
     </div>
   );

@@ -14,7 +14,7 @@ describe("Home", () => {
     render(<Home />);
     expect(
       screen.getByText(
-        "Building AI Products, Open Source & Real-World Solutions",
+        "Building Intelligent Products Through Machine Learning & Engineering",
       ),
     ).toBeInTheDocument();
     expect(
@@ -52,4 +52,3 @@ describe("Home", () => {
     );
   });
 });
-

@@ -7,7 +7,8 @@ export const identity: Identity = {
   institution: "Maharaja Surajmal Institute of Technology",
   graduationYear: 2029,
   currentCgpa: 8.59,
-  headline: "Building AI Products, Open Source & Real-World Solutions",
+  headline:
+    "Building Intelligent Products Through Machine Learning & Engineering",
   heroStatement:
     "Turning ideas into intelligent products through machine learning and engineering.",
   coreMessage:

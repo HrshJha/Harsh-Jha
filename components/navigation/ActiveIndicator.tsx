@@ -10,5 +10,10 @@ export function ActiveIndicator({ isActive }: ActiveIndicatorProps) {
     return null;
   }
 
-  return <span aria-hidden="true" className="block h-0.5 w-full bg-current" />;
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute bottom-1.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-text-muted"
+    />
+  );
 }
