@@ -4,3 +4,7 @@ out
 coverage
 pnpm-lock.yaml
 docs
+
+# Pre-existing files outside this milestone's scope
+.clario
+CLAUDE.md
