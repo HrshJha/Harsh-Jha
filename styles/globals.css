@@ -81,8 +81,9 @@
 
 :root {
   color-scheme: light;
-  --font-interface: var(--font-geist-sans), ui-sans-serif, system-ui,
-    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-interface:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-technical: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --leading-display: 1.05;
   --leading-heading: 1.15;
@@ -171,16 +172,24 @@ body {
   --graph-node-size: var(--spacing-3);
   --graph-node-x: 50%;
   --graph-node-y: 50%;
-  --graph-motion-slow: calc(var(--duration-slow) * 28);
-  --graph-motion-base: calc(var(--duration-slow) * 18);
-  --graph-motion-fast: calc(var(--duration-slow) * 12);
+  --graph-motion-slow: 7280ms;
+  --graph-motion-base: 4680ms;
+  --graph-motion-fast: 3120ms;
+  --graph-delay-short: -1040ms;
+  --graph-delay-medium: -2080ms;
+  --graph-delay-long: -3120ms;
+  --graph-delay-xlong: -4160ms;
   position: relative;
-  min-height: calc(var(--spacing-32) * 3);
+  min-height: calc(var(--spacing-32) + var(--spacing-32) + var(--spacing-32));
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background:
-    radial-gradient(circle at 48% 42%, rgb(240 166 111 / 0.16), transparent 34%),
+    radial-gradient(
+      circle at 48% 42%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 34%
+    ),
     linear-gradient(135deg, var(--surface), var(--background));
   box-shadow: var(--elevation-subtle);
   isolation: isolate;
@@ -206,7 +215,11 @@ body {
 
 .ai-systems-glow {
   background:
-    radial-gradient(circle at 32% 58%, rgb(240 166 111 / 0.16), transparent 22%),
+    radial-gradient(
+      circle at 32% 58%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 22%
+    ),
     radial-gradient(circle at 72% 44%, rgb(255 253 250 / 0.08), transparent 26%);
   filter: blur(var(--spacing-6));
   transform: translate3d(0, 0, 0);
@@ -244,11 +257,11 @@ body {
 }
 
 .ai-systems-edge-delayed {
-  animation-delay: calc(var(--duration-slow) * -8);
+  animation-delay: var(--graph-delay-medium);
 }
 
 .ai-systems-edge-offset {
-  animation-delay: calc(var(--duration-slow) * -14);
+  animation-delay: var(--graph-delay-long);
 }
 
 .ai-systems-core {
@@ -279,6 +292,7 @@ body {
 .ai-systems-focus {
   z-index: 3;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   pointer-events: none;
@@ -290,22 +304,23 @@ body {
 }
 
 .ai-systems-focus > span {
-  margin-bottom: var(--spacing-2);
   color: var(--muted-foreground);
   font-size: var(--text-label);
   font-weight: 500;
   line-height: var(--leading-label);
+  position: absolute;
+  transform: translate3d(0, calc(0rem - var(--spacing-12)), 0);
 }
 
 .ai-systems-focus > strong {
-  max-width: calc(var(--spacing-32) * 2);
+  max-width: calc(var(--spacing-32) + var(--spacing-32));
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   box-shadow: var(--elevation-interactive);
   color: var(--foreground);
   font-size: var(--text-card-title);
-  font-weight: 650;
+  font-weight: 600;
   line-height: var(--leading-heading);
   padding: var(--spacing-4) var(--spacing-6);
   text-align: center;
@@ -336,8 +351,8 @@ body {
   line-height: var(--leading-label);
   padding: var(--spacing-2) var(--spacing-3);
   backdrop-filter: blur(var(--spacing-2));
-  animation: ai-node-float var(--graph-motion-slow) var(--ease-standard) infinite
-    alternate;
+  animation: ai-node-float var(--graph-motion-slow) var(--ease-standard)
+    infinite alternate;
 }
 
 .ai-system-node-active {
@@ -349,44 +364,45 @@ body {
   width: var(--graph-node-size);
   height: var(--graph-node-size);
   flex: 0 0 var(--graph-node-size);
-  border-radius: 999px;
+  border-radius: var(--radius-lg);
   background: var(--accent);
-  box-shadow: 0 0 0 var(--spacing-2) rgb(240 166 111 / 0.12);
+  box-shadow: 0 0 0 var(--spacing-2)
+    color-mix(in srgb, var(--accent) 12%, transparent);
   animation: ai-node-pulse var(--graph-motion-fast) var(--ease-enter) infinite;
 }
 
 .ai-node-data {
-  --graph-node-x: 14%;
-  --graph-node-y: 54%;
+  --graph-node-x: 18%;
+  --graph-node-y: 50%;
 }
 
 .ai-node-models {
-  --graph-node-x: 46%;
-  --graph-node-y: 18%;
-  animation-delay: calc(var(--duration-slow) * -4);
+  --graph-node-x: 50%;
+  --graph-node-y: 16%;
+  animation-delay: var(--graph-delay-short);
 }
 
 .ai-node-agents {
-  --graph-node-x: 84%;
-  --graph-node-y: 52%;
-  animation-delay: calc(var(--duration-slow) * -8);
+  --graph-node-x: 82%;
+  --graph-node-y: 50%;
+  animation-delay: var(--graph-delay-medium);
 }
 
 .ai-node-evaluation {
-  --graph-node-x: 46%;
+  --graph-node-x: 50%;
   --graph-node-y: 84%;
-  animation-delay: calc(var(--duration-slow) * -12);
+  animation-delay: var(--graph-delay-long);
 }
 
 .ai-node-deployment {
-  --graph-node-x: 18%;
-  --graph-node-y: 82%;
-  animation-delay: calc(var(--duration-slow) * -16);
+  --graph-node-x: 24%;
+  --graph-node-y: 78%;
+  animation-delay: var(--graph-delay-xlong);
 }
 
 @keyframes ai-edge-flow {
   to {
-    stroke-dashoffset: calc(var(--spacing-8) * -1);
+    stroke-dashoffset: calc(0rem - var(--spacing-8));
   }
 }
 
@@ -404,21 +420,22 @@ body {
 
 @keyframes ai-node-pulse {
   50% {
-    box-shadow: 0 0 0 var(--spacing-3) rgb(240 166 111 / 0.08);
+    box-shadow: 0 0 0 var(--spacing-3)
+      color-mix(in srgb, var(--accent) 8%, transparent);
     transform: scale(1.03);
   }
 }
 
 @keyframes ai-graph-drift {
   to {
-    transform: translate3d(var(--spacing-2), calc(var(--spacing-2) * -1), 0)
+    transform: translate3d(var(--spacing-2), calc(0rem - var(--spacing-2)), 0)
       scale(1.03);
   }
 }
 
 @media (max-width: 63.999rem) {
   .ai-systems-panel {
-    min-height: calc(var(--spacing-32) * 2.5);
+    min-height: calc(var(--spacing-32) + var(--spacing-32) + var(--spacing-16));
   }
 
   .ai-systems-graph {
@@ -431,27 +448,27 @@ body {
   }
 
   .ai-node-data {
-    --graph-node-x: 18%;
-    --graph-node-y: 32%;
+    --graph-node-x: 20%;
+    --graph-node-y: 38%;
   }
 
   .ai-node-models {
-    --graph-node-x: 52%;
+    --graph-node-x: 50%;
     --graph-node-y: 16%;
   }
 
   .ai-node-agents {
-    --graph-node-x: 82%;
+    --graph-node-x: 80%;
     --graph-node-y: 38%;
   }
 
   .ai-node-evaluation {
-    --graph-node-x: 62%;
+    --graph-node-x: 58%;
     --graph-node-y: 84%;
   }
 
   .ai-node-deployment {
-    --graph-node-x: 22%;
+    --graph-node-x: 26%;
     --graph-node-y: 78%;
   }
 }

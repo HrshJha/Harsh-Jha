@@ -1,11 +1,11 @@
 import { identity } from "@/content/identity";
 
 const SYSTEM_NODES = [
-  { label: "Data", className: "ai-node-data" },
-  { label: "Models", className: "ai-node-models" },
+  { label: "Data", className: "ai-node-data", isFocus: false },
+  { label: "Models", className: "ai-node-models", isFocus: false },
   { label: "Agents", className: "ai-node-agents", isFocus: true },
-  { label: "Evaluation", className: "ai-node-evaluation" },
-  { label: "Deployment", className: "ai-node-deployment" },
+  { label: "Evaluation", className: "ai-node-evaluation", isFocus: false },
+  { label: "Deployment", className: "ai-node-deployment", isFocus: false },
 ] as const;
 
 export function HeroVisual() {
@@ -65,9 +65,13 @@ export function HeroVisual() {
           {SYSTEM_NODES.map((node) => (
             <div
               key={node.label}
-              className={`ai-system-node ${node.className} ${
-                node.isFocus ? "ai-system-node-active" : ""
-              }`}
+              className={[
+                "ai-system-node",
+                node.className,
+                node.isFocus ? "ai-system-node-active" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
               <span className="ai-system-node-dot" />
               <span>{node.label}</span>

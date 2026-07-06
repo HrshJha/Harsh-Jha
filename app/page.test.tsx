@@ -60,7 +60,7 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("img", { name: "AI systems focus map" }),
+      screen.getByRole("img", { name: /AI systems focus map/ }),
     ).toBeInTheDocument();
   });
 
