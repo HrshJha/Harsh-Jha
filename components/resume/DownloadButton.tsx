@@ -10,7 +10,7 @@ interface DownloadButtonProps {
 
 export function DownloadButton({ assetPath }: DownloadButtonProps) {
   return (
-    <Button href={assetPath} download variant="primary">
+    <Button href={assetPath} download variant="primary" size="lg">
       Download Resume
     </Button>
   );

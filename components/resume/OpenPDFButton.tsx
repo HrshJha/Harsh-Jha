@@ -10,7 +10,13 @@ interface OpenPDFButtonProps {
 
 export function OpenPDFButton({ assetPath }: OpenPDFButtonProps) {
   return (
-    <Button href={assetPath} target="_blank" rel="noopener noreferrer" variant="secondary">
+    <Button
+      href={assetPath}
+      target="_blank"
+      rel="noopener noreferrer"
+      variant="secondary"
+      size="lg"
+    >
       Open PDF
     </Button>
   );

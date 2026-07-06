@@ -82,8 +82,8 @@ export function TimelineItem({ entry }: TimelineItemProps) {
         </dl>
 
         <Button
-          aria-expanded={isExpanded}
-          aria-controls={contentId}
+          ariaExpanded={isExpanded}
+          ariaControls={contentId}
           onClick={() => setIsExpanded((current) => !current)}
           variant="secondary"
           size="sm"

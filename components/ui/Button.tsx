@@ -10,6 +10,8 @@ interface BaseButtonProps {
   readonly size?: ButtonSize;
   readonly className?: string;
   readonly ariaLabel?: string;
+  readonly ariaControls?: string;
+  readonly ariaExpanded?: boolean;
   readonly loading?: boolean;
   readonly children: ReactNode;
 }
@@ -64,6 +66,8 @@ export function Button({
   size = "md",
   className,
   ariaLabel,
+  ariaControls,
+  ariaExpanded,
   loading = false,
   children,
   ...props
@@ -85,6 +89,8 @@ export function Button({
           target={props.target}
           rel={props.rel}
           aria-label={ariaLabel}
+          aria-controls={ariaControls}
+          aria-expanded={ariaExpanded}
           aria-disabled={isDisabled || undefined}
           className={classes}
         >
@@ -96,6 +102,8 @@ export function Button({
       <Link
         href={props.href}
         aria-label={ariaLabel}
+        aria-controls={ariaControls}
+        aria-expanded={ariaExpanded}
         aria-disabled={isDisabled || undefined}
         className={classes}
       >
@@ -110,6 +118,8 @@ export function Button({
       onClick={props.onClick}
       disabled={isDisabled}
       aria-label={ariaLabel}
+      aria-controls={ariaControls}
+      aria-expanded={ariaExpanded}
       aria-busy={loading || undefined}
       className={classes}
     >

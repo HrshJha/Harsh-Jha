@@ -16,7 +16,7 @@ export default function ContactPage() {
         <div className="flex flex-col gap-8">
           <h1
             id="contact-heading"
-            className="text-page-title font-semibold text-foreground "
+            className="text-page-title font-semibold text-foreground"
           >
             Contact
           </h1>

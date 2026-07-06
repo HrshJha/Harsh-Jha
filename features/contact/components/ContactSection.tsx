@@ -19,7 +19,7 @@ export function ContactSection({
       {heading ? (
         <h2
           id={headingId}
-          className="text-section-heading font-semibold text-foreground "
+          className="text-section-heading font-semibold text-foreground"
         >
           {heading}
         </h2>
