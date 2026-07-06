@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home from "./page";
 
@@ -38,31 +38,26 @@ describe("Home", () => {
 
   it("renders the approved social links", () => {
     render(<Home />);
-    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute(
+    const socialProfiles = screen.getByRole("list", { name: "Social profiles" });
+
+    expect(within(socialProfiles).getByRole("link", { name: "GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/HrshJha",
     );
-    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
-      "href",
-      "https://www.linkedin.com/in/hrshjha/",
-    );
-    expect(screen.getByRole("link", { name: "X" })).toHaveAttribute(
+    expect(
+      within(socialProfiles).getByRole("link", { name: "LinkedIn" }),
+    ).toHaveAttribute("href", "https://www.linkedin.com/in/hrshjha/");
+    expect(within(socialProfiles).getByRole("link", { name: "X" })).toHaveAttribute(
       "href",
       "https://x.com/m_eharsh",
     );
   });
 
-  it("makes the hero visual interactive", () => {
+  it("renders the static hero systems visual", () => {
     render(<Home />);
 
-    const heroGraphButton = screen.getByRole("button", {
-      name: "Activate hero graph",
-    });
-
-    expect(heroGraphButton).toHaveAttribute("aria-pressed", "false");
-
-    fireEvent.click(heroGraphButton);
-
-    expect(heroGraphButton).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("img", { name: "AI systems focus map" }),
+    ).toBeInTheDocument();
   });
 });
