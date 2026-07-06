@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+/*
+ * MVP token baseline from docs/DESIGN_SYSTEM.md §2-4, §12. Values are
+ * copied verbatim from the approved token tables — nothing here is
+ * invented. Breakpoints and the base spacing unit are omitted because
+ * Tailwind's own defaults already match them exactly (see DECISIONS.md).
+ */
+@theme {
+  /* Color System (§3) */
+  --color-primary: #111827;
+  --color-secondary: #374151;
+  --color-surface-base: #ffffff;
+  --color-surface-raised: #f7f8fa;
+  --color-background-page: #ffffff;
+  --color-border-subtle: #e5e7eb;
+  --color-border-strong: #cbd5e1;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  --color-accent: #2563eb;
+  --color-success: #047857;
+  --color-warning: #b45309;
+  --color-error: #b91c1c;
+  --color-info: #0369a1;
+  --color-state-hover: #f3f4f6;
+  --color-state-focus: #2563eb;
+  --color-state-disabled: #9ca3af;
+
+  /* Typography System (§4) — font.sans falls back past the unavailable
+     Geist/Inter names to system-ui until an approved font asset/package
+     is added (see DECISIONS.md). */
+  --font-sans:
+    "Geist Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-hero: 2.5rem;
+  --text-hero--line-height: 1.15;
+  --text-hero-desktop: 3.5rem;
+  --text-hero-desktop--line-height: 1.15;
+  --text-page-title: 2rem;
+  --text-page-title--line-height: 1.15;
+  --text-page-title-desktop: 2.5rem;
+  --text-page-title-desktop--line-height: 1.15;
+  --text-body: 1rem;
+  --text-body--line-height: 1.55;
+
+  /* Border Radius Scale (§2) */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Container Widths (§2) */
+  --container-text: 42rem;
+  --container-content: 72rem;
+  --container-wide: 88rem;
+
+  /* Motion Tokens (§12) */
+  --duration-instant: 0ms;
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+}

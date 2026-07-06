@@ -117,8 +117,7 @@ confirmation before use. Nothing was installed in Milestone 1.
 
 ---
 
-## 2026-07-06 — Milestone 2: folder ownership conflict (`components/ui` vs.
-`components/layout` vs. `components/shared`)
+## 2026-07-06 — Milestone 2: folder ownership conflict (`components/ui` vs. `components/layout` vs. `components/shared`)
 
 **Decision:** `Container`, `Section`, and `Grid` live in `components/ui/`.
 `MainLayout` and `PageWrapper` live in `components/layout/`. No
@@ -203,8 +202,7 @@ for Milestone 14 to consume via `lib/metadata.ts`.
 
 ---
 
-## 2026-07-06 — Ongoing: uncommitted changes are being auto-committed by an
-external process
+## 2026-07-06 — Ongoing: uncommitted changes are being auto-committed by an external process
 
 **Status:** Observed again this milestone, not caused by me.
 
@@ -220,3 +218,109 @@ and `docs/IMPLEMENTATION_PLAN.md` into invented "approved" values). Flagged
 to the user at the end of Milestone 1; no action taken on it since, and I'm
 not taking unilateral action on it now either — noting it here so it's on
 the record.
+
+---
+
+## 2026-07-06 — Milestone 3: functional interface microcopy filled in ahead of formal approval
+
+**Decision:** Used minimal, conventional text for four pieces of UI copy
+that multiple source documents mark `MISSING INFORMATION`: the mobile menu
+trigger ("Menu"), its close button ("Close" / `aria-label="Close menu"`),
+the drawer's accessible name (`aria-label="Navigation menu"`), and both
+`nav` landmarks' accessible name (`aria-label="Primary"`).
+
+**Reason:** These aren't product/marketing content in the sense
+`FOUNDATION.md`'s "never invent" rule is protecting against (achievements,
+claims, biography) — they're required accessible names for interactive
+controls that must exist for the component to be usable at all (an
+icon/text-only toggle and a `role="dialog"` both require an accessible
+name per WCAG). `docs/COMPONENT_SPEC.md` §3 explicitly says the toggle's
+label "must be supplied before release," implying the component should
+still be built now with a placeholder. Leaving these blank or blocking the
+whole milestone on approval of the word "Menu" seemed disproportionate.
+
+**Trade-offs:** This is a judgment call, not a resolved requirement — flag
+if you want different wording; all four strings live in exactly four
+places (`components/navigation/{MobileNavbar,NavigationDrawer}.tsx`,
+`components/navigation/DesktopNavbar.tsx`) so they're cheap to change.
+
+---
+
+## 2026-07-06 — Milestone 3: hand-rolled focus trap instead of a dependency
+
+**Decision:** `NavigationDrawer`'s focus trap (Tab wrapping, Escape close,
+initial focus) is hand-written with `useEffect` + `querySelectorAll`,
+rather than using an accessible-dialog library (e.g. Radix UI's Dialog,
+which `docs/TECH_SPEC.md` §2 explicitly allows: "shadcn/ui only if
+implementation needs accessible primitives such as Sheet/Dialog").
+
+**Reason:** `CLAUDE.md`'s Completion Rules require your approval before any
+dependency addition. Rather than pause mid-milestone to ask, I implemented
+the trap directly — it's a bounded, six-link menu, not a general-purpose
+modal system, so this was tractable without a library.
+
+**Trade-offs:** A hand-rolled trap is more surface area to get subtly wrong
+than a battle-tested primitive. Covered by
+`components/navigation/MobileNavbar.test.tsx` (open → Escape → focus
+returns to trigger). If you'd rather standardize on Radix/shadcn for this
+and future overlays (there will be at least one more: none currently
+planned, but `docs/COMPONENT_SPEC.md` reserves `Modal`/`Accordion`/`Tabs`
+as future-only), say so and I'll swap it in.
+
+---
+
+## 2026-07-06 — Milestone 3: no drawer open/close animation yet
+
+**Decision:** The mobile drawer mounts/unmounts instantly (conditional
+render), no transition.
+
+**Reason:** `docs/IMPLEMENTATION_PLAN.md` assigns "Add mobile drawer
+transition" to Milestone 12 (Animations, task `MOT-03`), which explicitly
+depends on this milestone's `NAV-05`. Motion is scoped to land after all of
+Milestones 3–11 are functionally complete, not incrementally per milestone.
+
+**Trade-offs:** None; this is the documented sequencing, not a shortcut.
+
+---
+
+## 2026-07-06 — Milestone 3: active-route matching uses prefix match
+
+**Decision:** `utils/isNavItemActive.ts` treats `/projects/frameos` as
+matching the "Projects" nav item (`href: "/projects"`), not just an exact
+path match. Home (`/`) is the one exception — it matches only the exact
+root path.
+
+**Reason:** Not specified by any source document at this level of detail;
+this is the conventional interpretation of "active route" (a project detail
+page is still "within" Projects) and avoids every nav item going dark once
+a user navigates to `/projects/[slug]`.
+
+**Trade-offs:** Judgment call — flag if you want exact-match-only
+semantics instead.
+
+---
+
+## 2026-07-06 — Milestone 3: no sticky header
+
+**Decision:** `NavigationLayout`'s `<header>` uses normal document flow, no
+`position: sticky`.
+
+**Reason:** `docs/DESIGN_SYSTEM.md` §9 marks sticky-nav behavior
+`MISSING INFORMATION` ("allowed only if it improves orientation... Sticky
+behavior: MISSING INFORMATION"). Non-sticky is the conservative default
+that doesn't require inventing a behavior.
+
+**Trade-offs:** None; deferred, not decided against.
+
+---
+
+## 2026-07-06 — Milestone 3: no social links in the primary nav
+
+**Decision:** `NavigationLayout` renders only `Logo` + the six primary
+links (via `DesktopNavbar`/`MobileNavbar`) — no GitHub/LinkedIn/X/Email.
+
+**Reason:** `docs/DESIGN_SYSTEM.md` §9: "Social links are secondary and
+must not compete with primary navigation." Social/contact links belong to
+Milestone 11 (Contact) and the Footer tasks, not Milestone 3.
+
+**Trade-offs:** None; this is the documented scope boundary.

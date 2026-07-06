@@ -95,3 +95,47 @@ Hero/Projects/Experience/About/Skills/Education/Resume/Contact
 **Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
 `pnpm test` (4 tests passing), `pnpm build` (all 12 routes prerendered
 statically, including exactly the four approved project slugs).
+
+---
+
+## 2026-07-06 — Milestone 3: Navigation
+
+**Added:**
+
+- `types/navigation.ts` (`NavLink`), `content/navigation.ts` (the six
+  approved nav links, in order), `content/navigation.test.ts`.
+- `utils/isNavItemActive.ts` (prefix-aware active-route matching) +
+  `utils/isNavItemActive.test.ts`.
+- `components/navigation/`: `Logo`, `NavItem`, `ActiveIndicator`,
+  `DesktopNavbar` (+ test), `MobileNavbar` (+ test), `NavigationDrawer`.
+- `components/layout/NavigationLayout.tsx` — composes `Logo` +
+  `DesktopNavbar` + `MobileNavbar` inside a `header`.
+- Mobile nav drawer with a hand-rolled focus trap: initial focus on open,
+  Tab/Shift+Tab wrapping, Escape to close, focus returned to the trigger
+  button on close. `role="dialog"` / `aria-modal="true"`.
+- Active-route indication via `aria-current="page"` plus a non-color-only
+  visual underline (`ActiveIndicator`), for both desktop and mobile nav.
+
+**Modified:**
+
+- `app/layout.tsx` — renders `<NavigationLayout />` above `<MainLayout>`.
+
+**Not implemented (explicitly deferred):** drawer open/close animation
+(Milestone 12, task `MOT-03`), sticky header (`MISSING INFORMATION`),
+social/contact links in the header nav (Milestone 11 / Footer),
+`ThemeToggle` (explicitly excluded by this milestone's own acceptance
+criteria), `NavGroup`/`ScrollProgress` (not requested by this milestone's
+deliverable list).
+
+**Judgment calls made on unapproved microcopy** (see `DECISIONS.md` for
+full reasoning — all four strings are cheap to change): mobile toggle
+label "Menu", close button "Close", drawer `aria-label="Navigation menu"`,
+nav landmark `aria-label="Primary"`.
+
+**Also fixed:** two markdown headings in `DECISIONS.md` that had been
+accidentally hard-wrapped across two lines during Milestone 2 authoring,
+which broke them into non-heading paragraphs once Prettier reformatted the
+file.
+
+**Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
+`pnpm test` (7 test files, 11 tests passing), `pnpm build`.
