@@ -1,13 +1,23 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { about } from "@/content/about";
 import { education } from "@/content/education";
-import { skillCategories } from "@/content/skills";
+import { Badge } from "@/components/ui/Badge";
 
 interface AboutSectionProps {
   readonly heading?: string;
   readonly headingId?: string;
 }
+
+const CURRENTLY_EXPLORING = [
+  "Machine Learning",
+  "Deep Learning",
+  "NLP",
+  "Large Language Models",
+  "AI Agents",
+  "Generative AI",
+  "Production AI Systems",
+  "System Design",
+] as const;
 
 function SectionBlock({
   title,
@@ -26,73 +36,7 @@ function SectionBlock({
   );
 }
 
-function IntroBlock({ children }: { readonly children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-4 border-b border-border-subtle pb-8">
-      {children}
-    </div>
-  );
-}
-
-function TextLink({
-  href,
-  children,
-}: {
-  readonly href: string;
-  readonly children: ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="font-medium text-text-primary underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
-    >
-      {children}
-    </Link>
-  );
-}
-
-function CapabilityGroup({
-  title,
-  items,
-  note,
-}: {
-  readonly title: string;
-  readonly items: readonly string[];
-  readonly note?: string;
-}) {
-  if (items.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="flex flex-col gap-2">
-      <h3 className="text-card-title font-semibold text-text-primary">
-        {title}
-      </h3>
-      <p className="max-w-text text-body leading-7 text-text-secondary">
-        {items.join(", ")}
-      </p>
-      {note ? (
-        <p className="max-w-text text-label text-text-muted">{note}</p>
-      ) : null}
-    </div>
-  );
-}
-
 export function AboutSection({ heading, headingId }: AboutSectionProps) {
-  const programming = skillCategories.find(
-    (category) => category.category === "Programming",
-  );
-  const libraries = skillCategories.find(
-    (category) => category.category === "Libraries",
-  );
-  const backend = skillCategories.find(
-    (category) => category.category === "Backend",
-  );
-  const developerTools = skillCategories.find(
-    (category) => category.category === "Developer Tools",
-  );
-
   return (
     <div className="flex flex-col gap-10">
       {heading ? (
@@ -104,37 +48,25 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
         </h1>
       ) : null}
 
-      <IntroBlock>
+      <SectionBlock title="About Me">
         <p className="max-w-text text-body leading-7 text-text-secondary">
-          I am an engineering student at {about.identity.institution}, working
-          toward AI research and production AI engineering. My profile is
-          centered on machine learning, AI systems, and the discipline required
-          to turn technical ideas into maintainable products.
+          I&apos;m Harsh Kumar Jha, an Electronics &amp; Communication
+          Engineering student at Maharaja Surajmal Institute of Technology with
+          a strong interest in AI systems, machine learning, and production
+          engineering.
         </p>
         <p className="max-w-text text-body leading-7 text-text-secondary">
-          The detailed evidence for that work lives in{" "}
-          <TextLink href="/projects">Projects</TextLink>,{" "}
-          <TextLink href="/experience">Experience</TextLink>, and{" "}
-          <TextLink href="/resume">Resume</TextLink>. This page is the canonical
-          profile for how I think, what I know, where I study, and the engineer
-          I am working toward becoming.
-        </p>
-      </IntroBlock>
-
-      <SectionBlock title="Current Focus">
-        <p className="max-w-text text-body leading-7 text-text-secondary">
-          My current focus areas are {about.focusAreas.join(", ")}. Across those
-          areas, I am most interested in systems that combine research,
-          engineering judgment, and product usefulness rather than isolated
-          model demos.
+          I enjoy turning research ideas into real software by combining
+          engineering fundamentals, scalable system design, and practical
+          implementation. My goal is to build AI products that are reliable,
+          maintainable, and useful beyond demonstrations.
         </p>
       </SectionBlock>
 
       <SectionBlock title="Engineering Philosophy">
         <p className="max-w-text text-body leading-7 text-text-secondary">
-          These principles define how I evaluate technical work: the goal is to
-          understand the problem, make the implementation defensible, and ship
-          work that can be inspected beyond a surface-level demo.
+          The principles that guide how I approach engineering and problem
+          solving.
         </p>
         <ul className="grid gap-2 text-body text-text-secondary md:grid-cols-2">
           {about.engineeringPhilosophy.map((statement) => (
@@ -143,41 +75,6 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
             </li>
           ))}
         </ul>
-      </SectionBlock>
-
-      <SectionBlock title="How I Learn">
-        <p className="max-w-text text-body leading-7 text-text-secondary">
-          My learning loop starts with research, moves into experimentation, and
-          becomes useful through building. I try to understand concepts before
-          memorizing patterns, then use implementation and iteration to expose
-          gaps in the work.
-        </p>
-      </SectionBlock>
-
-      <SectionBlock title="Technical Capabilities">
-        <div className="grid gap-6 md:grid-cols-2">
-          <CapabilityGroup
-            title="Programming And Data"
-            items={[
-              ...(programming?.skills ?? []),
-              ...(libraries?.skills ?? []),
-            ]}
-          />
-          <CapabilityGroup
-            title="Backend Engineering"
-            items={backend?.skills ?? []}
-            note="Related implementation context is documented on the Experience page where source-backed."
-          />
-          <CapabilityGroup
-            title="AI Engineering Direction"
-            items={about.focusAreas}
-            note="Project-specific implementation details remain on the Projects page."
-          />
-          <CapabilityGroup
-            title="Developer Workflow"
-            items={developerTools?.skills ?? []}
-          />
-        </div>
       </SectionBlock>
 
       <SectionBlock title="Education">
@@ -217,13 +114,14 @@ export function AboutSection({ heading, headingId }: AboutSectionProps) {
         </dl>
       </SectionBlock>
 
-      <SectionBlock title="Future Direction">
-        <p className="max-w-text text-body leading-7 text-text-secondary">
-          I am working toward becoming an {about.vision.primaryGoal} and{" "}
-          {about.vision.secondaryGoal}. The direction is to keep building the
-          judgment needed to connect AI research, production systems, and useful
-          product execution.
-        </p>
+      <SectionBlock title="Currently Exploring">
+        <ul className="flex flex-wrap gap-2" aria-label="Currently exploring">
+          {CURRENTLY_EXPLORING.map((item) => (
+            <li key={item}>
+              <Badge>{item}</Badge>
+            </li>
+          ))}
+        </ul>
       </SectionBlock>
     </div>
   );

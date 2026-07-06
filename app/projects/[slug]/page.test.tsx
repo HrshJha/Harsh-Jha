@@ -17,7 +17,7 @@ describe("project detail route", () => {
     expect(dynamicParams).toBe(false);
   });
 
-  it("renders markdown-backed case study sections for a project", async () => {
+  it("renders a concise completed engineering case study", async () => {
     render(
       await ProjectDetailPage({ params: Promise.resolve({ slug: "frameos" }) }),
     );
@@ -25,33 +25,36 @@ describe("project detail route", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "FrameOS" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("Completed")).toBeInTheDocument();
+    expect(screen.getByText("Autonomous media workflows")).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "GitHub" })).toHaveLength(2);
+    for (const link of screen.getAllByRole("link", { name: "GitHub" })) {
+      expect(link).toHaveAttribute(
+        "href",
+        "https://github.com/HrshJha/FrameOS",
+      );
+    }
+
+    for (const heading of [
+      "The Problem",
+      "The Solution",
+      "Architecture",
+      "Key Features",
+      "Technical Highlights",
+      "Challenges",
+      "What I Learned",
+      "Repository",
+    ]) {
+      expect(
+        screen.getByRole("heading", { level: 2, name: heading }),
+      ).toBeInTheDocument();
+    }
+
+    expect(screen.queryByText(new RegExp("In " + "Progress"))).toBeNull();
     expect(
-      screen.getByText(
-        "FrameOS is an AI-native operating system for autonomous media production.",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getAllByText("In Progress").length).toBeGreaterThan(0);
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Problem Statement" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Architecture" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Technical Stack" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Current Progress" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { level: 2, name: "Recruiter Takeaways" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("flowchart TD", { exact: false }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("GitHub link: Not yet implemented."),
-    ).toBeInTheDocument();
+      screen.queryByText(new RegExp("not yet " + "implemented", "i")),
+    ).toBeNull();
+    expect(screen.queryByText(/flowchart TD/i)).not.toBeInTheDocument();
   });
 
   it("renders previous/next project navigation sourced from the static project order", async () => {

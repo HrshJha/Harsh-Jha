@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { projects } from "./projects";
 
 describe("projects content", () => {
-  it("contains exactly the four approved projects with In Progress status", () => {
+  it("contains exactly the four approved projects with Completed status", () => {
     expect(projects.map((project) => project.name)).toEqual([
       "FrameOS",
       "Candidate Intelligence System",
@@ -11,7 +11,7 @@ describe("projects content", () => {
     ]);
 
     for (const project of projects) {
-      expect(project.status).toBe("In Progress");
+      expect(project.status).toBe("Completed");
     }
   });
 });

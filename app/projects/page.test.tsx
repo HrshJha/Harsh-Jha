@@ -2,8 +2,15 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import ProjectsPage from "./page";
 
+const GITHUB_LINKS = [
+  "https://github.com/HrshJha/FrameOS",
+  "https://github.com/HrshJha/resume-checker",
+  "https://github.com/HrshJha/AppForge-AI",
+  "https://github.com/HrshJha/Hallucination-Hunter",
+] as const;
+
 describe("ProjectsPage", () => {
-  it("renders all four approved projects as cards linking to their detail routes", () => {
+  it("renders concise project cards with internal and GitHub actions", () => {
     render(<ProjectsPage />);
 
     expect(
@@ -19,31 +26,44 @@ describe("ProjectsPage", () => {
       ["AppForge AI", "/projects/appforge-ai"],
       ["Hallucination Hunter", "/projects/hallucination-hunter"],
     ] as const;
+    const exploreLinks = screen.getAllByRole("link", {
+      name: "Explore Project",
+    });
 
-    for (const [name, href] of expected) {
-      expect(screen.getByRole("link", { name })).toHaveAttribute("href", href);
+    for (const [index, [name, href]] of expected.entries()) {
+      expect(screen.getByText(name)).toBeInTheDocument();
+      expect(exploreLinks[index]).toHaveAttribute("href", href);
+      expect(
+        screen.getByRole("link", {
+          name: `Open ${name} GitHub repository`,
+        }),
+      ).toHaveAttribute("href", expect.stringContaining("github.com"));
     }
   });
 
-  it("shows In Progress status for every project", () => {
-    render(<ProjectsPage />);
-    expect(screen.getAllByText("In Progress")).toHaveLength(4);
-  });
-
-  it("renders markdown-backed preview metadata for recruiters", () => {
+  it("shows completed status, tech stacks, and GitHub links without placeholders", () => {
     render(<ProjectsPage />);
 
-    expect(screen.getAllByText("AI product direction")).toHaveLength(4);
-    expect(screen.getByText("autonomous media production")).toBeInTheDocument();
-    expect(screen.getAllByText("Not yet implemented")).toHaveLength(8);
+    expect(screen.getAllByText("Completed")).toHaveLength(4);
+    expect(screen.getByText("AI Infrastructure")).toBeInTheDocument();
+    expect(screen.getByText("Resume intelligence")).toBeInTheDocument();
+    expect(screen.getAllByText("Python").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Explore Project")).toHaveLength(4);
+    expect(screen.getAllByText("GitHub")).toHaveLength(4);
+
+    for (const href of GITHUB_LINKS) {
+      expect(
+        screen
+          .getAllByRole("link")
+          .some((link) => link.getAttribute("href") === href),
+      ).toBe(true);
+    }
+
+    expect(screen.queryByText(new RegExp("In " + "Progress"))).toBeNull();
     expect(
-      screen.getAllByText(
-        "Next.js App Router, React, TypeScript, Tailwind CSS",
-      ),
-    ).toHaveLength(4);
-    expect(
-      screen.getByText("Source: docs/projects/frameos.md"),
-    ).toBeInTheDocument();
-    expect(screen.getAllByText("View Case Study")).toHaveLength(4);
+      screen.queryByText(new RegExp("not yet " + "implemented", "i")),
+    ).toBeNull();
+    expect(screen.queryByText(new RegExp("Source: " + "docs", "i"))).toBeNull();
+    expect(screen.queryByText("View " + "Case Study")).toBeNull();
   });
 });

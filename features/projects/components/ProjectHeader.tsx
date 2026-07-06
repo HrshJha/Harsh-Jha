@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/Button";
+import { ProjectTags } from "@/features/projects/components/ProjectTags";
 import { StatusBadge } from "@/features/projects/components/StatusBadge";
 import type { ProjectCaseStudy } from "@/types/project";
 
@@ -19,36 +21,24 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
         <p className="text-section-heading font-medium text-text-primary">
           {project.shortDescription}
         </p>
-        <p className="max-w-text text-body text-text-secondary">
-          {project.overview}
-        </p>
       </div>
-      <dl className="grid gap-4 md:grid-cols-3">
-        <div>
-          <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
-            Primary focus
-          </dt>
-          <dd className="mt-1 text-body text-text-secondary">
-            {project.primaryFocus}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
-            Product stack
-          </dt>
-          <dd className="mt-1 text-body text-text-secondary">
-            {project.productStackStatus}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
-            Repository
-          </dt>
-          <dd className="mt-1 text-body text-text-secondary">
-            {project.repositoryStatus}
-          </dd>
-        </div>
-      </dl>
+      <div className="flex flex-col gap-3">
+        <p className="text-label font-medium uppercase tracking-normal text-text-muted">
+          {project.primaryFocus}
+        </p>
+        <ProjectTags tags={project.techStack} />
+      </div>
+      <div>
+        <Button
+          href={project.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          variant="secondary"
+          className="h-10 px-4 text-sm"
+        >
+          GitHub
+        </Button>
+      </div>
     </header>
   );
 }

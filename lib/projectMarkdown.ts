@@ -1,13 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { PROJECT_STATUS_IN_PROGRESS } from "@/constants/status";
-import type {
-  Project,
-  ProjectCaseStudy,
-  ProjectMarkdownBlock,
-  ProjectMarkdownSection,
-  ProjectStatus,
-} from "@/types/project";
+import type { Project, ProjectCaseStudy, ProjectStatus } from "@/types/project";
 
 const PROJECT_MARKDOWN_FILES = [
   "frameos.md",
@@ -18,300 +11,104 @@ const PROJECT_MARKDOWN_FILES = [
 
 const PROJECTS_DIRECTORY = join(process.cwd(), "docs", "projects");
 
-interface ParsedMarkdown {
-  readonly title: string;
-  readonly sections: readonly ProjectMarkdownSection[];
-}
-
 function slugFromFileName(fileName: string) {
   return fileName.replace(/\.md$/, "");
 }
 
-function stripMarkdownSyntax(value: string) {
+function stripMarkdown(value: string) {
   return value
-    .replace(/^\s*[-*]\s+/, "")
     .replace(/^#+\s+/, "")
+    .replace(/^\s*-\s+/, "")
     .trim();
 }
 
-function parseTable(lines: readonly string[], startIndex: number) {
-  const rows: string[][] = [];
-  let index = startIndex;
-
-  while (index < lines.length && lines[index].trim().startsWith("|")) {
-    const row = lines[index]
-      .trim()
-      .replace(/^\|/, "")
-      .replace(/\|$/, "")
-      .split("|")
-      .map((cell) => stripMarkdownSyntax(cell));
-    rows.push(row);
-    index += 1;
-  }
-
-  const [headers = [], separator = [], ...bodyRows] = rows;
-  const hasSeparator = separator.every((cell) => /^-+$/.test(cell));
-
-  return {
-    block: {
-      type: "table" as const,
-      headers,
-      rows: hasSeparator ? bodyRows : rows.slice(1),
-    },
-    nextIndex: index,
-  };
-}
-
-function parseBlocks(lines: readonly string[]) {
-  const blocks: ProjectMarkdownBlock[] = [];
-  let index = 0;
-
-  while (index < lines.length) {
-    const line = lines[index];
-    const trimmed = line.trim();
-
-    if (!trimmed || trimmed === "---") {
-      index += 1;
-      continue;
-    }
-
-    if (trimmed.startsWith("```")) {
-      const language = trimmed.replace(/^```/, "").trim();
-      const codeLines: string[] = [];
-      index += 1;
-
-      while (index < lines.length && !lines[index].trim().startsWith("```")) {
-        codeLines.push(lines[index]);
-        index += 1;
-      }
-
-      blocks.push({
-        type: "code",
-        language,
-        code: codeLines.join("\n").trim(),
-      });
-      index += 1;
-      continue;
-    }
-
-    if (/^#{3,4}\s+/.test(trimmed)) {
-      blocks.push({
-        type: "heading",
-        depth: trimmed.startsWith("####") ? 4 : 3,
-        text: stripMarkdownSyntax(trimmed),
-      });
-      index += 1;
-      continue;
-    }
-
-    if (trimmed.startsWith("|")) {
-      const { block, nextIndex } = parseTable(lines, index);
-      blocks.push(block);
-      index = nextIndex;
-      continue;
-    }
-
-    if (/^[-*]\s+/.test(trimmed)) {
-      const items: string[] = [];
-
-      while (index < lines.length && /^[-*]\s+/.test(lines[index].trim())) {
-        items.push(stripMarkdownSyntax(lines[index]));
-        index += 1;
-      }
-
-      blocks.push({ type: "list", items });
-      continue;
-    }
-
-    const paragraphLines: string[] = [];
-
-    while (
-      index < lines.length &&
-      lines[index].trim() &&
-      lines[index].trim() !== "---" &&
-      !/^#{2,4}\s+/.test(lines[index].trim()) &&
-      !lines[index].trim().startsWith("```") &&
-      !lines[index].trim().startsWith("|") &&
-      !/^[-*]\s+/.test(lines[index].trim())
-    ) {
-      paragraphLines.push(lines[index].trim());
-      index += 1;
-    }
-
-    blocks.push({
-      type: "paragraph",
-      text: paragraphLines.join(" "),
-    });
-  }
-
-  return blocks;
-}
-
-function parseMarkdown(markdown: string): ParsedMarkdown {
-  const lines = markdown.split(/\r?\n/);
-  const title = stripMarkdownSyntax(
-    lines.find((line) => line.startsWith("# ")) ?? "",
-  );
-  const sections: ProjectMarkdownSection[] = [];
-  let currentTitle: string | undefined;
-  let currentLines: string[] = [];
-
-  function commitSection() {
-    if (!currentTitle) {
-      return;
-    }
-
-    sections.push({
-      title: currentTitle,
-      blocks: parseBlocks(currentLines),
-    });
-  }
-
-  for (const line of lines) {
-    if (line.startsWith("## ")) {
-      commitSection();
-      currentTitle = stripMarkdownSyntax(line);
-      currentLines = [];
-      continue;
-    }
-
-    if (currentTitle) {
-      currentLines.push(line);
-    }
-  }
-
-  commitSection();
-
-  return { title, sections };
-}
-
-function getSection(
-  sections: readonly ProjectMarkdownSection[],
-  title: string,
-) {
-  return sections.find((section) => section.title === title);
-}
-
-function getFirstParagraph(section: ProjectMarkdownSection | undefined) {
-  return (
-    section?.blocks.find((block) => block.type === "paragraph")?.text ?? ""
+function getTitle(markdown: string) {
+  return stripMarkdown(
+    markdown.split(/\r?\n/).find((line) => line.startsWith("# ")) ?? "",
   );
 }
 
-function getAllParagraphs(section: ProjectMarkdownSection | undefined) {
-  return (
-    section?.blocks
-      .filter((block) => block.type === "paragraph")
-      .map((block) => block.text) ?? []
-  );
+function getSection(markdown: string, title: string) {
+  const pattern = new RegExp(`## ${title}\\n\\n([\\s\\S]*?)(?=\\n## |$)`);
+  const match = markdown.match(pattern);
+
+  return match?.[1].trim() ?? "";
 }
 
-function getListAfterHeading(
-  section: ProjectMarkdownSection | undefined,
-  heading: string,
-) {
-  if (!section) {
-    return [];
-  }
-
-  const headingIndex = section.blocks.findIndex(
-    (block) => block.type === "heading" && block.text === heading,
-  );
-
-  if (headingIndex === -1) {
-    return [];
-  }
-
-  const list = section.blocks
-    .slice(headingIndex + 1)
-    .find((block) => block.type === "list");
-
-  return list?.type === "list"
-    ? list.items.map((item) => item.replace(/\.$/, ""))
-    : [];
+function getParagraphs(section: string) {
+  return section
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.replace(/\n/g, " ").trim())
+    .filter(Boolean);
 }
 
-function getProductStackStatus(section: ProjectMarkdownSection | undefined) {
-  const table = section?.blocks.find((block) => block.type === "table");
-
-  if (!table || table.type !== "table") {
-    return "Planned";
-  }
-
-  const statuses = new Set(table.rows.map((row) => row[1]).filter(Boolean));
-
-  if (statuses.size === 1) {
-    return Array.from(statuses)[0];
-  }
-
-  return "Documented in case study";
+function getBulletItems(section: string) {
+  return section
+    .split(/\r?\n/)
+    .filter((line) => line.trim().startsWith("- "))
+    .map(stripMarkdown);
 }
 
-function getRepositoryStatus(section: ProjectMarkdownSection | undefined) {
-  const line =
-    getAllParagraphs(section).find((paragraph) =>
-      paragraph.startsWith("GitHub link:"),
-    ) ?? "GitHub link: Not yet implemented.";
-
-  return line.replace(/^GitHub link:\s*/, "").replace(/\.$/, "");
-}
-
-function getCategoryAndFocus(elevatorPitch: string) {
-  const match = elevatorPitch.match(
-    /as an in-progress (.+?) focused on (.+?)\./,
+function getMetadataValue(section: string, key: string) {
+  const item = getBulletItems(section).find((line) =>
+    line.startsWith(`${key}:`),
   );
 
-  return {
-    category: match?.[1] ?? "AI product direction",
-    primaryFocus: match?.[2] ?? "Planned",
-  };
+  return item?.replace(`${key}:`, "").trim() ?? "";
 }
 
-function getStatus(section: ProjectMarkdownSection | undefined): ProjectStatus {
-  const statusLine = getAllParagraphs(section).find((paragraph) =>
-    paragraph.startsWith("Current status:"),
-  );
-  const parsedStatus = statusLine
-    ?.replace("Current status:", "")
-    .replace(/\.$/, "")
-    .trim();
+function getRequiredMetadataValue(section: string, key: string) {
+  const value = getMetadataValue(section, key);
 
-  if (parsedStatus === PROJECT_STATUS_IN_PROGRESS) {
-    return parsedStatus;
+  if (!value) {
+    throw new Error(`Missing project metadata field: ${key}`);
   }
 
-  return PROJECT_STATUS_IN_PROGRESS;
+  return value;
+}
+
+function getStatus(value: string): ProjectStatus {
+  if (value === "Completed") {
+    return value;
+  }
+
+  throw new Error(`Unsupported project status: ${value}`);
+}
+
+function getTechStack(metadata: string) {
+  return getRequiredMetadataValue(metadata, "Tech Stack")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function loadProjectCaseStudy(fileName: string): ProjectCaseStudy {
-  const sourcePath = `docs/projects/${fileName}`;
   const markdown = readFileSync(join(PROJECTS_DIRECTORY, fileName), "utf8");
-  const { title, sections } = parseMarkdown(markdown);
-  const summary = getFirstParagraph(getSection(sections, "One-line Summary"));
-  const elevatorPitch = getFirstParagraph(
-    getSection(sections, "Elevator Pitch"),
-  );
-  const systemOverview = getSection(sections, "System Overview");
-  const technicalStack = getSection(sections, "Technical Stack");
-  const repository = getSection(sections, "Repository");
-  const { category, primaryFocus } = getCategoryAndFocus(elevatorPitch);
+  const metadata = getSection(markdown, "Project Metadata");
 
   return {
-    name: title,
+    name: getTitle(markdown),
     slug: slugFromFileName(fileName),
-    shortDescription: summary,
-    status: getStatus(systemOverview),
-    sourcePath,
-    category,
-    primaryFocus,
-    overview: elevatorPitch,
-    portfolioTechnologies: getListAfterHeading(
-      technicalStack,
-      "Repository-backed Portfolio Stack",
+    shortDescription: getParagraphs(
+      getSection(markdown, "One-line Summary"),
+    )[0],
+    category: getRequiredMetadataValue(metadata, "Category"),
+    status: getStatus(getRequiredMetadataValue(metadata, "Status")),
+    githubUrl: getRequiredMetadataValue(metadata, "GitHub"),
+    primaryFocus: getRequiredMetadataValue(
+      metadata,
+      "Primary Engineering Focus",
     ),
-    productStackStatus: getProductStackStatus(technicalStack),
-    repositoryStatus: getRepositoryStatus(repository),
-    sections,
+    techStack: getTechStack(metadata),
+    problem: getParagraphs(getSection(markdown, "The Problem")),
+    solution: getParagraphs(getSection(markdown, "The Solution")),
+    architecture: getBulletItems(getSection(markdown, "Architecture")),
+    keyFeatures: getBulletItems(getSection(markdown, "Key Features")),
+    technicalHighlights: getBulletItems(
+      getSection(markdown, "Technical Highlights"),
+    ),
+    challenges: getBulletItems(getSection(markdown, "Challenges")),
+    learnings: getBulletItems(getSection(markdown, "What I Learned")),
   };
 }
 
