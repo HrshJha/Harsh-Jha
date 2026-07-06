@@ -114,3 +114,109 @@ Milestone 3 Navigation, for a mobile menu toggle or social icons).
 `docs/TECH_SPEC.md` recommends `lucide-react` but `docs/DESIGN_SYSTEM.md` §6
 still marks the icon library as `MISSING INFORMATION` and asks for
 confirmation before use. Nothing was installed in Milestone 1.
+
+---
+
+## 2026-07-06 — Milestone 2: folder ownership conflict (`components/ui` vs.
+`components/layout` vs. `components/shared`)
+
+**Decision:** `Container`, `Section`, and `Grid` live in `components/ui/`.
+`MainLayout` and `PageWrapper` live in `components/layout/`. No
+`components/shared/` folder was created.
+
+**Reason:** Three source documents disagree on where these primitives
+belong: `docs/TECH_SPEC.md` §5 puts `Section`/`Container` under
+`components/ui/` (as "Primitives"); `docs/COMPONENT_SPEC.md` §2 groups
+`Section`/`Container`/`PageWrapper`/`MainLayout` together as "Global Layout
+Components" without naming a folder; `docs/IMPLEMENTATION_PLAN.md`'s
+Milestone 2 file list says `components/layout/` and `components/shared/`.
+Per `CLAUDE.md`'s documentation hierarchy, `TECH_SPEC.md` outranks both
+`COMPONENT_SPEC.md` and `IMPLEMENTATION_PLAN.md`, so its `components/ui/`
+placement for content-agnostic primitives wins. `MainLayout`/`PageWrapper`
+are page-composition components, not generic primitives, so they went to
+`components/layout/` — the one folder name all three documents agree on.
+
+**Trade-offs:** None functionally; this is a folder-naming resolution only.
+
+---
+
+## 2026-07-06 — Milestone 2: route skeletons render approved labels only
+
+**Decision:** Each new route (`/projects`, `/experience`, `/about`,
+`/resume`, `/contact`) renders only its own single-word section heading
+already approved in `docs/CONTENT_SPEC.md` §17 (e.g. "Projects",
+"Experience"). `/projects/[slug]` renders only the matched project's
+approved `name`. No hero copy, project cards, timelines, or other feature
+content was added.
+
+**Reason:** Full page content is explicitly owned by Milestones 4–11
+(Hero, Projects, Experience, About, Skills, Education, Resume, Contact), not
+Milestone 2 ("Core Architecture"). Rendering more now would implement future
+milestones ahead of their own tasks and components (e.g. `ProjectCard`,
+`StatusBadge` don't exist yet).
+
+**Trade-offs:** Pages are visually empty beyond a heading until their
+dedicated milestones land. This is intentional.
+
+---
+
+## 2026-07-06 — Milestone 2: `/projects/[slug]` restricted to approved slugs
+
+**Decision:** `dynamicParams = false` on `app/projects/[slug]/page.tsx`, so
+only the four slugs returned by `generateStaticParams` (derived from
+`content/projects.ts`) resolve; any other slug 404s instead of rendering
+on demand.
+
+**Reason:** `docs/IMPLEMENTATION_PLAN.md` Milestone 2 acceptance criteria:
+"Project detail routes are generated only for the four approved projects."
+
+**Trade-offs:** None — this is the documented requirement, not a judgment
+call.
+
+---
+
+## 2026-07-06 — Milestone 2: 404 page still has no real copy
+
+**Decision:** `app/not-found.tsx` renders only the numeral "404" and a link
+to Home (label "Home", already approved for navigation).
+
+**Reason:** `docs/CONTENT_SPEC.md` §15 and `docs/TECH_SPEC.md` §12 both mark
+404 copy as `MISSING INFORMATION`. A bare status code isn't invented prose;
+a Home link uses only an already-approved label.
+
+**Trade-offs:** No user-facing explanation of what happened exists yet.
+Deferred until approved 404 copy is supplied.
+
+---
+
+## 2026-07-06 — Milestone 2: root/homepage metadata still title-only
+
+**Decision:** Did not add `description`, Open Graph, Twitter, or structured
+data to `app/layout.tsx` or any new route, even though `docs/CONTENT_SPEC.md`
+§13 already has approved homepage description/OG/Twitter text.
+
+**Reason:** Populating full SEO metadata is explicitly Milestone 14's job
+(task `SEO-01`). Content being available doesn't move milestone ownership.
+
+**Trade-offs:** None; deferred, not blocked — the approved copy is ready
+for Milestone 14 to consume via `lib/metadata.ts`.
+
+---
+
+## 2026-07-06 — Ongoing: uncommitted changes are being auto-committed by an
+external process
+
+**Status:** Observed again this milestone, not caused by me.
+
+A background process outside Claude Code (`~/.clario/mcp-server`, per two
+running processes found in Milestone 1) committed the pending
+`.prettierignore`/`next.config.ts` changes left at the end of Milestone 1
+into a new commit (`7d15370`) under the repository owner's git identity,
+without either of us running `git commit`. I verified this specific commit's
+diff contains only the changes I actually made — no additional fabricated
+content this time (unlike the Milestone 1 finding, where the same mechanism
+had rewritten two `MISSING INFORMATION` fields in `docs/COMPONENT_SPEC.md`
+and `docs/IMPLEMENTATION_PLAN.md` into invented "approved" values). Flagged
+to the user at the end of Milestone 1; no action taken on it since, and I'm
+not taking unilateral action on it now either — noting it here so it's on
+the record.

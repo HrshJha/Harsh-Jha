@@ -48,3 +48,50 @@ canonical domain, static-export-vs-hybrid rendering decision. See
 
 **Validation run:** `pnpm install`, `pnpm build`, `pnpm lint`,
 `pnpm typecheck`, `pnpm test`.
+
+---
+
+## 2026-07-06 — Milestone 2: Core Architecture
+
+**Added:**
+
+- Typed content modules in `content/` (`identity.ts`, `projects.ts`,
+  `experience.ts`, `education.ts`, `skills.ts`, `social.ts`), each sourced
+  verbatim from `docs/FOUNDATION.md` / `docs/CONTENT_SPEC.md`, backed by
+  types in `types/` (`identity.ts`, `project.ts`, `experience.ts`,
+  `education.ts`, `skills.ts`, `social.ts`).
+- `constants/status.ts` (shared `"In Progress"` status literal).
+- `config/site.ts` (site name; `siteUrl` left undefined — canonical domain
+  is `MISSING INFORMATION`).
+- `lib/metadata.ts` — `buildMetadata()` helper; emits a canonical URL only
+  once `siteConfig.siteUrl` is set.
+- Shared layout primitives: `components/ui/{Container,Section,Grid}.tsx`,
+  `components/layout/{MainLayout,PageWrapper}.tsx`, plus a small
+  `utils/cn.ts` class-joining helper (no new dependency added for this).
+- Route skeletons: `app/projects/page.tsx`, `app/projects/[slug]/page.tsx`
+  (static params generated only for the four approved project slugs,
+  `dynamicParams = false`), `app/experience/page.tsx`, `app/about/page.tsx`,
+  `app/resume/page.tsx`, `app/contact/page.tsx`, `app/not-found.tsx`. Each
+  renders only its own already-approved section label (or, for the project
+  detail route, the matched project's approved name) — no feature content.
+- Tests: `content/projects.test.ts`, `app/projects/[slug]/page.test.ts`.
+
+**Modified:**
+
+- `app/layout.tsx` — metadata now built via `buildMetadata()`; `children`
+  now wrapped in `MainLayout` (single `main` landmark, owned at the root
+  instead of per-page).
+- `app/page.tsx` — same "Harsh Kumar Jha" placeholder content from
+  Milestone 1, now composed through `PageWrapper`/`Section` instead of a
+  raw `<main>` tag (avoids double `main` landmarks now that the root layout
+  owns it).
+
+**Not implemented (explicitly deferred to later milestones):**
+navigation content/components (Milestone 3), all real page content for
+Hero/Projects/Experience/About/Skills/Education/Resume/Contact
+(Milestones 4–11), full SEO metadata beyond `title` (Milestone 14), approved
+404 copy (blocked on `MISSING INFORMATION`).
+
+**Validation run:** `pnpm typecheck`, `pnpm lint`, `pnpm format:check`,
+`pnpm test` (4 tests passing), `pnpm build` (all 12 routes prerendered
+statically, including exactly the four approved project slugs).
