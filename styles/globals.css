@@ -30,10 +30,8 @@
   /* Typography System (§4) — font.sans falls back past the unavailable
      Geist/Inter names to system-ui until an approved font asset/package
      is added (see DECISIONS.md). */
-  --font-sans:
-    "Geist Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono:
-    "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Geist Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --text-hero: 2.5rem;
   --text-hero--line-height: 1.15;
