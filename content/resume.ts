@@ -15,9 +15,8 @@ export const resume = {
   // The stable route for the Resume page.
   route: "/resume",
 
-  // Resume asset path is MISSING INFORMATION.
-  // Do not add download, open, or PDF-preview behavior until this is defined.
-  assetPath: null as null,
+  // Resume asset path.
+  assetPath: "/documents/Harsh_CV.pdf",
 
   // Supporting copy is MISSING INFORMATION.
   supportingCopy: null as null,

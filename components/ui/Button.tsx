@@ -12,12 +12,18 @@ interface BaseButtonProps {
 
 interface LinkButtonProps extends BaseButtonProps {
   readonly href: string;
+  readonly download?: string | boolean;
+  readonly target?: string;
+  readonly rel?: string;
   readonly onClick?: undefined;
   readonly disabled?: undefined;
 }
 
 interface ActionButtonProps extends BaseButtonProps {
   readonly href?: undefined;
+  readonly download?: undefined;
+  readonly target?: undefined;
+  readonly rel?: undefined;
   readonly onClick?: MouseEventHandler<HTMLButtonElement>;
   readonly disabled?: boolean;
 }
@@ -50,12 +56,26 @@ export function Button({
   const classes = cn(BASE_STYLES, VARIANT_STYLES[variant], className);
 
   if (props.href !== undefined) {
+    if (props.download || props.target) {
+      return (
+        <a
+          href={props.href}
+          download={props.download}
+          target={props.target}
+          rel={props.rel}
+          className={classes}
+        >
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={props.href} className={classes}>
         {children}
       </Link>
     );
   }
+
 
   return (
     <button

@@ -4,7 +4,138 @@ Record of implementation changes, per `CLAUDE.md`.
 
 ---
 
+## 2026-07-06 — Homepage Simplification
+
+**Changed:**
+
+- `app/page.tsx` — removed duplicated preview sections (Projects, Experience,
+  About, Skills, Education, Contact). The homepage now functions strictly as a
+  landing page containing only the `HeroSection`.
+- `app/page.tsx` — updated `PageWrapper` to use flex layout (`flex-1 justify-center`)
+  to vertically center the Hero section in the viewport.
+- `app/page.test.tsx` — simplified tests to align with the removal of preview sections.
+
+
+## 2026-07-06 — Milestone 11: Contact
+
+**Added:**
+
+- `content/contact.ts` — source-backed contact content module with email and
+  exact social URLs (GitHub, LinkedIn, X). Description and footer copy remain
+  `MISSING INFORMATION` (CONT-01).
+- `components/contact/EmailCard.tsx` — renders the `mailto:` link for the
+  approved email. No backend form included (CONT-02).
+- `components/contact/SocialLinks.tsx` — renders social links as external anchor
+  tags styled with secondary button variants (CONT-03).
+- `features/contact/components/ContactSection.tsx` — composes `EmailCard` and
+  `SocialLinks` (CONT-04).
+- `content/contact.test.ts` — 4 tests validating the exact email, social URLs,
+  and asserting that missing fields are undefined (CONT-06).
+
+**Changed:**
+
+- `app/contact/page.tsx` — updated to render the `ContactSection` (CONT-05).
+- `app/page.tsx` — added `ContactSection` after Education, completing the full
+  homepage recruiter journey (CONT-05).
+- `app/page.test.tsx` — updated social link tests to handle multiple rendered
+  instances (Hero and Contact sections).
+
+**Blocked (unchanged):**
+
+- FooterContact — not implemented; `MISSING INFORMATION` for footer copy.
+- ContactCTA — not implemented; no dedicated CTA required for MVP beyond standard
+  navigation and section rendering.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 61/61 tests passed (4 new contact content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
+## 2026-07-06 — Milestone 10: Resume
+
+**Added:**
+
+- `content/resume.ts` — source-backed resume content module defining the label,
+  stable route, and asset path (`/documents/Harsh_CV.pdf`). Supporting copy
+  remains `MISSING INFORMATION`.
+- `components/resume/DownloadButton.tsx` — uses a native `a` tag styled as a
+  Button with the `download` attribute for the resume PDF (RES-05).
+- `components/resume/OpenPDFButton.tsx` — uses a native `a` tag styled as a
+  Button with `target="_blank"` to open the resume PDF (RES-05).
+- `features/resume/components/ResumeSection.tsx` — composes the download and open
+  buttons since the resume asset is now available.
+- `content/resume.test.ts` — 4 tests validating exact resume fields and
+  that supporting copy is absent (RES-04).
+
+**Changed:**
+
+- `app/resume/page.tsx` — updated comments and behavior to implement RES-05,
+  displaying the `ResumeSection` with download/open buttons.
+- `components/ui/Button.tsx` — added support for native anchor attributes
+  (`download`, `target`, `rel`) to safely render `a` tags when required,
+  preventing Next.js `Link` client-side navigation errors for files.
+- `public/documents/Harsh_CV.pdf` — moved the supplied resume asset into the
+  public assets directory.
+
+**Blocked (unchanged):**
+
+- `PDFPreview` — not implemented; title and description are `MISSING INFORMATION`.
+- `ResumeInfo` — not implemented; supporting copy is `MISSING INFORMATION`.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 57/57 tests passed (4 new resume content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
+## 2026-07-06 — Milestone 9: Education
+
+**Added:**
+
+- `components/education/AcademicInfo.tsx` — renders structured academic facts
+  (institution, degree, graduation, CGPA) as a definition list (`dl`) in the
+  approved field order. Coursework/awards are `MISSING INFORMATION`.
+- `components/education/UniversityCard.tsx` — `article` grouping with an `h3`
+  institution heading and `AcademicInfo`.
+- `features/education/components/EducationSection.tsx` — composes `UniversityCard`
+  with an optional section heading. Education description is `MISSING INFORMATION`.
+- `content/education.test.ts` — 8 tests validating exact education fields and
+  that coursework, awards, and descriptions are absent (EDU-04).
+
+**Changed:**
+
+- `app/page.tsx` — added Education section (`heading="Education"`,
+  `headingId="education-preview-heading"`) after the Skills section, extending
+  the recruiter journey.
+- `app/about/page.tsx` — added Education section (`heading="Education"`,
+  `headingId="about-education-heading"`) per CONTENT_SPEC.md §9 placement
+  rule ("Homepage / About").
+
+**Blocked (unchanged):**
+
+- Coursework — not implemented; `MISSING INFORMATION`.
+- Academic projects — not implemented; `MISSING INFORMATION`.
+- Awards — not implemented; `MISSING INFORMATION`.
+- Education description — not implemented; `MISSING INFORMATION`.
+
+**Validation:**
+
+- `pnpm tsc --noEmit` — passed (0 errors).
+- `pnpm lint` — passed (0 warnings or errors).
+- `pnpm vitest run` — 53/53 tests passed (8 new education content tests).
+- `pnpm build` — all 12 static routes compiled and generated successfully.
+
+---
+
 ## 2026-07-06 — Milestone 8: Skills
+
 
 **Added:**
 

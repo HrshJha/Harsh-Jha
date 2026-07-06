@@ -21,9 +21,9 @@ export default function ResumePage() {
             Resume
           </h1>
           {/*
-            PDFPreview, DownloadButton, and OpenPDFButton are NOT rendered.
-            Resume asset path is MISSING INFORMATION (CONTENT_SPEC.md §10).
-            Implement RES-05 once an approved resume file or URL is supplied.
+            PDFPreview is NOT rendered (title/description MISSING INFORMATION).
+            DownloadButton and OpenPDFButton are implemented (RES-05) since
+            the asset path is now supplied.
           */}
           <ResumeSection />
         </div>
