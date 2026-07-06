@@ -5,7 +5,11 @@ import { HeroSection } from "@/components/hero/HeroSection";
 export default function Home() {
   return (
     <PageWrapper>
-      <Section ariaLabelledBy="hero-heading" containerSize="wide">
+      <Section
+        ariaLabelledBy="hero-heading"
+        className="hero-section"
+        containerSize="hero"
+      >
         <HeroSection />
       </Section>
     </PageWrapper>
