@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
 type Theme = "light" | "dark";
 
 const STORAGE_KEY = "portfolio-theme";
+const THEME_CHANGE_EVENT = "portfolio-theme-change";
 
 function getPreferredTheme(): Theme {
   if (typeof window === "undefined") {
@@ -27,8 +28,28 @@ function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
 }
 
+function subscribeToTheme(listener: () => void) {
+  const notify = () => listener();
+
+  window.addEventListener("storage", notify);
+  window.addEventListener(THEME_CHANGE_EVENT, notify);
+
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener(THEME_CHANGE_EVENT, notify);
+  };
+}
+
+function getServerTheme(): Theme {
+  return "light";
+}
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => getPreferredTheme());
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getPreferredTheme,
+    getServerTheme,
+  );
 
   useEffect(() => {
     applyTheme(theme);
@@ -36,9 +57,9 @@ export function ThemeToggle() {
 
   function handleToggle() {
     const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
     window.localStorage.setItem(STORAGE_KEY, nextTheme);
     applyTheme(nextTheme);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   }
 
   const isDark = theme === "dark";
