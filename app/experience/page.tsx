@@ -20,7 +20,6 @@ export default function ExperiencePage() {
           >
             Experience
           </h1>
-          {/* Section introduction is MISSING INFORMATION (CONTENT_SPEC.md §7). */}
           <ExperienceSection />
         </div>
       </Section>

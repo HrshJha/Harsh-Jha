@@ -1,27 +1,23 @@
-// COMPONENT_SPEC.md §6 TechnologyList.
-// Renders source-backed role highlights as a semantic list.
-// Does not infer or add unlisted technologies (CONTENT_SPEC.md §7).
+import { Badge } from "@/components/ui/Badge";
 
 interface TechnologyListProps {
   readonly highlights: readonly string[];
+  readonly ariaLabel?: string;
 }
 
-export function TechnologyList({ highlights }: TechnologyListProps) {
+export function TechnologyList({
+  highlights,
+  ariaLabel = "Technologies and topics",
+}: TechnologyListProps) {
   if (highlights.length === 0) {
     return null;
   }
 
   return (
-    <ul
-      className="flex flex-wrap gap-x-3 gap-y-1"
-      aria-label="Technologies and topics"
-    >
+    <ul className="flex flex-wrap gap-2" aria-label={ariaLabel}>
       {highlights.map((item) => (
-        <li
-          key={item}
-          className="text-label text-text-secondary before:mr-1.5 before:content-['·'] first:before:content-['']"
-        >
-          {item}
+        <li key={item}>
+          <Badge>{item}</Badge>
         </li>
       ))}
     </ul>

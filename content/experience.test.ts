@@ -68,4 +68,30 @@ describe("experience content", () => {
       expect(raw["achievements"]).toBeUndefined();
     }
   });
+
+  it("contains source-backed expanded experience details", () => {
+    const domaiyn = experience[0];
+    const mathongo = experience[1];
+
+    expect(domaiyn?.employmentType).toBe("Internship");
+    expect(domaiyn?.technologies).toEqual([
+      "FastAPI",
+      "NLP systems",
+      "Retrieval systems",
+      "LLM evaluation",
+    ]);
+    expect(domaiyn?.keyProjects).toEqual([
+      {
+        name: "Hallucination Hunter",
+        href: "/projects/hallucination-hunter",
+      },
+    ]);
+
+    expect(mathongo?.employmentType).toBe("Internship");
+    expect(mathongo?.technologies).toEqual([
+      "AI-assisted workflows",
+      "Dataset organization",
+    ]);
+    expect(mathongo?.impact).toContain("2000+ question content scope");
+  });
 });

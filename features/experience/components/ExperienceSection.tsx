@@ -1,10 +1,3 @@
-// COMPONENT_SPEC.md §6. ExperienceSection composes the section heading
-// and Timeline. Section introduction is MISSING INFORMATION (CONTENT_SPEC.md §7)
-// and must not be invented.
-//
-// `heading` and `headingId` are optional: the dedicated /experience page
-// supplies its own h1, while the homepage uses this with a section heading.
-
 import { Timeline } from "@/features/experience/components/Timeline";
 import { experience } from "@/content/experience";
 
