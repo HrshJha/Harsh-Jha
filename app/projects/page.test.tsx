@@ -29,4 +29,21 @@ describe("ProjectsPage", () => {
     render(<ProjectsPage />);
     expect(screen.getAllByText("In Progress")).toHaveLength(4);
   });
+
+  it("renders markdown-backed preview metadata for recruiters", () => {
+    render(<ProjectsPage />);
+
+    expect(screen.getAllByText("AI product direction")).toHaveLength(4);
+    expect(screen.getByText("autonomous media production")).toBeInTheDocument();
+    expect(screen.getAllByText("Not yet implemented")).toHaveLength(8);
+    expect(
+      screen.getAllByText(
+        "Next.js App Router, React, TypeScript, Tailwind CSS",
+      ),
+    ).toHaveLength(4);
+    expect(
+      screen.getByText("Source: docs/projects/frameos.md"),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("View Case Study")).toHaveLength(4);
+  });
 });

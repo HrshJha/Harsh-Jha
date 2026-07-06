@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
-import { getProjectCaseStudies, getProjectCaseStudy } from "@/lib/projectMarkdown";
+import {
+  getProjectCaseStudies,
+  getProjectCaseStudy,
+} from "@/lib/projectMarkdown";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { Section } from "@/components/ui/Section";
 import { ProjectHeader } from "@/features/projects/components/ProjectHeader";

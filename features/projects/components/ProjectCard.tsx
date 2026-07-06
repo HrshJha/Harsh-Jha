@@ -55,10 +55,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           label="Product stack"
           value={project.productStackStatus}
         />
-        <ProjectMetaItem
-          label="Repository"
-          value={project.repositoryStatus}
-        />
+        <ProjectMetaItem label="Repository" value={project.repositoryStatus} />
         <ProjectMetaItem
           label="Portfolio stack"
           value={

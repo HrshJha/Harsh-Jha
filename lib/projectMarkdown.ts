@@ -31,7 +31,6 @@ function stripMarkdownSyntax(value: string) {
   return value
     .replace(/^\s*[-*]\s+/, "")
     .replace(/^#+\s+/, "")
-    .replace(/`/g, "")
     .trim();
 }
 
@@ -227,7 +226,9 @@ function getListAfterHeading(
     .slice(headingIndex + 1)
     .find((block) => block.type === "list");
 
-  return list?.type === "list" ? list.items : [];
+  return list?.type === "list"
+    ? list.items.map((item) => item.replace(/\.$/, ""))
+    : [];
 }
 
 function getProductStackStatus(section: ProjectMarkdownSection | undefined) {
@@ -287,7 +288,9 @@ function loadProjectCaseStudy(fileName: string): ProjectCaseStudy {
   const markdown = readFileSync(join(PROJECTS_DIRECTORY, fileName), "utf8");
   const { title, sections } = parseMarkdown(markdown);
   const summary = getFirstParagraph(getSection(sections, "One-line Summary"));
-  const elevatorPitch = getFirstParagraph(getSection(sections, "Elevator Pitch"));
+  const elevatorPitch = getFirstParagraph(
+    getSection(sections, "Elevator Pitch"),
+  );
   const systemOverview = getSection(sections, "System Overview");
   const technicalStack = getSection(sections, "Technical Stack");
   const repository = getSection(sections, "Repository");

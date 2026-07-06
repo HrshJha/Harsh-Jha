@@ -17,7 +17,7 @@ describe("project detail route", () => {
     expect(dynamicParams).toBe(false);
   });
 
-  it("renders only the approved name, description, and status for a project", async () => {
+  it("renders markdown-backed case study sections for a project", async () => {
     render(
       await ProjectDetailPage({ params: Promise.resolve({ slug: "frameos" }) }),
     );
@@ -27,10 +27,31 @@ describe("project detail route", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        "AI-native operating system for autonomous media production.",
+        "FrameOS is an AI-native operating system for autonomous media production.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("In Progress")).toBeInTheDocument();
+    expect(screen.getAllByText("In Progress").length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Problem Statement" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Architecture" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Technical Stack" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Current Progress" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Recruiter Takeaways" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("flowchart TD", { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("GitHub link: Not yet implemented."),
+    ).toBeInTheDocument();
   });
 
   it("renders previous/next project navigation sourced from the static project order", async () => {

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/navigation", () => ({
@@ -19,6 +19,7 @@ describe("MobileNavbar", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Navigation menu" });
     expect(dialog).toBeInTheDocument();
+    expect(within(dialog).queryByRole("link", { name: "Resume" })).toBeNull();
 
     fireEvent.keyDown(document, { key: "Escape" });
 

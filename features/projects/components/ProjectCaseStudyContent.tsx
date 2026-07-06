@@ -52,7 +52,11 @@ function SectionHeading({
   );
 }
 
-function MarkdownBlockView({ block }: { readonly block: ProjectMarkdownBlock }) {
+function MarkdownBlockView({
+  block,
+}: {
+  readonly block: ProjectMarkdownBlock;
+}) {
   if (block.type === "paragraph") {
     return (
       <p className="max-w-text text-body leading-7 text-text-secondary">

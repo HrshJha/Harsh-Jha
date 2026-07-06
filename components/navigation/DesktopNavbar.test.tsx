@@ -8,7 +8,7 @@ vi.mock("next/navigation", () => ({
 import { DesktopNavbar } from "./DesktopNavbar";
 
 describe("DesktopNavbar", () => {
-  it("renders all six approved nav links in order and marks the active one", () => {
+  it("renders all approved nav links in order and marks the active one", () => {
     render(<DesktopNavbar />);
 
     const nav = screen.getByRole("navigation", { name: "Primary" });
@@ -19,7 +19,6 @@ describe("DesktopNavbar", () => {
       "Projects",
       "Experience",
       "About",
-      "Resume",
       "Contact",
     ]);
 
