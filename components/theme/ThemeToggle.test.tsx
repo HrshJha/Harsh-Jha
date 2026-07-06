@@ -13,11 +13,11 @@ describe("ThemeToggle", () => {
     vi.unstubAllGlobals();
   });
 
-  it("switches between light and night mode and persists the selected theme", async () => {
+  it("switches between Lightbox and Darkroom mode and persists the selected theme", async () => {
     render(<ThemeToggle />);
 
     const toggle = await screen.findByRole("button", {
-      name: "Switch to night mode",
+      name: "Switch to Darkroom mode",
     });
 
     await waitFor(() => {
@@ -29,7 +29,7 @@ describe("ThemeToggle", () => {
     expect(document.documentElement.dataset.theme).toBe("dark");
     expect(window.localStorage.getItem("portfolio-theme")).toBe("dark");
     expect(
-      screen.getByRole("button", { name: "Switch to light mode" }),
+      screen.getByRole("button", { name: "Switch to Lightbox mode" }),
     ).toBeInTheDocument();
   });
 });

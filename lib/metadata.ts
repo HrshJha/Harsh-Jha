@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { identity } from "@/content/identity";
 
 interface BuildMetadataInput {
   readonly title: string;
@@ -12,11 +13,21 @@ export function buildMetadata({
   description,
   path,
 }: BuildMetadataInput): Metadata {
-  const metadata: Metadata = { title };
-
-  if (description) {
-    metadata.description = description;
-  }
+  const metadata: Metadata = {
+    title:
+      title === siteConfig.name ? title : `${title} - ${siteConfig.name}`,
+    description: description ?? identity.coreMessage,
+    openGraph: {
+      title,
+      description: description ?? identity.coreMessage,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description: description ?? identity.coreMessage,
+    },
+  };
 
   // Canonical URLs are blocked until an approved production domain exists.
   if (siteConfig.siteUrl && path) {

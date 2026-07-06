@@ -54,8 +54,8 @@ const SIZE_STYLES: Record<ButtonSize, string> = {
 
 const BASE_STYLES = cn(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-sm font-medium",
-  "transition-[background-color,border-color,color,box-shadow,transform] duration-(--duration-fast) ease-(--ease-standard)",
-  "hover:shadow-subtle active:translate-y-px",
+  "transition-colors duration-(--duration-fast) ease-(--ease-standard)",
+  "hover:shadow-subtle active:shadow-none",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
   "disabled:pointer-events-none disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none",
   "aria-disabled:pointer-events-none aria-disabled:border-border aria-disabled:bg-muted aria-disabled:text-muted-foreground aria-disabled:shadow-none",

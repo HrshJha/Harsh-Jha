@@ -33,7 +33,7 @@ export function Card({
         "rounded-md border p-6",
         VARIANT_STYLES[variant],
         interactive &&
-          "transition-[border-color,box-shadow,transform,background-color] duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:shadow-interactive focus-within:border-border-strong focus-within:shadow-interactive",
+          "transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:shadow-interactive focus-within:border-border-strong focus-within:shadow-interactive",
         className,
       )}
     >

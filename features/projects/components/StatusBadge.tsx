@@ -6,5 +6,5 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
-  return <Badge>{status}</Badge>;
+  return <Badge variant="success">{status}</Badge>;
 }

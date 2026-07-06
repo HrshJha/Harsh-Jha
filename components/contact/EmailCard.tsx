@@ -9,7 +9,7 @@ export function EmailCard() {
     <a
       href={`mailto:${contact.email}`}
       aria-label="Email"
-      className="flex w-full flex-col gap-2 rounded-md border border-border bg-surface p-6 transition-[border-color,box-shadow] duration-(--duration-fast) ease-(--ease-standard) hover:border-accent hover:shadow-interactive focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-auto"
+      className="flex w-full flex-col gap-2 rounded-md border border-border bg-surface p-6 transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-accent hover:shadow-interactive focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-auto"
     >
       <span className="text-card-title font-semibold text-foreground">
         Email

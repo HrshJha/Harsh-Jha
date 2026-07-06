@@ -56,13 +56,15 @@ export function HeroVisual() {
           </div>
         ))}
 
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-border-strong bg-surface px-6 py-5 text-center shadow-subtle">
-          <span className="text-label font-medium text-muted-foreground">
-            Focus
-          </span>
-          <span className="max-w-48 text-card-title font-semibold text-foreground">
-            {identity.vision.primaryGoal}
-          </span>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex max-w-48 flex-col items-center gap-2 rounded-md border border-border-strong bg-surface px-6 py-5 text-center shadow-subtle">
+            <span className="text-label font-medium text-muted-foreground">
+              Focus
+            </span>
+            <span className="text-card-title font-semibold text-foreground">
+              {identity.vision.primaryGoal}
+            </span>
+          </div>
         </div>
       </div>
     </aside>
