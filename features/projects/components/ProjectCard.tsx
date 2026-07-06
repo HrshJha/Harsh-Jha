@@ -10,19 +10,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const visibleTech = project.techStack.slice(0, 6);
 
   return (
-    <article className="flex h-full flex-col gap-5 rounded-lg border border-border-subtle p-6 transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong focus-within:border-border-strong">
+    <article className="flex h-full flex-col gap-5 rounded-lg border border-border p-6 transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong focus-within:border-border-strong">
       <div className="flex flex-col gap-3">
         <ProjectTags tags={[project.category, project.status]} />
-        <h3 className="text-card-title font-semibold text-text-primary">
+        <h3 className="text-card-title font-semibold text-foreground">
           {project.name}
         </h3>
-        <p className="text-body text-text-secondary">
+        <p className="text-body text-muted-foreground">
           {project.shortDescription}
         </p>
       </div>
 
       <div className="flex flex-col gap-3">
-        <p className="text-label font-medium uppercase tracking-normal text-text-muted">
+        <p className="text-label font-medium uppercase tracking-normal text-muted-foreground">
           {project.primaryFocus}
         </p>
         <ProjectTags tags={visibleTech} />

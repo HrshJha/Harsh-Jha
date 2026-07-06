@@ -32,8 +32,8 @@ function SectionBlock({
   const HeadingTag = headingLevel === 2 ? "h2" : "h3";
 
   return (
-    <section className="flex flex-col gap-4 border-b border-border-subtle pb-8 last:border-b-0 last:pb-0">
-      <HeadingTag className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
+    <section className="flex flex-col gap-4 border-b border-border pb-8 last:border-b-0 last:pb-0">
+      <HeadingTag className="text-section-heading font-semibold text-foreground ">
         {title}
       </HeadingTag>
       {children}
@@ -56,8 +56,8 @@ export function AboutSection({
           id={headingId}
           className={
             headingLevel === 1
-              ? "text-page-title font-semibold text-text-primary md:text-page-title-desktop"
-              : "text-section-heading font-semibold text-text-primary md:text-section-heading-desktop"
+              ? "text-page-title font-semibold text-foreground "
+              : "text-section-heading font-semibold text-foreground "
           }
         >
           {heading}
@@ -65,13 +65,13 @@ export function AboutSection({
       ) : null}
 
       <SectionBlock title="About Me" headingLevel={sectionBlockHeadingLevel}>
-        <p className="max-w-text text-body leading-7 text-text-secondary">
+        <p className="max-w-text text-body leading-7 text-muted-foreground">
           I&apos;m Harsh Kumar Jha, an Electronics &amp; Communication
           Engineering student at Maharaja Surajmal Institute of Technology with
           a strong interest in AI systems, machine learning, and production
           engineering.
         </p>
-        <p className="max-w-text text-body leading-7 text-text-secondary">
+        <p className="max-w-text text-body leading-7 text-muted-foreground">
           I enjoy turning research ideas into real software by combining
           engineering fundamentals, scalable system design, and practical
           implementation. My goal is to build AI products that are reliable,
@@ -83,11 +83,11 @@ export function AboutSection({
         title="Engineering Philosophy"
         headingLevel={sectionBlockHeadingLevel}
       >
-        <p className="max-w-text text-body leading-7 text-text-secondary">
+        <p className="max-w-text text-body leading-7 text-muted-foreground">
           The principles that guide how I approach engineering and problem
           solving.
         </p>
-        <ul className="grid gap-2 text-body text-text-secondary md:grid-cols-2">
+        <ul className="grid gap-2 text-body text-muted-foreground md:grid-cols-2">
           {about.engineeringPhilosophy.map((statement) => (
             <li key={statement} className="before:mr-2 before:content-['-']">
               {statement}
@@ -99,34 +99,34 @@ export function AboutSection({
       <SectionBlock title="Education" headingLevel={sectionBlockHeadingLevel}>
         <dl className="grid gap-4 md:grid-cols-2">
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Institution
             </dt>
-            <dd className="mt-1 text-body text-text-secondary">
+            <dd className="mt-1 text-body text-muted-foreground">
               {education.institution}
             </dd>
           </div>
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Degree
             </dt>
-            <dd className="mt-1 text-body text-text-secondary">
+            <dd className="mt-1 text-body text-muted-foreground">
               {education.degree}
             </dd>
           </div>
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Expected Graduation
             </dt>
-            <dd className="mt-1 text-body text-text-secondary">
+            <dd className="mt-1 text-body text-muted-foreground">
               {education.graduationYear}
             </dd>
           </div>
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Current CGPA
             </dt>
-            <dd className="mt-1 text-body text-text-secondary">
+            <dd className="mt-1 text-body text-muted-foreground">
               {education.currentCgpa}
             </dd>
           </div>

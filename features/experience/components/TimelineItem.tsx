@@ -11,7 +11,7 @@ interface TimelineItemProps {
 
 function BulletList({ items }: { readonly items: readonly string[] }) {
   return (
-    <ul className="flex flex-col gap-2 text-body text-text-secondary">
+    <ul className="flex flex-col gap-2 text-body text-muted-foreground">
       {items.map((item) => (
         <li key={item} className="before:mr-2 before:content-['-']">
           {item}
@@ -30,7 +30,7 @@ function DetailSection({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <h4 className="text-body font-semibold text-text-primary">{title}</h4>
+      <h4 className="text-body font-semibold text-foreground">{title}</h4>
       {children}
     </section>
   );
@@ -42,30 +42,30 @@ export function TimelineItem({ entry }: TimelineItemProps) {
 
   return (
     <article
-      className="flex flex-col gap-5 rounded-lg border border-border-subtle p-6"
+      className="flex flex-col gap-5 rounded-lg border border-border p-6"
       aria-label={entry.company}
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h3 className="text-card-title font-semibold text-text-primary">
+          <h3 className="text-card-title font-semibold text-foreground">
             {entry.company}
           </h3>
-          <p className="text-body font-medium text-text-secondary">
+          <p className="text-body font-medium text-muted-foreground">
             {entry.role}
           </p>
         </div>
 
         <dl className="grid gap-3 md:grid-cols-2">
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Employment Type
             </dt>
-            <dd className="mt-1 text-body text-text-secondary">
+            <dd className="mt-1 text-body text-muted-foreground">
               {entry.employmentType}
             </dd>
           </div>
           <div>
-            <dt className="text-label font-medium uppercase tracking-normal text-text-muted">
+            <dt className="text-label font-medium uppercase tracking-normal text-muted-foreground">
               Technology Stack
             </dt>
             <dd className="mt-2">
@@ -82,7 +82,7 @@ export function TimelineItem({ entry }: TimelineItemProps) {
           aria-expanded={isExpanded}
           aria-controls={contentId}
           onClick={() => setIsExpanded((current) => !current)}
-          className="inline-flex h-10 w-fit items-center justify-center rounded-md border border-border-subtle px-4 text-sm font-medium text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+          className="inline-flex h-10 w-fit items-center justify-center rounded-md border border-border px-4 text-sm font-medium text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           {isExpanded ? "Hide Details" : "Expand Experience"}
         </button>
@@ -91,13 +91,13 @@ export function TimelineItem({ entry }: TimelineItemProps) {
       {isExpanded ? (
         <div
           id={contentId}
-          className="flex flex-col gap-6 border-t border-border-subtle pt-5"
+          className="flex flex-col gap-6 border-t border-border pt-5"
         >
           <DetailSection title="About The Role">
             {entry.about.map((paragraph) => (
               <p
                 key={paragraph}
-                className="max-w-text text-body leading-7 text-text-secondary"
+                className="max-w-text text-body leading-7 text-muted-foreground"
               >
                 {paragraph}
               </p>
@@ -122,7 +122,7 @@ export function TimelineItem({ entry }: TimelineItemProps) {
                   <li key={project.href}>
                     <Link
                       href={project.href}
-                      className="text-body font-medium text-text-primary underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus"
+                      className="text-body font-medium text-foreground underline underline-offset-4 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                     >
                       {project.name}
                     </Link>
@@ -141,7 +141,7 @@ export function TimelineItem({ entry }: TimelineItemProps) {
           </DetailSection>
 
           <DetailSection title="Impact">
-            <p className="max-w-text text-body leading-7 text-text-secondary">
+            <p className="max-w-text text-body leading-7 text-muted-foreground">
               {entry.impact}
             </p>
           </DetailSection>

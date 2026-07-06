@@ -13,14 +13,14 @@ function ParagraphSection({
   }
 
   return (
-    <section className="flex flex-col gap-4 border-b border-border-subtle pb-8">
-      <h2 className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
+    <section className="flex flex-col gap-4 border-b border-border pb-8">
+      <h2 className="text-section-heading font-semibold text-foreground ">
         {title}
       </h2>
       {paragraphs.map((paragraph) => (
         <p
           key={paragraph}
-          className="max-w-text text-body leading-7 text-text-secondary"
+          className="max-w-text text-body leading-7 text-muted-foreground"
         >
           {paragraph}
         </p>
@@ -45,11 +45,11 @@ function BulletSection({
   }
 
   return (
-    <section className="flex flex-col gap-4 border-b border-border-subtle pb-8">
-      <h2 className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
+    <section className="flex flex-col gap-4 border-b border-border pb-8">
+      <h2 className="text-section-heading font-semibold text-foreground ">
         {title}
       </h2>
-      <ul className="grid gap-2 text-body leading-7 text-text-secondary md:grid-cols-2">
+      <ul className="grid gap-2 text-body leading-7 text-muted-foreground md:grid-cols-2">
         {visibleItems.map((item) => (
           <li key={item} className="before:mr-2 before:content-['-']">
             {item}
@@ -94,8 +94,8 @@ export function ProjectCaseStudyContent({
         items={project.learnings}
         maxItems={4}
       />
-      <section className="flex flex-col gap-4 border-b border-border-subtle pb-8">
-        <h2 className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop">
+      <section className="flex flex-col gap-4 border-b border-border pb-8">
+        <h2 className="text-section-heading font-semibold text-foreground ">
           Repository
         </h2>
         <div>

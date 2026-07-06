@@ -9,12 +9,12 @@ export function EmailCard() {
     <a
       href={`mailto:${contact.email}`}
       aria-label="Email"
-      className="flex w-full flex-col gap-2 rounded-lg border border-border-subtle p-6 transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus md:w-auto"
+      className="flex w-full flex-col gap-2 rounded-lg border border-border p-6 transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring md:w-auto"
     >
-      <span className="text-card-title font-semibold text-text-primary">
+      <span className="text-card-title font-semibold text-foreground">
         Email
       </span>
-      <span className="text-body text-text-secondary">{contact.email}</span>
+      <span className="text-body text-muted-foreground">{contact.email}</span>
     </a>
   );
 }

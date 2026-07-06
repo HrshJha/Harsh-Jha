@@ -16,7 +16,7 @@ export default function ExperiencePage() {
         <div className="flex flex-col gap-8">
           <h1
             id="experience-heading"
-            className="text-page-title font-semibold text-text-primary md:text-page-title-desktop"
+            className="text-page-title font-semibold text-foreground "
           >
             Experience
           </h1>

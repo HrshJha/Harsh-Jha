@@ -17,7 +17,7 @@ export function ProjectsSection({ heading, headingId }: ProjectsSectionProps) {
       {heading ? (
         <h2
           id={headingId}
-          className="text-section-heading font-semibold text-text-primary md:text-section-heading-desktop"
+          className="text-section-heading font-semibold text-foreground "
         >
           {heading}
         </h2>

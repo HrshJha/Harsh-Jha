@@ -6,7 +6,7 @@ interface NavigationBetweenProjectsProps {
 }
 
 const LINK_STYLES =
-  "flex flex-col gap-1 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-state-focus";
+  "flex flex-col gap-1 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 // COMPONENT_SPEC.md §5: "Prev/next links if detail pages exist... Only
 // appears when detail routes are implemented." Order follows the static
@@ -30,8 +30,8 @@ export function NavigationBetweenProjects({
     >
       {previous ? (
         <Link href={`/projects/${previous.slug}`} className={LINK_STYLES}>
-          <span className="text-label text-text-muted">Previous</span>{" "}
-          <span className="text-body text-text-primary">{previous.name}</span>
+          <span className="text-label text-muted-foreground">Previous</span>{" "}
+          <span className="text-body text-foreground">{previous.name}</span>
         </Link>
       ) : (
         <span />
@@ -41,8 +41,8 @@ export function NavigationBetweenProjects({
           href={`/projects/${next.slug}`}
           className={`${LINK_STYLES} items-end text-right`}
         >
-          <span className="text-label text-text-muted">Next</span>{" "}
-          <span className="text-body text-text-primary">{next.name}</span>
+          <span className="text-label text-muted-foreground">Next</span>{" "}
+          <span className="text-body text-foreground">{next.name}</span>
         </Link>
       ) : (
         <span />
