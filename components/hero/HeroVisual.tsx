@@ -12,8 +12,12 @@ interface SignalNode {
   readonly mobileX: number;
   readonly mobileY: number;
   readonly side: "left" | "right";
-  readonly path: string;
-  readonly mobilePath: string;
+  readonly startX: number;
+  readonly startY: number;
+  readonly controlX: number;
+  readonly controlY: number;
+  readonly mobileStartX: number;
+  readonly mobileStartY: number;
   readonly delay: number;
 }
 
@@ -26,8 +30,12 @@ const SIGNAL_NODES = [
     mobileX: 50,
     mobileY: 24,
     side: "right",
-    path: "M 50 50 C 50 42 49 31 49 20",
-    mobilePath: "M 50 50 L 50 24",
+    startX: 50,
+    startY: 44,
+    controlX: 50,
+    controlY: 34,
+    mobileStartX: 50,
+    mobileStartY: 44,
     delay: 0,
   },
   {
@@ -38,8 +46,12 @@ const SIGNAL_NODES = [
     mobileX: 68,
     mobileY: 36,
     side: "right",
-    path: "M 53 49 C 60 42 68 36 75 32",
-    mobilePath: "M 53 49 L 68 36",
+    startX: 56,
+    startY: 47,
+    controlX: 64,
+    controlY: 39,
+    mobileStartX: 55,
+    mobileStartY: 47,
     delay: 600,
   },
   {
@@ -50,8 +62,12 @@ const SIGNAL_NODES = [
     mobileX: 65,
     mobileY: 62,
     side: "right",
-    path: "M 53 52 C 61 57 66 63 70 69",
-    mobilePath: "M 53 52 L 65 62",
+    startX: 55,
+    startY: 54,
+    controlX: 63,
+    controlY: 61,
+    mobileStartX: 54,
+    mobileStartY: 54,
     delay: 1200,
   },
   {
@@ -62,8 +78,12 @@ const SIGNAL_NODES = [
     mobileX: 36,
     mobileY: 64,
     side: "left",
-    path: "M 47 52 C 42 59 37 66 35 73",
-    mobilePath: "M 47 52 L 36 64",
+    startX: 46,
+    startY: 55,
+    controlX: 40,
+    controlY: 65,
+    mobileStartX: 46,
+    mobileStartY: 55,
     delay: 1800,
   },
   {
@@ -74,8 +94,12 @@ const SIGNAL_NODES = [
     mobileX: 30,
     mobileY: 39,
     side: "left",
-    path: "M 47 48 C 39 45 31 40 25 37",
-    mobilePath: "M 47 48 L 30 39",
+    startX: 44,
+    startY: 47,
+    controlX: 35,
+    controlY: 43,
+    mobileStartX: 45,
+    mobileStartY: 48,
     delay: 2400,
   },
 ] as const satisfies readonly SignalNode[];
@@ -99,6 +123,14 @@ function getLineStyle(index: number) {
   return {
     "--signal-line-delay": `${500 + index * 80}ms`,
   } as CSSProperties;
+}
+
+function getSignalPath(node: SignalNode) {
+  return `M ${node.startX} ${node.startY} Q ${node.controlX} ${node.controlY} ${node.x} ${node.y}`;
+}
+
+function getMobileSignalPath(node: SignalNode) {
+  return `M ${node.mobileStartX} ${node.mobileStartY} L ${node.mobileX} ${node.mobileY}`;
 }
 
 export function HeroVisual() {
@@ -147,14 +179,17 @@ export function HeroVisual() {
   }
 
   return (
-    <aside aria-label="AI signal core visualization" className="hero-visual-shell">
+    <aside
+      aria-label="AI signal core visualization"
+      className="hero-visual-shell"
+    >
       <div
         ref={panelRef}
         className="ai-systems-panel signal-core-panel"
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
-        <div className="signal-core-stage" aria-hidden="true">
+        <div className="signal-core-stage">
           <svg
             viewBox="0 0 100 100"
             className="signal-core-graph signal-core-graph-desktop"
@@ -173,7 +208,7 @@ export function HeroVisual() {
               <path
                 key={node.id}
                 className="signal-core-line"
-                d={node.path}
+                d={getSignalPath(node)}
                 pathLength="1"
                 style={getLineStyle(index)}
               />
@@ -186,7 +221,7 @@ export function HeroVisual() {
                   dur={`${SIGNAL_LOOP_MS / 1000}s`}
                   keyPoints="0;1;1"
                   keyTimes="0;0.3;1"
-                  path={node.path}
+                  path={getSignalPath(node)}
                   repeatCount="indefinite"
                 />
                 <animate
@@ -212,7 +247,7 @@ export function HeroVisual() {
               <path
                 key={node.id}
                 className="signal-core-line"
-                d={node.mobilePath}
+                d={getMobileSignalPath(node)}
                 pathLength="1"
                 style={getLineStyle(index)}
               />
@@ -225,7 +260,7 @@ export function HeroVisual() {
                   dur={`${SIGNAL_LOOP_MS / 1000}s`}
                   keyPoints="0;1;1"
                   keyTimes="0;0.3;1"
-                  path={node.mobilePath}
+                  path={getMobileSignalPath(node)}
                   repeatCount="indefinite"
                 />
                 <animate
@@ -240,11 +275,11 @@ export function HeroVisual() {
             ))}
           </svg>
 
-          <div className="signal-core-orb">
+          <div className="signal-core-orb" aria-hidden="true">
             <span>Model Core</span>
           </div>
 
-          <div className="signal-core-nodes">
+          <div className="signal-core-nodes" aria-hidden="true">
             {SIGNAL_NODES.map((node, index) => (
               <div
                 key={node.id}
@@ -279,8 +314,11 @@ export function HeroVisual() {
             --accent-soft: var(--hero-accent-soft, rgb(232 86 58 / 0.12));
             --panel-bg: var(--hero-bg-elevated, #121110);
             --signal-ease: cubic-bezier(0.16, 1, 0.3, 1);
-            min-height: 480px;
-            aspect-ratio: 1.08 / 1;
+            height: clamp(400px, 34vw, 440px);
+            min-height: 0;
+            max-width: 560px;
+            aspect-ratio: auto;
+            overflow: hidden;
             background:
               radial-gradient(
                 circle at 65% 35%,
@@ -311,7 +349,7 @@ export function HeroVisual() {
           .signal-core-stage {
             position: absolute;
             inset: var(--spacing-6) var(--spacing-6)
-              calc(var(--spacing-24) + var(--spacing-8)) var(--spacing-6);
+              calc(var(--spacing-24) + var(--spacing-6)) var(--spacing-6);
             overflow: visible;
           }
 
@@ -334,7 +372,7 @@ export function HeroVisual() {
             stroke-dasharray: 1;
             stroke-dashoffset: 1;
             stroke-linecap: round;
-            stroke-width: 1px;
+            stroke-width: 1.5px;
             opacity: 0.3;
             vector-effect: non-scaling-stroke;
             animation: signal-line-draw 420ms var(--signal-ease)
@@ -359,13 +397,18 @@ export function HeroVisual() {
             border-radius: 999px;
             background:
               radial-gradient(
+                ellipse 64% 36% at 50% 50%,
+                rgb(26 16 6 / 0.9),
+                transparent 64%
+              ),
+              radial-gradient(
                 circle,
-                rgb(232 86 58 / 0.92) 0%,
-                rgb(232 86 58 / 0.36) 42%,
+                rgb(232 86 58 / 0.78) 0%,
+                rgb(232 86 58 / 0.31) 42%,
                 transparent 72%
               ),
               #1a1006;
-            color: var(--text-tertiary);
+            color: var(--text-primary);
             font-size: 0.625rem;
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -397,7 +440,8 @@ export function HeroVisual() {
 
           .signal-core-orb > span {
             max-width: 7ch;
-            opacity: 0.72;
+            opacity: 1;
+            text-shadow: 0 1px 8px rgb(0 0 0 / 0.62);
           }
 
           .signal-core-nodes {
@@ -411,30 +455,27 @@ export function HeroVisual() {
             position: absolute;
             left: var(--signal-x);
             top: var(--signal-y);
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-2);
+            display: block;
             color: var(--text-primary);
             font-size: 0.9375rem;
             font-weight: 500;
             line-height: var(--leading-label);
             opacity: 0;
-            transform: translate3d(-50%, -50%, 0) scale(0.86);
+            transform: translate3d(0, -50%, 0) scale(0.86);
             animation: signal-node-enter 300ms var(--signal-ease)
               var(--signal-node-delay) both;
           }
 
-          .signal-core-node-left {
-            flex-direction: row-reverse;
-          }
-
           .signal-core-node-dot {
-            position: relative;
+            position: absolute;
+            left: 0;
+            top: 50%;
             width: var(--spacing-2);
             height: var(--spacing-2);
             flex: 0 0 var(--spacing-2);
             border-radius: 999px;
             background: var(--accent);
+            transform: translate3d(-50%, -50%, 0);
             animation:
               signal-node-idle 2.5s ease-in-out var(--signal-idle-delay)
                 infinite,
@@ -453,6 +494,12 @@ export function HeroVisual() {
             );
             content: "";
             opacity: 0.7;
+          }
+
+          .signal-core-node-label {
+            display: block;
+            margin-left: calc(var(--spacing-2) + var(--spacing-1));
+            white-space: nowrap;
           }
 
           .signal-core-readout {
@@ -592,12 +639,12 @@ export function HeroVisual() {
           @keyframes signal-node-enter {
             from {
               opacity: 0;
-              transform: translate3d(-50%, -50%, 0) scale(0.86);
+              transform: translate3d(0, -50%, 0) scale(0.86);
             }
 
             to {
               opacity: 1;
-              transform: translate3d(-50%, -50%, 0) scale(1);
+              transform: translate3d(0, -50%, 0) scale(1);
             }
           }
 
@@ -617,11 +664,11 @@ export function HeroVisual() {
             27%,
             36%,
             100% {
-              transform: scale(1);
+              transform: translate3d(-50%, -50%, 0) scale(1);
             }
 
             31% {
-              transform: scale(1.4);
+              transform: translate3d(-50%, -50%, 0) scale(1.4);
             }
           }
 
@@ -652,7 +699,7 @@ export function HeroVisual() {
 
           @media (min-width: 48rem) and (max-width: 79.999rem) {
             .signal-core-panel.ai-systems-panel {
-              min-height: 430px;
+              height: clamp(380px, 48vw, 430px);
             }
 
             .signal-core-stage {
@@ -673,8 +720,9 @@ export function HeroVisual() {
 
           @media (max-width: 47.999rem) {
             .signal-core-panel.ai-systems-panel {
-              min-height: 360px;
-              aspect-ratio: 4 / 5;
+              height: 360px;
+              min-height: 0;
+              aspect-ratio: auto;
             }
 
             .signal-core-stage {
@@ -699,7 +747,6 @@ export function HeroVisual() {
             .signal-core-node {
               left: var(--signal-mobile-x);
               top: var(--signal-mobile-y);
-              gap: var(--spacing-1);
               font-size: 0.8125rem;
             }
 

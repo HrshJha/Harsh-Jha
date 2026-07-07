@@ -1848,17 +1848,28 @@ body {
   }
 
   .hero-layout {
-    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
-    gap: var(--spacing-16);
+    grid-template-columns: minmax(0, min(38.75rem, 48%)) minmax(0, 35rem);
+    justify-content: center;
+    gap: max(var(--spacing-16), 5vw);
   }
 
   .hero-copy {
-    padding-left: var(--spacing-24);
+    width: 100%;
+    max-width: min(38.75rem, 48vw);
+    padding-left: 0;
     padding-right: 0;
   }
 
+  .hero-headline {
+    max-width: 100%;
+    font-size: clamp(2.75rem, 3.6vw, 4rem);
+  }
+
   .hero-visual-shell {
-    padding-right: var(--spacing-24);
+    width: 100%;
+    max-width: 35rem;
+    padding-right: 0;
+    justify-self: end;
   }
 }
 
