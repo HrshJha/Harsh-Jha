@@ -2,157 +2,107 @@
 
 import { identity } from "@/content/identity";
 import type { CSSProperties, PointerEvent } from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-type ConnectionId =
-  | "models-training"
-  | "data-training"
-  | "training-evaluation"
-  | "evaluation-deployment"
-  | "deployment-users"
-  | "users-data";
-
-interface SystemNode {
+interface SignalNode {
   readonly id: string;
   readonly label: string;
   readonly x: number;
   readonly y: number;
   readonly mobileX: number;
   readonly mobileY: number;
-  readonly sequence: number;
-  readonly connections: readonly ConnectionId[];
-}
-
-interface FlowConnection {
-  readonly id: ConnectionId;
+  readonly side: "left" | "right";
   readonly path: string;
   readonly mobilePath: string;
-  readonly delay: string;
+  readonly delay: number;
 }
 
-const CENTER_NODE = {
-  label: identity.vision.primaryGoal,
-} as const;
-
-const SYSTEM_NODES = [
-  {
-    id: "models",
-    label: "Models",
-    x: 22,
-    y: 24,
-    mobileX: 50,
-    mobileY: 12,
-    sequence: 0,
-    connections: ["models-training"],
-  },
+const SIGNAL_NODES = [
   {
     id: "data",
     label: "Data",
-    x: 31,
-    y: 43,
+    x: 49,
+    y: 19,
     mobileX: 50,
-    mobileY: 32,
-    sequence: 2,
-    connections: ["data-training", "users-data"],
+    mobileY: 24,
+    side: "right",
+    path: "M 50 50 C 50 42 49 31 49 20",
+    mobilePath: "M 50 50 L 50 24",
+    delay: 0,
   },
   {
     id: "training",
     label: "Training",
-    x: 56,
-    y: 25,
-    mobileX: 50,
-    mobileY: 22,
-    sequence: 1,
-    connections: ["models-training", "data-training", "training-evaluation"],
+    x: 76,
+    y: 31,
+    mobileX: 68,
+    mobileY: 36,
+    side: "right",
+    path: "M 53 49 C 60 42 68 36 75 32",
+    mobilePath: "M 53 49 L 68 36",
+    delay: 600,
   },
   {
     id: "evaluation",
     label: "Evaluation",
-    x: 74,
-    y: 48,
-    mobileX: 50,
-    mobileY: 42,
-    sequence: 3,
-    connections: ["training-evaluation", "evaluation-deployment"],
+    x: 70,
+    y: 70,
+    mobileX: 65,
+    mobileY: 62,
+    side: "right",
+    path: "M 53 52 C 61 57 66 63 70 69",
+    mobilePath: "M 53 52 L 65 62",
+    delay: 1200,
   },
   {
     id: "deployment",
     label: "Deployment",
-    x: 64,
-    y: 78,
-    mobileX: 50,
-    mobileY: 52,
-    sequence: 4,
-    connections: ["evaluation-deployment", "deployment-users"],
+    x: 34,
+    y: 74,
+    mobileX: 36,
+    mobileY: 64,
+    side: "left",
+    path: "M 47 52 C 42 59 37 66 35 73",
+    mobilePath: "M 47 52 L 36 64",
+    delay: 1800,
   },
   {
     id: "users",
     label: "Users",
-    x: 30,
-    y: 83,
-    mobileX: 50,
-    mobileY: 62,
-    sequence: 5,
-    connections: ["deployment-users", "users-data"],
+    x: 24,
+    y: 36,
+    mobileX: 30,
+    mobileY: 39,
+    side: "left",
+    path: "M 47 48 C 39 45 31 40 25 37",
+    mobilePath: "M 47 48 L 30 39",
+    delay: 2400,
   },
-] as const satisfies readonly SystemNode[];
+] as const satisfies readonly SignalNode[];
 
-const FLOW_CONNECTIONS = [
-  {
-    id: "models-training",
-    path: "M 32 24 L 46 24 Q 51 24 56 25",
-    mobilePath: "M 50 16 L 50 18",
-    delay: "0s",
-  },
-  {
-    id: "data-training",
-    path: "M 41 43 L 47 43 Q 52 43 56 35",
-    mobilePath: "M 50 26 L 50 28",
-    delay: "-0.6s",
-  },
-  {
-    id: "training-evaluation",
-    path: "M 66 25 L 70 25 Q 74 25 74 38",
-    mobilePath: "M 50 36 L 50 38",
-    delay: "-1.2s",
-  },
-  {
-    id: "evaluation-deployment",
-    path: "M 74 58 L 74 64 Q 74 72 64 72",
-    mobilePath: "M 50 46 L 50 48",
-    delay: "-1.8s",
-  },
-  {
-    id: "deployment-users",
-    path: "M 54 78 L 42 78 Q 34 78 30 83",
-    mobilePath: "M 50 56 L 50 58",
-    delay: "-2.4s",
-  },
-  {
-    id: "users-data",
-    path: "M 30 78 L 30 58 Q 30 50 31 43",
-    mobilePath: "M 50 60 L 50 64",
-    delay: "-3s",
-  },
-] as const satisfies readonly FlowConnection[];
+const SIGNAL_LOOP_MS = 3000;
+const SIGNAL_START_MS = 1400;
 
-function getNodeStyle(node: SystemNode) {
+function getNodeStyle(node: SignalNode, index: number) {
   return {
-    "--node-x": `${node.x}%`,
-    "--node-y": `${node.y}%`,
-    "--node-mobile-x": `${node.mobileX}%`,
-    "--node-mobile-y": `${node.mobileY}%`,
-    "--node-sequence": `${node.sequence}`,
-    "--node-enter-delay": `${500 + node.sequence * 100}ms`,
-    "--node-breathe-delay": `${node.sequence * 400}ms`,
+    "--signal-x": `${node.x}%`,
+    "--signal-y": `${node.y}%`,
+    "--signal-mobile-x": `${node.mobileX}%`,
+    "--signal-mobile-y": `${node.mobileY}%`,
+    "--signal-node-delay": `${700 + index * 100}ms`,
+    "--signal-idle-delay": `${index * 420}ms`,
+    "--signal-flash-delay": `${SIGNAL_START_MS + node.delay}ms`,
+  } as CSSProperties;
+}
+
+function getLineStyle(index: number) {
+  return {
+    "--signal-line-delay": `${500 + index * 80}ms`,
   } as CSSProperties;
 }
 
 export function HeroVisual() {
   const panelRef = useRef<HTMLDivElement>(null);
-  const [activeConnections, setActiveConnections] = useState<
-    readonly ConnectionId[]
-  >([]);
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
     const panel = panelRef.current;
@@ -161,11 +111,6 @@ export function HeroVisual() {
       return;
     }
 
-    const bounds = panel.getBoundingClientRect();
-    const localX = event.clientX - bounds.left;
-    const localY = event.clientY - bounds.top;
-    const x = (localX / bounds.width) * 100;
-    const y = (localY / bounds.height) * 100;
     const isDesktopPointer = window.matchMedia(
       "(hover: hover) and (pointer: fine) and (min-width: 80rem)",
     ).matches;
@@ -174,15 +119,16 @@ export function HeroVisual() {
       return;
     }
 
-    const depthX = ((x - 50) / 50) * 12;
-    const depthY = ((y - 50) / 50) * 12;
+    const bounds = panel.getBoundingClientRect();
+    const localX = event.clientX - bounds.left;
+    const localY = event.clientY - bounds.top;
+    const x = (localX / bounds.width) * 100;
+    const y = (localY / bounds.height) * 100;
     const tiltX = ((50 - y) / 50) * 4;
     const tiltY = ((x - 50) / 50) * 4;
 
     panel.style.setProperty("--visual-glow-x", `${localX.toFixed(2)}px`);
     panel.style.setProperty("--visual-glow-y", `${localY.toFixed(2)}px`);
-    panel.style.setProperty("--visual-depth-x", `${depthX.toFixed(2)}px`);
-    panel.style.setProperty("--visual-depth-y", `${depthY.toFixed(2)}px`);
     panel.style.setProperty("--visual-tilt-x", `${tiltX.toFixed(2)}deg`);
     panel.style.setProperty("--visual-tilt-y", `${tiltY.toFixed(2)}deg`);
   }
@@ -196,170 +142,622 @@ export function HeroVisual() {
 
     panel.style.setProperty("--visual-glow-x", "50%");
     panel.style.setProperty("--visual-glow-y", "50%");
-    panel.style.setProperty("--visual-depth-x", "0px");
-    panel.style.setProperty("--visual-depth-y", "0px");
     panel.style.setProperty("--visual-tilt-x", "0deg");
     panel.style.setProperty("--visual-tilt-y", "0deg");
-    setActiveConnections([]);
   }
 
   return (
-    <aside
-      aria-label="AI systems architecture diagram"
-      className="hero-visual-shell"
-    >
+    <aside aria-label="AI signal core visualization" className="hero-visual-shell">
       <div
         ref={panelRef}
-        className="ai-systems-panel"
+        className="ai-systems-panel signal-core-panel"
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
-        <div className="ai-systems-grid" aria-hidden="true" />
-        <div className="ai-systems-glow" aria-hidden="true" />
-        <div className="ai-radar-rings" aria-hidden="true">
-          <span className="ai-radar-ring ai-radar-ring-outer" />
-          <span className="ai-radar-ring ai-radar-ring-middle" />
-          <span className="ai-radar-ring ai-radar-ring-inner" />
-        </div>
-        <div className="ai-live-status" aria-hidden="true">
-          <span>Status</span>
-          <span>
-            <span className="ai-live-status-dot" />
-            Building
-          </span>
-          <strong>Production AI Systems</strong>
-          <span>Updated Today</span>
-        </div>
-
-        <svg
-          viewBox="0 0 100 100"
-          className="ai-systems-graph"
-          role="img"
-          aria-labelledby="hero-visual-title hero-visual-description"
-          preserveAspectRatio="none"
-        >
-          <title id="hero-visual-title">AI systems architecture flow</title>
-          <desc id="hero-visual-description">
-            Production AI architecture showing models and data flowing into
-            training, evaluation, deployment, and users.
-          </desc>
-
-          <g
-            className="ai-systems-edges ai-systems-edges-desktop"
-            fill="none"
-            strokeLinecap="round"
+        <div className="signal-core-stage" aria-hidden="true">
+          <svg
+            viewBox="0 0 100 100"
+            className="signal-core-graph signal-core-graph-desktop"
+            role="img"
+            aria-labelledby="signal-core-title signal-core-description"
+            preserveAspectRatio="none"
           >
-            {FLOW_CONNECTIONS.map((connection) => (
+            <title id="signal-core-title">
+              AI systems architecture flow: Signal Core
+            </title>
+            <desc id="signal-core-description">
+              A central model core sends signals to data, training, evaluation,
+              deployment, and users.
+            </desc>
+            {SIGNAL_NODES.map((node, index) => (
               <path
-                key={connection.id}
-                className={[
-                  "ai-systems-edge",
-                  `ai-connection-${connection.id}`,
-                  activeConnections.includes(connection.id)
-                    ? "ai-systems-edge-active"
-                    : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                d={connection.path}
+                key={node.id}
+                className="signal-core-line"
+                d={node.path}
+                pathLength="1"
+                style={getLineStyle(index)}
               />
             ))}
-          </g>
-
-          <g
-            className="ai-systems-edges ai-systems-edges-mobile"
-            fill="none"
-            strokeLinecap="round"
-          >
-            {FLOW_CONNECTIONS.map((connection) => (
-              <path
-                key={connection.id}
-                className={[
-                  "ai-systems-edge",
-                  `ai-connection-${connection.id}`,
-                  activeConnections.includes(connection.id)
-                    ? "ai-systems-edge-active"
-                    : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                d={connection.mobilePath}
-              />
-            ))}
-          </g>
-
-          <g
-            className="ai-systems-flow ai-systems-flow-desktop"
-            aria-hidden="true"
-          >
-            {FLOW_CONNECTIONS.map((connection) => (
-              <circle
-                key={connection.id}
-                className={[
-                  "ai-flow-packet",
-                  `ai-flow-packet-${connection.id}`,
-                ].join(" ")}
-                r="1"
-                style={{ "--packet-delay": connection.delay } as CSSProperties}
-              >
+            {SIGNAL_NODES.map((node) => (
+              <circle key={node.id} className="signal-core-pulse" r="0.85">
                 <animateMotion
-                  begin={connection.delay}
-                  dur="3s"
-                  path={connection.path}
+                  begin={`${(SIGNAL_START_MS + node.delay) / 1000}s`}
+                  calcMode="linear"
+                  dur={`${SIGNAL_LOOP_MS / 1000}s`}
+                  keyPoints="0;1;1"
+                  keyTimes="0;0.3;1"
+                  path={node.path}
                   repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  begin={`${(SIGNAL_START_MS + node.delay) / 1000}s`}
+                  dur={`${SIGNAL_LOOP_MS / 1000}s`}
+                  keyTimes="0;0.08;0.24;0.3;1"
+                  repeatCount="indefinite"
+                  values="0;1;1;0;0"
                 />
               </circle>
             ))}
-          </g>
+          </svg>
 
-          <g
-            className="ai-systems-flow ai-systems-flow-mobile"
+          <svg
+            viewBox="0 0 100 100"
+            className="signal-core-graph signal-core-graph-mobile"
+            role="img"
             aria-hidden="true"
+            preserveAspectRatio="none"
           >
-            {FLOW_CONNECTIONS.map((connection) => (
-              <circle
-                key={connection.id}
-                className={[
-                  "ai-flow-packet",
-                  `ai-flow-packet-${connection.id}`,
-                ].join(" ")}
-                r="1"
-                style={{ "--packet-delay": connection.delay } as CSSProperties}
-              >
+            {SIGNAL_NODES.map((node, index) => (
+              <path
+                key={node.id}
+                className="signal-core-line"
+                d={node.mobilePath}
+                pathLength="1"
+                style={getLineStyle(index)}
+              />
+            ))}
+            {SIGNAL_NODES.slice(0, 3).map((node) => (
+              <circle key={node.id} className="signal-core-pulse" r="0.85">
                 <animateMotion
-                  begin={connection.delay}
-                  dur="3s"
-                  path={connection.mobilePath}
+                  begin={`${(SIGNAL_START_MS + node.delay) / 1000}s`}
+                  calcMode="linear"
+                  dur={`${SIGNAL_LOOP_MS / 1000}s`}
+                  keyPoints="0;1;1"
+                  keyTimes="0;0.3;1"
+                  path={node.mobilePath}
                   repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  begin={`${(SIGNAL_START_MS + node.delay) / 1000}s`}
+                  dur={`${SIGNAL_LOOP_MS / 1000}s`}
+                  keyTimes="0;0.08;0.24;0.3;1"
+                  repeatCount="indefinite"
+                  values="0;1;1;0;0"
                 />
               </circle>
             ))}
-          </g>
-        </svg>
+          </svg>
 
-        <div className="ai-pipeline-center" aria-hidden="true">
-          <span>Current Focus</span>
-          <strong>{CENTER_NODE.label}</strong>
-        </div>
+          <div className="signal-core-orb">
+            <span>Model Core</span>
+          </div>
 
-        <div className="ai-systems-nodes" aria-hidden="true">
-          {SYSTEM_NODES.map((node) => (
-            <div
-              key={node.id}
-              className={["ai-system-node", `ai-system-node-${node.id}`].join(
-                " ",
-              )}
-              style={getNodeStyle(node)}
-              onPointerEnter={() => setActiveConnections(node.connections)}
-              onPointerLeave={() => setActiveConnections([])}
-            >
-              <div className="ai-system-node-card">
-                <span className="ai-system-node-dot" />
-                <span>{node.label}</span>
+          <div className="signal-core-nodes">
+            {SIGNAL_NODES.map((node, index) => (
+              <div
+                key={node.id}
+                className={[
+                  "signal-core-node",
+                  `signal-core-node-${node.side}`,
+                ].join(" ")}
+                style={getNodeStyle(node, index)}
+              >
+                <span className="signal-core-node-dot" />
+                <span className="signal-core-node-label">{node.label}</span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        <div className="signal-core-readout" aria-hidden="true">
+          <p>
+            <span className="signal-core-status-dot" />
+            Building Production AI Systems
+          </p>
+          <strong>{identity.vision.primaryGoal}</strong>
+          <span>Updated today</span>
+        </div>
+
+        <style>{`
+          .signal-core-panel.ai-systems-panel {
+            --text-primary: var(--hero-text-primary, #f5f1ea);
+            --text-secondary: var(--hero-text-secondary, #a8a29a);
+            --text-tertiary: var(--hero-text-tertiary, #6b655d);
+            --accent: var(--hero-accent, #e8563a);
+            --accent-soft: var(--hero-accent-soft, rgb(232 86 58 / 0.12));
+            --panel-bg: var(--hero-bg-elevated, #121110);
+            --signal-ease: cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 480px;
+            aspect-ratio: 1.08 / 1;
+            background:
+              radial-gradient(
+                circle at 65% 35%,
+                rgb(232 86 58 / 0.08),
+                transparent 60%
+              ),
+              radial-gradient(
+                circle at var(--visual-glow-x, 50%) var(--visual-glow-y, 50%),
+                rgb(232 86 58 / 0.06),
+                transparent 34%
+              ),
+              var(--panel-bg);
+            animation: signal-panel-enter 600ms var(--signal-ease) both;
+          }
+
+          .signal-core-panel.ai-systems-panel::before {
+            display: none;
+          }
+
+          .signal-core-panel.ai-systems-panel::after {
+            background: radial-gradient(
+              circle at center,
+              transparent 48%,
+              rgb(10 9 8 / 0.64)
+            );
+          }
+
+          .signal-core-stage {
+            position: absolute;
+            inset: var(--spacing-6) var(--spacing-6)
+              calc(var(--spacing-24) + var(--spacing-8)) var(--spacing-6);
+            overflow: visible;
+          }
+
+          .signal-core-graph {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+          }
+
+          .signal-core-graph-mobile {
+            display: none;
+          }
+
+          .signal-core-line {
+            fill: none;
+            stroke: var(--accent);
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+            stroke-linecap: round;
+            stroke-width: 1px;
+            opacity: 0.3;
+            vector-effect: non-scaling-stroke;
+            animation: signal-line-draw 420ms var(--signal-ease)
+              var(--signal-line-delay) both;
+          }
+
+          .signal-core-pulse {
+            fill: var(--accent);
+            filter: drop-shadow(0 0 6px rgb(232 86 58 / 0.7));
+            opacity: 0;
+          }
+
+          .signal-core-orb {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 4;
+            display: grid;
+            width: 72px;
+            height: 72px;
+            place-items: center;
+            border-radius: 999px;
+            background:
+              radial-gradient(
+                circle,
+                rgb(232 86 58 / 0.92) 0%,
+                rgb(232 86 58 / 0.36) 42%,
+                transparent 72%
+              ),
+              #1a1006;
+            color: var(--text-tertiary);
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            line-height: 1.1;
+            text-align: center;
+            text-transform: uppercase;
+            transform: translate3d(-50%, -50%, 0) scale(0.7);
+            animation:
+              signal-core-enter 400ms var(--signal-ease) 300ms both,
+              signal-core-breathe 4s ease-in-out 900ms infinite;
+          }
+
+          .signal-core-orb::before {
+            position: absolute;
+            inset: calc(0rem - var(--spacing-6));
+            z-index: -1;
+            border-radius: inherit;
+            background: radial-gradient(
+              circle,
+              rgb(232 86 58 / 0.25),
+              transparent 68%
+            );
+            content: "";
+            filter: blur(var(--spacing-6));
+            opacity: 0.3;
+            transform: scale(1);
+            animation: signal-core-halo 3s ease-in-out 1400ms infinite;
+          }
+
+          .signal-core-orb > span {
+            max-width: 7ch;
+            opacity: 0.72;
+          }
+
+          .signal-core-nodes {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+          }
+
+          .signal-core-node {
+            position: absolute;
+            left: var(--signal-x);
+            top: var(--signal-y);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            line-height: var(--leading-label);
+            opacity: 0;
+            transform: translate3d(-50%, -50%, 0) scale(0.86);
+            animation: signal-node-enter 300ms var(--signal-ease)
+              var(--signal-node-delay) both;
+          }
+
+          .signal-core-node-left {
+            flex-direction: row-reverse;
+          }
+
+          .signal-core-node-dot {
+            position: relative;
+            width: var(--spacing-2);
+            height: var(--spacing-2);
+            flex: 0 0 var(--spacing-2);
+            border-radius: 999px;
+            background: var(--accent);
+            animation:
+              signal-node-idle 2.5s ease-in-out var(--signal-idle-delay)
+                infinite,
+              signal-node-flash 3s ease-in-out var(--signal-flash-delay)
+                infinite;
+          }
+
+          .signal-core-node-dot::before {
+            position: absolute;
+            inset: calc(0rem - var(--spacing-2));
+            border-radius: inherit;
+            background: radial-gradient(
+              circle,
+              rgb(232 86 58 / 0.34),
+              transparent 70%
+            );
+            content: "";
+            opacity: 0.7;
+          }
+
+          .signal-core-readout {
+            position: absolute;
+            right: var(--spacing-6);
+            bottom: var(--spacing-6);
+            left: var(--spacing-6);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            color: var(--text-tertiary);
+          }
+
+          .signal-core-readout > p,
+          .signal-core-readout > strong,
+          .signal-core-readout > span {
+            margin: 0;
+            opacity: 0;
+            transform: translate3d(0, var(--spacing-2), 0);
+            animation: signal-readout-enter 320ms var(--signal-ease) both;
+          }
+
+          .signal-core-readout > p {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            line-height: var(--leading-label);
+            text-transform: uppercase;
+            animation-delay: 1000ms;
+          }
+
+          .signal-core-readout > strong {
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: var(--leading-heading);
+            animation-delay: 1080ms;
+          }
+
+          .signal-core-readout > span {
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            line-height: var(--leading-label);
+            animation-delay: 1160ms;
+          }
+
+          .signal-core-status-dot {
+            position: relative;
+            width: var(--spacing-2);
+            height: var(--spacing-2);
+            flex: 0 0 var(--spacing-2);
+            border-radius: 999px;
+            background: #4ade80;
+          }
+
+          .signal-core-status-dot::before {
+            position: absolute;
+            inset: calc(0rem - var(--spacing-2));
+            border-radius: inherit;
+            background: radial-gradient(
+              circle,
+              rgb(74 222 128 / 0.28),
+              transparent 70%
+            );
+            content: "";
+            animation: signal-status-pulse 2s ease-in-out infinite;
+          }
+
+          @keyframes signal-panel-enter {
+            from {
+              opacity: 0;
+              transform: perspective(1000px) translate3d(var(--spacing-8), 0, 0)
+                rotateX(var(--visual-tilt-x, 0deg))
+                rotateY(var(--visual-tilt-y, 0deg));
+            }
+
+            to {
+              opacity: 1;
+              transform: perspective(1000px) translate3d(0, 0, 0)
+                rotateX(var(--visual-tilt-x, 0deg))
+                rotateY(var(--visual-tilt-y, 0deg));
+            }
+          }
+
+          @keyframes signal-core-enter {
+            from {
+              opacity: 0;
+              transform: translate3d(-50%, -50%, 0) scale(0.7);
+            }
+
+            to {
+              opacity: 1;
+              transform: translate3d(-50%, -50%, 0) scale(1);
+            }
+          }
+
+          @keyframes signal-core-breathe {
+            0%,
+            100% {
+              transform: translate3d(-50%, -50%, 0) scale(1);
+            }
+
+            50% {
+              transform: translate3d(-50%, -50%, 0) scale(1.06);
+            }
+          }
+
+          @keyframes signal-core-halo {
+            0%,
+            100% {
+              opacity: 0.3;
+              transform: scale(1);
+            }
+
+            50% {
+              opacity: 0.6;
+              transform: scale(1.08);
+            }
+          }
+
+          @keyframes signal-line-draw {
+            from {
+              stroke-dashoffset: 1;
+            }
+
+            to {
+              stroke-dashoffset: 0;
+            }
+          }
+
+          @keyframes signal-node-enter {
+            from {
+              opacity: 0;
+              transform: translate3d(-50%, -50%, 0) scale(0.86);
+            }
+
+            to {
+              opacity: 1;
+              transform: translate3d(-50%, -50%, 0) scale(1);
+            }
+          }
+
+          @keyframes signal-node-idle {
+            0%,
+            100% {
+              opacity: 0.6;
+            }
+
+            50% {
+              opacity: 1;
+            }
+          }
+
+          @keyframes signal-node-flash {
+            0%,
+            27%,
+            36%,
+            100% {
+              transform: scale(1);
+            }
+
+            31% {
+              transform: scale(1.4);
+            }
+          }
+
+          @keyframes signal-readout-enter {
+            from {
+              opacity: 0;
+              transform: translate3d(0, var(--spacing-2), 0);
+            }
+
+            to {
+              opacity: 1;
+              transform: translate3d(0, 0, 0);
+            }
+          }
+
+          @keyframes signal-status-pulse {
+            0%,
+            100% {
+              opacity: 0.35;
+              transform: scale(0.7);
+            }
+
+            50% {
+              opacity: 0.8;
+              transform: scale(1);
+            }
+          }
+
+          @media (min-width: 48rem) and (max-width: 79.999rem) {
+            .signal-core-panel.ai-systems-panel {
+              min-height: 430px;
+            }
+
+            .signal-core-stage {
+              inset: var(--spacing-6) var(--spacing-6)
+                calc(var(--spacing-24) + var(--spacing-6)) var(--spacing-6);
+            }
+
+            .signal-core-orb {
+              width: 56px;
+              height: 56px;
+              font-size: 0.5625rem;
+            }
+
+            .signal-core-node {
+              font-size: 0.8125rem;
+            }
+          }
+
+          @media (max-width: 47.999rem) {
+            .signal-core-panel.ai-systems-panel {
+              min-height: 360px;
+              aspect-ratio: 4 / 5;
+            }
+
+            .signal-core-stage {
+              inset: var(--spacing-4) var(--spacing-4)
+                calc(var(--spacing-16) + var(--spacing-8)) var(--spacing-4);
+            }
+
+            .signal-core-graph-desktop {
+              display: none;
+            }
+
+            .signal-core-graph-mobile {
+              display: block;
+            }
+
+            .signal-core-orb {
+              width: 44px;
+              height: 44px;
+              font-size: 0.5rem;
+            }
+
+            .signal-core-node {
+              left: var(--signal-mobile-x);
+              top: var(--signal-mobile-y);
+              gap: var(--spacing-1);
+              font-size: 0.8125rem;
+            }
+
+            .signal-core-readout {
+              right: var(--spacing-4);
+              bottom: var(--spacing-4);
+              left: var(--spacing-4);
+            }
+
+            .signal-core-readout > p {
+              font-size: 0.6875rem;
+            }
+
+            .signal-core-readout > strong {
+              font-size: 1rem;
+            }
+
+            .signal-core-readout > span {
+              display: none;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .signal-core-panel.ai-systems-panel,
+            .signal-core-line,
+            .signal-core-orb,
+            .signal-core-orb::before,
+            .signal-core-node,
+            .signal-core-node-dot,
+            .signal-core-readout > p,
+            .signal-core-readout > strong,
+            .signal-core-readout > span,
+            .signal-core-status-dot::before {
+              animation: none !important;
+            }
+
+            .signal-core-pulse {
+              display: none;
+            }
+
+            .signal-core-line {
+              stroke-dashoffset: 0;
+            }
+
+            .signal-core-panel.ai-systems-panel {
+              opacity: 1;
+              transform: none !important;
+            }
+
+            .signal-core-orb,
+            .signal-core-node,
+            .signal-core-readout > p,
+            .signal-core-readout > strong,
+            .signal-core-readout > span {
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
     </aside>
   );
