@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 const TRUST_SIGNALS = [
   "Machine Learning",
   "LLMs",
-  "Agents",
+  "AI Agents",
   "Evaluation",
   "Open Source",
 ] as const;

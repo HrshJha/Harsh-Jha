@@ -30,9 +30,10 @@ describe("Home", () => {
 
   it("routes the primary CTA to Projects and downloads the resume PDF", () => {
     render(<Home />);
-    expect(
-      screen.getByRole("link", { name: "View Projects →" }),
-    ).toHaveAttribute("href", "/projects");
+    expect(screen.getByRole("link", { name: "View Projects" })).toHaveAttribute(
+      "href",
+      "/projects",
+    );
     const resumeLink = screen.getByRole("link", { name: "Resume" });
     expect(resumeLink).toHaveAttribute("href", "/documents/Harsh_CV.pdf");
     expect(resumeLink).toHaveAttribute(
@@ -50,7 +51,7 @@ describe("Home", () => {
     for (const label of [
       "Machine Learning",
       "LLMs",
-      "Agents",
+      "AI Agents",
       "Evaluation",
       "Open Source",
     ]) {

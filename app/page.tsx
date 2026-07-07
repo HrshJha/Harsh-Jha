@@ -9,6 +9,7 @@ export default function Home() {
         ariaLabelledBy="hero-heading"
         className="hero-section"
         containerSize="hero"
+        containerClassName="lg:px-16"
       >
         <HeroSection />
       </Section>

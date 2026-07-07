@@ -70,7 +70,7 @@
   --container-reading: 48rem;
   --container-content: 72rem;
   --container-wide: 88rem;
-  --container-hero: 92.5rem;
+  --container-hero: 90rem;
 
   --duration-instant: 0ms;
   --duration-fast: 120ms;
@@ -224,8 +224,7 @@ body {
 .hero-shell {
   position: relative;
   display: flex;
-  min-height: calc(100vh - var(--spacing-12));
-  min-height: 86vh;
+  min-height: 100vh;
   flex-direction: column;
   justify-content: center;
   padding-block: var(--spacing-12);
@@ -488,13 +487,13 @@ body {
   --graph-node-height: 10%;
   --graph-node-font: clamp(0.6875rem, 1.7cqw, 0.875rem);
   --graph-center-width: 38%;
-  --graph-center-height: 17%;
+  --graph-center-height: 15%;
   --graph-center-font: clamp(0.875rem, 2.4cqw, 1.1875rem);
   --node-x: 50%;
   --node-y: 50%;
   --node-mobile-x: 50%;
   --node-mobile-y: 50%;
-  --center-y: 63%;
+  --center-y: 63.5%;
   --visual-depth-x: 0px;
   --visual-depth-y: 0px;
   --visual-glow-x: 50%;
@@ -735,7 +734,7 @@ body {
   display: flex;
   width: var(--graph-center-width);
   height: var(--graph-center-height);
-  min-height: calc(var(--spacing-16) + var(--spacing-2));
+  min-height: 0;
   flex-direction: column;
   justify-content: center;
   gap: var(--spacing-1);
@@ -1037,11 +1036,26 @@ body {
 
 @media (min-width: 64rem) {
   .hero-layout {
-    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .hero-copy {
     padding-right: var(--spacing-4);
+  }
+}
+
+@media (max-width: 74rem) and (min-width: 48rem) {
+  .ai-systems-panel {
+    --graph-center-font: clamp(0.75rem, 1.8cqw, 0.9375rem);
+  }
+
+  .ai-pipeline-center {
+    gap: 0;
+    padding: calc(var(--spacing-1) + var(--spacing-1)) var(--spacing-3);
+  }
+
+  .ai-pipeline-center > span {
+    font-size: clamp(0.5rem, 1.2cqw, 0.625rem);
   }
 }
 
