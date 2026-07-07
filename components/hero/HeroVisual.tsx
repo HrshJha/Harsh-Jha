@@ -73,15 +73,15 @@ const SIGNAL_NODES = [
   {
     id: "deployment",
     label: "Deployment",
-    x: 34,
-    y: 74,
+    x: 38,
+    y: 78,
     mobileX: 36,
     mobileY: 64,
     side: "left",
-    startX: 46,
-    startY: 55,
-    controlX: 40,
-    controlY: 65,
+    startX: 48,
+    startY: 56,
+    controlX: 43,
+    controlY: 69,
     mobileStartX: 46,
     mobileStartY: 55,
     delay: 1800,
@@ -90,14 +90,14 @@ const SIGNAL_NODES = [
     id: "users",
     label: "Users",
     x: 24,
-    y: 36,
+    y: 31,
     mobileX: 30,
     mobileY: 39,
     side: "left",
     startX: 44,
-    startY: 47,
+    startY: 45,
     controlX: 35,
-    controlY: 43,
+    controlY: 38,
     mobileStartX: 45,
     mobileStartY: 48,
     delay: 2400,
@@ -319,11 +319,17 @@ export function HeroVisual() {
             max-width: 560px;
             aspect-ratio: auto;
             overflow: hidden;
+            border-color: rgb(255 255 255 / 0.08);
             background:
               radial-gradient(
                 circle at 65% 35%,
-                rgb(232 86 58 / 0.08),
+                rgb(232 86 58 / 0.1),
                 transparent 60%
+              ),
+              linear-gradient(
+                to bottom,
+                rgb(255 255 255 / 0.02),
+                transparent 40%
               ),
               radial-gradient(
                 circle at var(--visual-glow-x, 50%) var(--visual-glow-y, 50%),
@@ -331,6 +337,10 @@ export function HeroVisual() {
                 transparent 34%
               ),
               var(--panel-bg);
+            box-shadow:
+              0 0 80px rgb(232 86 58 / 0.06),
+              inset 0 0 0 1px rgb(255 255 255 / 0.04),
+              inset 0 1px 0 rgb(255 255 255 / 0.05);
             animation: signal-panel-enter 600ms var(--signal-ease) both;
           }
 
@@ -349,7 +359,8 @@ export function HeroVisual() {
           .signal-core-stage {
             position: absolute;
             inset: var(--spacing-6) var(--spacing-6)
-              calc(var(--spacing-24) + var(--spacing-6)) var(--spacing-6);
+              calc(var(--spacing-24) + var(--spacing-6) + var(--spacing-1))
+              var(--spacing-6);
             overflow: visible;
           }
 
@@ -373,7 +384,7 @@ export function HeroVisual() {
             stroke-dashoffset: 1;
             stroke-linecap: round;
             stroke-width: 1.5px;
-            opacity: 0.3;
+            opacity: 0.45;
             vector-effect: non-scaling-stroke;
             animation: signal-line-draw 420ms var(--signal-ease)
               var(--signal-line-delay) both;
@@ -391,8 +402,8 @@ export function HeroVisual() {
             top: 50%;
             z-index: 4;
             display: grid;
-            width: 72px;
-            height: 72px;
+            width: 92px;
+            height: 92px;
             place-items: center;
             border-radius: 999px;
             background:
@@ -403,8 +414,8 @@ export function HeroVisual() {
               ),
               radial-gradient(
                 circle,
-                rgb(232 86 58 / 0.78) 0%,
-                rgb(232 86 58 / 0.31) 42%,
+                rgb(232 86 58 / 0.84) 0%,
+                rgb(232 86 58 / 0.36) 42%,
                 transparent 72%
               ),
               #1a1006;
@@ -428,7 +439,7 @@ export function HeroVisual() {
             border-radius: inherit;
             background: radial-gradient(
               circle,
-              rgb(232 86 58 / 0.25),
+              rgb(232 86 58 / 0.35),
               transparent 68%
             );
             content: "";
@@ -457,7 +468,7 @@ export function HeroVisual() {
             top: var(--signal-y);
             display: block;
             color: var(--text-primary);
-            font-size: 0.9375rem;
+            font-size: 1rem;
             font-weight: 500;
             line-height: var(--leading-label);
             opacity: 0;
@@ -470,11 +481,12 @@ export function HeroVisual() {
             position: absolute;
             left: 0;
             top: 50%;
-            width: var(--spacing-2);
-            height: var(--spacing-2);
-            flex: 0 0 var(--spacing-2);
+            width: calc(var(--spacing-2) + 2px);
+            height: calc(var(--spacing-2) + 2px);
+            flex: 0 0 calc(var(--spacing-2) + 2px);
             border-radius: 999px;
             background: var(--accent);
+            box-shadow: 0 0 8px rgb(232 86 58 / 0.5);
             transform: translate3d(-50%, -50%, 0);
             animation:
               signal-node-idle 2.5s ease-in-out var(--signal-idle-delay)
@@ -498,7 +510,7 @@ export function HeroVisual() {
 
           .signal-core-node-label {
             display: block;
-            margin-left: calc(var(--spacing-2) + var(--spacing-1));
+            margin-left: calc(var(--spacing-2) + var(--spacing-1) + 1px);
             white-space: nowrap;
           }
 
