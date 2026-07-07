@@ -9,7 +9,8 @@ type ConnectionId =
   | "data-training"
   | "training-evaluation"
   | "evaluation-deployment"
-  | "deployment-users";
+  | "deployment-users"
+  | "users-data";
 
 interface SystemNode {
   readonly id: string;
@@ -18,6 +19,7 @@ interface SystemNode {
   readonly y: number;
   readonly mobileX: number;
   readonly mobileY: number;
+  readonly sequence: number;
   readonly connections: readonly ConnectionId[];
 }
 
@@ -38,8 +40,9 @@ const SYSTEM_NODES = [
     label: "Models",
     x: 22,
     y: 24,
-    mobileX: 62,
-    mobileY: 42,
+    mobileX: 50,
+    mobileY: 12,
+    sequence: 0,
     connections: ["models-training"],
   },
   {
@@ -47,17 +50,19 @@ const SYSTEM_NODES = [
     label: "Data",
     x: 31,
     y: 43,
-    mobileX: 24,
-    mobileY: 54,
-    connections: ["data-training"],
+    mobileX: 50,
+    mobileY: 32,
+    sequence: 2,
+    connections: ["data-training", "users-data"],
   },
   {
     id: "training",
     label: "Training",
     x: 56,
     y: 25,
-    mobileX: 62,
-    mobileY: 54,
+    mobileX: 50,
+    mobileY: 22,
+    sequence: 1,
     connections: ["models-training", "data-training", "training-evaluation"],
   },
   {
@@ -65,8 +70,9 @@ const SYSTEM_NODES = [
     label: "Evaluation",
     x: 74,
     y: 48,
-    mobileX: 62,
-    mobileY: 66,
+    mobileX: 50,
+    mobileY: 42,
+    sequence: 3,
     connections: ["training-evaluation", "evaluation-deployment"],
   },
   {
@@ -74,8 +80,9 @@ const SYSTEM_NODES = [
     label: "Deployment",
     x: 64,
     y: 78,
-    mobileX: 62,
-    mobileY: 78,
+    mobileX: 50,
+    mobileY: 52,
+    sequence: 4,
     connections: ["evaluation-deployment", "deployment-users"],
   },
   {
@@ -83,9 +90,10 @@ const SYSTEM_NODES = [
     label: "Users",
     x: 30,
     y: 83,
-    mobileX: 62,
-    mobileY: 90,
-    connections: ["deployment-users"],
+    mobileX: 50,
+    mobileY: 62,
+    sequence: 5,
+    connections: ["deployment-users", "users-data"],
   },
 ] as const satisfies readonly SystemNode[];
 
@@ -93,32 +101,38 @@ const FLOW_CONNECTIONS = [
   {
     id: "models-training",
     path: "M 32 24 L 46 24 Q 51 24 56 25",
-    mobilePath: "M 62 47 L 62 49",
+    mobilePath: "M 50 16 L 50 18",
     delay: "0s",
   },
   {
     id: "data-training",
     path: "M 41 43 L 47 43 Q 52 43 56 35",
-    mobilePath: "M 41 54 L 45 54",
+    mobilePath: "M 50 26 L 50 28",
     delay: "-0.6s",
   },
   {
     id: "training-evaluation",
     path: "M 66 25 L 70 25 Q 74 25 74 38",
-    mobilePath: "M 62 59 L 62 61",
+    mobilePath: "M 50 36 L 50 38",
     delay: "-1.2s",
   },
   {
     id: "evaluation-deployment",
     path: "M 74 58 L 74 64 Q 74 72 64 72",
-    mobilePath: "M 62 71 L 62 73",
+    mobilePath: "M 50 46 L 50 48",
     delay: "-1.8s",
   },
   {
     id: "deployment-users",
     path: "M 54 78 L 42 78 Q 34 78 30 83",
-    mobilePath: "M 62 83 L 62 85",
+    mobilePath: "M 50 56 L 50 58",
     delay: "-2.4s",
+  },
+  {
+    id: "users-data",
+    path: "M 30 78 L 30 58 Q 30 50 31 43",
+    mobilePath: "M 50 60 L 50 64",
+    delay: "-3s",
   },
 ] as const satisfies readonly FlowConnection[];
 
@@ -128,6 +142,9 @@ function getNodeStyle(node: SystemNode) {
     "--node-y": `${node.y}%`,
     "--node-mobile-x": `${node.mobileX}%`,
     "--node-mobile-y": `${node.mobileY}%`,
+    "--node-sequence": `${node.sequence}`,
+    "--node-enter-delay": `${500 + node.sequence * 100}ms`,
+    "--node-breathe-delay": `${node.sequence * 400}ms`,
   } as CSSProperties;
 }
 
@@ -149,13 +166,25 @@ export function HeroVisual() {
     const localY = event.clientY - bounds.top;
     const x = (localX / bounds.width) * 100;
     const y = (localY / bounds.height) * 100;
-    const depthX = ((x - 50) / 50) * 10;
-    const depthY = ((y - 50) / 50) * 10;
+    const isDesktopPointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine) and (min-width: 80rem)",
+    ).matches;
+
+    if (!isDesktopPointer) {
+      return;
+    }
+
+    const depthX = ((x - 50) / 50) * 12;
+    const depthY = ((y - 50) / 50) * 12;
+    const tiltX = ((50 - y) / 50) * 4;
+    const tiltY = ((x - 50) / 50) * 4;
 
     panel.style.setProperty("--visual-glow-x", `${localX.toFixed(2)}px`);
     panel.style.setProperty("--visual-glow-y", `${localY.toFixed(2)}px`);
     panel.style.setProperty("--visual-depth-x", `${depthX.toFixed(2)}px`);
     panel.style.setProperty("--visual-depth-y", `${depthY.toFixed(2)}px`);
+    panel.style.setProperty("--visual-tilt-x", `${tiltX.toFixed(2)}deg`);
+    panel.style.setProperty("--visual-tilt-y", `${tiltY.toFixed(2)}deg`);
   }
 
   function handlePointerLeave() {
@@ -169,11 +198,16 @@ export function HeroVisual() {
     panel.style.setProperty("--visual-glow-y", "50%");
     panel.style.setProperty("--visual-depth-x", "0px");
     panel.style.setProperty("--visual-depth-y", "0px");
+    panel.style.setProperty("--visual-tilt-x", "0deg");
+    panel.style.setProperty("--visual-tilt-y", "0deg");
     setActiveConnections([]);
   }
 
   return (
-    <aside aria-label="AI systems architecture diagram" className="w-full">
+    <aside
+      aria-label="AI systems architecture diagram"
+      className="hero-visual-shell"
+    >
       <div
         ref={panelRef}
         className="ai-systems-panel"
@@ -220,6 +254,7 @@ export function HeroVisual() {
                 key={connection.id}
                 className={[
                   "ai-systems-edge",
+                  `ai-connection-${connection.id}`,
                   activeConnections.includes(connection.id)
                     ? "ai-systems-edge-active"
                     : "",
@@ -241,6 +276,7 @@ export function HeroVisual() {
                 key={connection.id}
                 className={[
                   "ai-systems-edge",
+                  `ai-connection-${connection.id}`,
                   activeConnections.includes(connection.id)
                     ? "ai-systems-edge-active"
                     : "",
@@ -259,7 +295,10 @@ export function HeroVisual() {
             {FLOW_CONNECTIONS.map((connection) => (
               <circle
                 key={connection.id}
-                className="ai-flow-packet"
+                className={[
+                  "ai-flow-packet",
+                  `ai-flow-packet-${connection.id}`,
+                ].join(" ")}
                 r="1"
                 style={{ "--packet-delay": connection.delay } as CSSProperties}
               >
@@ -280,7 +319,10 @@ export function HeroVisual() {
             {FLOW_CONNECTIONS.map((connection) => (
               <circle
                 key={connection.id}
-                className="ai-flow-packet"
+                className={[
+                  "ai-flow-packet",
+                  `ai-flow-packet-${connection.id}`,
+                ].join(" ")}
                 r="1"
                 style={{ "--packet-delay": connection.delay } as CSSProperties}
               >
@@ -304,7 +346,9 @@ export function HeroVisual() {
           {SYSTEM_NODES.map((node) => (
             <div
               key={node.id}
-              className="ai-system-node"
+              className={["ai-system-node", `ai-system-node-${node.id}`].join(
+                " ",
+              )}
               style={getNodeStyle(node)}
               onPointerEnter={() => setActiveConnections(node.connections)}
               onPointerLeave={() => setActiveConnections([])}
