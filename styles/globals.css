@@ -1074,6 +1074,7 @@ body {
     --graph-node-height: 8%;
     --graph-node-font: clamp(0.625rem, 2.7cqw, 0.8125rem);
     --graph-node-size: calc(var(--spacing-1) + 1px);
+    --center-y: 16%;
     aspect-ratio: 4 / 5;
   }
 
@@ -1091,17 +1092,11 @@ body {
     display: inline;
   }
 
-  .ai-systems-glow,
-  .ai-radar-rings {
-    top: 16%;
-  }
-
   .ai-radar-rings {
     width: 78%;
   }
 
   .ai-pipeline-center {
-    top: 16%;
     min-height: 0;
     padding: var(--spacing-3);
   }
