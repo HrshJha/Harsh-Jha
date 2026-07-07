@@ -26,14 +26,14 @@ const SIGNAL_NODES = [
     id: "data",
     label: "Data",
     x: 49,
-    y: 19,
+    y: 11,
     mobileX: 50,
     mobileY: 24,
     side: "right",
     startX: 50,
-    startY: 44,
+    startY: 32,
     controlX: 50,
-    controlY: 34,
+    controlY: 23,
     mobileStartX: 50,
     mobileStartY: 44,
     delay: 0,
@@ -41,15 +41,15 @@ const SIGNAL_NODES = [
   {
     id: "training",
     label: "Training",
-    x: 76,
-    y: 31,
+    x: 81,
+    y: 25,
     mobileX: 68,
     mobileY: 36,
     side: "right",
-    startX: 56,
-    startY: 47,
-    controlX: 64,
-    controlY: 39,
+    startX: 61,
+    startY: 43,
+    controlX: 70,
+    controlY: 32,
     mobileStartX: 55,
     mobileStartY: 47,
     delay: 600,
@@ -57,15 +57,15 @@ const SIGNAL_NODES = [
   {
     id: "evaluation",
     label: "Evaluation",
-    x: 70,
-    y: 70,
+    x: 78,
+    y: 77,
     mobileX: 65,
     mobileY: 62,
     side: "right",
-    startX: 55,
-    startY: 54,
-    controlX: 63,
-    controlY: 61,
+    startX: 60,
+    startY: 59,
+    controlX: 70,
+    controlY: 67,
     mobileStartX: 54,
     mobileStartY: 54,
     delay: 1200,
@@ -73,15 +73,15 @@ const SIGNAL_NODES = [
   {
     id: "deployment",
     label: "Deployment",
-    x: 38,
-    y: 78,
+    x: 36,
+    y: 84,
     mobileX: 36,
     mobileY: 64,
     side: "left",
-    startX: 48,
-    startY: 56,
-    controlX: 43,
-    controlY: 69,
+    startX: 46,
+    startY: 62,
+    controlX: 40,
+    controlY: 74,
     mobileStartX: 46,
     mobileStartY: 55,
     delay: 1800,
@@ -89,15 +89,15 @@ const SIGNAL_NODES = [
   {
     id: "users",
     label: "Users",
-    x: 24,
-    y: 31,
+    x: 18,
+    y: 25,
     mobileX: 30,
     mobileY: 39,
     side: "left",
-    startX: 44,
-    startY: 45,
-    controlX: 35,
-    controlY: 38,
+    startX: 39,
+    startY: 43,
+    controlX: 29,
+    controlY: 33,
     mobileStartX: 45,
     mobileStartY: 48,
     delay: 2400,
@@ -319,28 +319,23 @@ export function HeroVisual() {
             max-width: 560px;
             aspect-ratio: auto;
             overflow: hidden;
-            border-color: rgb(255 255 255 / 0.08);
+            border: 1px solid rgb(255 255 255 / 0.08);
+            border-radius: 24px;
             background:
               radial-gradient(
-                circle at 65% 35%,
-                rgb(232 86 58 / 0.1),
-                transparent 60%
+                circle at 65% 30%,
+                rgb(232 86 58 / 0.14),
+                transparent 55%
               ),
               linear-gradient(
-                to bottom,
-                rgb(255 255 255 / 0.02),
-                transparent 40%
+                180deg,
+                rgb(255 255 255 / 0.03) 0%,
+                transparent 35%
               ),
-              radial-gradient(
-                circle at var(--visual-glow-x, 50%) var(--visual-glow-y, 50%),
-                rgb(232 86 58 / 0.06),
-                transparent 34%
-              ),
-              var(--panel-bg);
+              #100d0b;
             box-shadow:
-              0 0 80px rgb(232 86 58 / 0.06),
-              inset 0 0 0 1px rgb(255 255 255 / 0.04),
-              inset 0 1px 0 rgb(255 255 255 / 0.05);
+              0 0 100px rgb(232 86 58 / 0.08),
+              inset 0 1px 0 rgb(255 255 255 / 0.04);
             animation: signal-panel-enter 600ms var(--signal-ease) both;
           }
 
@@ -359,7 +354,7 @@ export function HeroVisual() {
           .signal-core-stage {
             position: absolute;
             inset: var(--spacing-6) var(--spacing-6)
-              calc(var(--spacing-24) + var(--spacing-6) + var(--spacing-1))
+              calc(var(--spacing-24) + var(--spacing-12) + var(--spacing-4))
               var(--spacing-6);
             overflow: visible;
           }
@@ -402,8 +397,8 @@ export function HeroVisual() {
             top: 50%;
             z-index: 4;
             display: grid;
-            width: 92px;
-            height: 92px;
+            width: 100px;
+            height: 100px;
             place-items: center;
             border-radius: 999px;
             background:
@@ -468,7 +463,7 @@ export function HeroVisual() {
             top: var(--signal-y);
             display: block;
             color: var(--text-primary);
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 500;
             line-height: var(--leading-label);
             opacity: 0;
@@ -481,9 +476,9 @@ export function HeroVisual() {
             position: absolute;
             left: 0;
             top: 50%;
-            width: calc(var(--spacing-2) + 2px);
-            height: calc(var(--spacing-2) + 2px);
-            flex: 0 0 calc(var(--spacing-2) + 2px);
+            width: 11px;
+            height: 11px;
+            flex: 0 0 11px;
             border-radius: 999px;
             background: var(--accent);
             box-shadow: 0 0 8px rgb(232 86 58 / 0.5);
@@ -510,8 +505,18 @@ export function HeroVisual() {
 
           .signal-core-node-label {
             display: block;
-            margin-left: calc(var(--spacing-2) + var(--spacing-1) + 1px);
+            margin-left: 13.5px;
             white-space: nowrap;
+          }
+
+          .signal-core-readout::before {
+            position: absolute;
+            right: 0;
+            top: calc(0rem - var(--spacing-8));
+            left: 0;
+            height: 1px;
+            background: rgb(255 255 255 / 0.06);
+            content: "";
           }
 
           .signal-core-readout {
