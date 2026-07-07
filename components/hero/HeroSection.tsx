@@ -19,10 +19,6 @@ export function HeroSection() {
         </div>
         <HeroVisual />
       </div>
-      <div className="hero-scroll-indicator" aria-hidden="true">
-        <span>Scroll to explore</span>
-        <span>↓</span>
-      </div>
     </div>
   );
 }

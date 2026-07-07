@@ -1,11 +1,11 @@
 import { Check } from "lucide-react";
 
 const TRUST_SIGNALS = [
-  "AI Research",
-  "Production ML",
+  "Machine Learning",
+  "LLMs",
+  "Agents",
+  "Evaluation",
   "Open Source",
-  "FastAPI",
-  "LLM Engineering",
 ] as const;
 
 export function HeroTrustRow() {

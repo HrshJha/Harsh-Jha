@@ -66,7 +66,6 @@ export function ThemeToggle() {
 
   const Icon = isDark ? Sun : Moon;
   const label = isDark ? "Switch to Lightbox mode" : "Switch to Darkroom mode";
-  const visibleLabel = isDark ? "Lightbox" : "Darkroom";
 
   return (
     <button
@@ -74,10 +73,9 @@ export function ThemeToggle() {
       onClick={handleToggle}
       aria-label={label}
       suppressHydrationWarning
-      className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-border bg-surface px-3 text-label font-medium text-muted-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="theme-toggle-button inline-flex items-center justify-center rounded-sm border border-border bg-surface text-muted-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       <Icon aria-hidden="true" className="size-4" strokeWidth={2} />
-      <span className="hidden sm:inline">{visibleLabel}</span>
     </button>
   );
 }

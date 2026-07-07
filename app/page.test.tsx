@@ -8,7 +8,7 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "Building Production AI Systems",
+        name: "Building AI Systems From Research to Production",
       }),
     ).toBeInTheDocument();
   });
@@ -16,22 +16,24 @@ describe("Home", () => {
   it("renders the production AI headline and hero statement", () => {
     render(<Home />);
     expect(
-      screen.getByText("Building Production AI Systems"),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Building AI Systems From Research to Production",
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Machine Learning. LLMs. AI Infrastructure. Building production-ready AI systems through engineering, research and open source.",
+        "Building production-grade AI systems through research, engineering and open source.",
       ),
     ).toBeInTheDocument();
   });
 
   it("routes the primary CTA to Projects and downloads the resume PDF", () => {
     render(<Home />);
-    expect(screen.getByRole("link", { name: "View Projects" })).toHaveAttribute(
-      "href",
-      "/projects",
-    );
-    const resumeLink = screen.getByRole("link", { name: "Download Resume" });
+    expect(
+      screen.getByRole("link", { name: "View Projects →" }),
+    ).toHaveAttribute("href", "/projects");
+    const resumeLink = screen.getByRole("link", { name: "Resume" });
     expect(resumeLink).toHaveAttribute("href", "/documents/Harsh_CV.pdf");
     expect(resumeLink).toHaveAttribute(
       "download",
@@ -46,11 +48,11 @@ describe("Home", () => {
     });
 
     for (const label of [
-      "AI Research",
-      "Production ML",
+      "Machine Learning",
+      "LLMs",
+      "Agents",
+      "Evaluation",
       "Open Source",
-      "FastAPI",
-      "LLM Engineering",
     ]) {
       expect(within(focusAreas).getByText(label)).toBeInTheDocument();
     }
@@ -77,7 +79,7 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("img", { name: /AI systems focus map/ }),
+      screen.getByRole("img", { name: /AI systems pipeline/ }),
     ).toBeInTheDocument();
   });
 
@@ -96,5 +98,6 @@ describe("Home", () => {
     expect(
       screen.queryByRole("heading", { level: 2, name: "Contact" }),
     ).toBeNull();
+    expect(screen.queryByRole("contentinfo")).toBeNull();
   });
 });

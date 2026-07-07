@@ -26,7 +26,7 @@ export function MobileNavbar() {
         aria-label="Open navigation"
         className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-border bg-surface px-3 text-label font-medium text-foreground transition-colors duration-(--duration-fast) ease-(--ease-standard) hover:border-border-strong hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
-        <span>Menu</span>
+        <span className="hidden min-[22.5rem]:inline">Menu</span>
         <Menu aria-hidden="true" className="size-4" strokeWidth={2} />
       </button>
       <NavigationDrawer

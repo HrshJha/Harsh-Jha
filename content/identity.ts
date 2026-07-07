@@ -7,9 +7,9 @@ export const identity: Identity = {
   institution: "Maharaja Surajmal Institute of Technology",
   graduationYear: 2029,
   currentCgpa: 8.59,
-  headline: "Building Production AI Systems",
+  headline: "Building AI Systems From Research to Production",
   heroStatement:
-    "Machine Learning. LLMs. AI Infrastructure. Building production-ready AI systems through engineering, research and open source.",
+    "Building production-grade AI systems through research, engineering and open source.",
   coreMessage:
     "Building autonomous AI systems through research, engineering, and product thinking.",
   mission: "Demonstrate the ability to engineer production-grade AI systems.",
