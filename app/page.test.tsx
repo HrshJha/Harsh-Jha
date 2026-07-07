@@ -75,11 +75,11 @@ describe("Home", () => {
     ).toHaveAttribute("href", "mailto:jhaharsh451@gmail.com");
   });
 
-  it("renders the static hero systems visual", () => {
+  it("renders the hero architecture diagram", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("img", { name: /AI systems pipeline/ }),
+      screen.getByRole("img", { name: /AI systems architecture flow/ }),
     ).toBeInTheDocument();
   });
 
