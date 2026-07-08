@@ -1,0 +1,227 @@
+/*
+ * globals.css — Cinematic Signal design system
+ *
+ * All color tokens are defined ONCE here in @theme.
+ * No component may use a raw hex code — every color must trace to one of these 7 tokens.
+ * See tech.md Section 2 and DECISIONS.md for full rationale.
+ */
+
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   THEME TOKENS — Tailwind v4 CSS-first config via @theme
+   No tailwind.config.js exists. These become Tailwind utilities automatically:
+   e.g. bg-surface-dark, text-ink, border-signal-steel, etc.
+   ───────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Surfaces */
+  --color-surface-dark: #100d0b;   /* "Darkroom" — warm near-black, not pure black */
+  --color-surface-light: #faf6ef;  /* "Lightbox" — warm paper white, not pure white */
+
+  /* Signal stage colors — used exclusively for the Signal Core pipeline diagram.
+     Stage mapping (from tech.md Section 2):
+       Research → Parse  = steel   (input / gathering)
+       Rank → Repair     = gold    (active processing)
+       Verify → Feedback = rust    (resolved / output)
+     Six nodes, three stages, three colors — not six arbitrary assignments. */
+  --color-signal-steel: #5c7a99;   /* Input / research stage */
+  --color-signal-gold: #c9a961;    /* Processing / active stage */
+  --color-signal-rust: #bf5b3d;    /* Output / verified stage — close to a darkroom safelight */
+
+  /* Ink — text colors */
+  --color-ink-dark: #ede6da;
+  --color-ink-light: #181410;
+  --color-ink: var(--ink);            /* Primary text on dark (Darkroom) surface */
+  /* --color-ink-inverse replaced by --color-ink-light */    /* Primary text on light (Lightbox) surface */
+
+  /* Typography — font variable references (CSS variables set by next/font in layout.tsx) */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE LAYER — semantic theme application
+   Dark/light switching is handled by next-themes via data-theme attribute
+   (attribute: 'data-theme', values: 'dark' | 'light').
+   Darkroom = dark. Lightbox = light.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* System default: Darkroom */
+:root {
+  color-scheme: dark;
+  --surface: var(--color-surface-dark);
+  --ink: var(--color-ink-dark);
+
+  /* ── Motion tokens (MOTION_SYSTEM.md §2, locked values) ──
+     JS mirror lives in lib/motion.ts — same values, one source of truth.
+     CSS properties are used by Tailwind transition-* utilities and
+     inline style CSS transitions (toggle pill, nav hovers, card hover). */
+
+  /* Duration */
+  --motion-feedback:     150ms;   /* button press, focus ring — §1 flagged exception to 400ms floor */
+  --motion-base:         400ms;   /* default state changes: link trace, nav item, card hover */
+  --motion-reveal:       600ms;   /* content entering the viewport */
+  --motion-develop:      900ms;   /* photography-coded reveals */
+  --motion-toggle:       500ms;   /* Darkroom/Lightbox surface cross-fade */
+  --motion-ambient-loop: 2800ms;  /* Signal Core node pulse (± 137ms jitter per node) */
+
+  /* Easing */
+  --ease-feedback:     cubic-bezier(0.2, 0, 0, 1);    /* quick, confident, zero overshoot */
+  --ease-signal-drift: cubic-bezier(0.45, 0, 0.15, 1); /* symmetric slow-in/slow-out */
+  --ease-develop:      cubic-bezier(0.16, 1, 0.3, 1);  /* fast start, long gentle decel */
+  --ease-trace:        linear;                          /* constant-rate signal travel */
+
+  /* Distance / scale */
+  --reveal-sm:    12px;   /* line-level text reveals */
+  --reveal-md:    24px;   /* cards/blocks entering viewport */
+  --reveal-lg:    40px;   /* major section wrappers only */
+  --hover-lift:   -4px;   /* card/interactive hover */
+  --press-scale:  0.97;   /* button press yield */
+
+  /* Stagger */
+  --stagger-tight: 60ms;  /* characters/words, icon rows, list bullets */
+  --stagger-base:  90ms;  /* cards in a grid, list items */
+  --stagger-loose: 140ms; /* Hero children sequence */
+}
+
+/* Lightbox mode */
+[data-theme="light"] {
+  color-scheme: light;
+  --surface: var(--color-surface-light);
+  --ink: var(--color-ink-light);
+}
+
+/* Darkroom mode (explicit, matches system default) */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: var(--color-surface-dark);
+  --ink: var(--color-ink-dark);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   GLOBAL BASE STYLES
+   ───────────────────────────────────────────────────────────────────────────── */
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+  background-color: var(--surface);
+  color: var(--ink);
+  /* Body copy uses Geist Sans; headlines use Fraunces via font-display in components */
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Darkroom/Lightbox surface cross-fade (MOTION_SYSTEM.md §4.5):
+     "Should feel like a room's light level changing, not a snap."
+     Uses --motion-toggle (500ms) and --ease-signal-drift — the same
+     symmetric slow-in/slow-out used for ambient/background motion. */
+  transition:
+    background-color var(--motion-toggle) var(--ease-signal-drift),
+    color var(--motion-toggle) var(--ease-signal-drift);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HEADLINE FALLBACK RULE (rules.md Section 2)
+   If Fraunces fails to load, the fallback must still look intentional —
+   Georgia is a serifed editorial face, not default Arial/Helvetica Bold.
+   ───────────────────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   FOCUS STYLES — visible keyboard focus everywhere (rules.md Section 3)
+   ───────────────────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-signal-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOTION UTILITY CLASSES
+   Each transition class maps directly to MOTION_SYSTEM.md Section 2 tokens.
+   Components use these for CSS-only hover/focus states instead of Tailwind
+   duration-* utilities or inline timing values.
+   ───────────────────────────────────────────────────────────────────────────── */
+.motion-feedback-transition {
+  transition-duration: var(--motion-feedback);
+  transition-timing-function: var(--ease-feedback);
+}
+
+.motion-base-feedback-transition {
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease-feedback);
+}
+
+.motion-base-drift-transition {
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease-signal-drift);
+}
+
+.press-scale-control {
+  transition-property: background-color, border-color, color, opacity, transform;
+  transition-duration: var(--motion-feedback);
+  transition-timing-function: var(--ease-feedback);
+}
+
+.press-scale-control:active {
+  transform: scale(var(--press-scale));
+}
+
+.nav-trace-link {
+  position: relative;
+  transition-property: color, opacity;
+  transition-duration: var(--motion-base);
+  transition-timing-function: var(--ease-signal-drift);
+}
+
+.nav-trace-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 1px;
+  background: var(--color-signal-steel);
+  opacity: 0.65;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    transform var(--motion-base) var(--ease-signal-drift),
+    background-color var(--motion-base) var(--ease-signal-drift),
+    opacity var(--motion-base) var(--ease-signal-drift);
+}
+
+.nav-trace-link:hover::after,
+.nav-trace-link:focus-visible::after,
+.nav-trace-link[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+.nav-trace-link[data-active="true"]::after {
+  background: var(--color-signal-gold);
+  opacity: 0.9;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   REDUCED MOTION — global reset (rules.md Section 2, tech.md Section 4)
+   The Signal Core animation wrapper checks this; this is the CSS safety net.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: var(--motion-feedback) !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--motion-feedback) !important;
+    scroll-behavior: auto !important;
+  }
+
+  .press-scale-control:active {
+    transform: none;
+  }
+}
