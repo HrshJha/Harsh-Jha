@@ -12,11 +12,22 @@
  * calling its own hook.
  */
 
+import { useEffect, useState } from "react";
 import { useReducedMotion as useMotionReducedMotion } from "motion/react";
 
 export function useReducedMotion(): boolean {
   // motion/react's useReducedMotion reads the OS prefers-reduced-motion media query.
-  // Returns true if the user has requested reduced motion.
+  // Keep the hydration pass server-equivalent; the OS media query is client-only.
   const shouldReduce = useMotionReducedMotion();
-  return shouldReduce ?? false;
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setIsMounted(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  return isMounted ? shouldReduce ?? false : false;
 }

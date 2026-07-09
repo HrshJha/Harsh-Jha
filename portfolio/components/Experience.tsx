@@ -10,8 +10,6 @@
  *   Experience is the proof layer — it reads as a technical dossier, not a
  *   promotional résumé. Typography is subdued relative to the projects section;
  *   Fraunces for company names, JetBrains Mono for metadata/labels, Geist for body.
- *   The Signal Core rust color (resolved/output stage) marks the "key project" link —
- *   tying experience directly to the work product it produced.
  *
  * Content rules enforced here (prd.md Section 9 / FOUNDATION.md Content Rules):
  *   - No "passionate", "hardworking", "quick learner", "results-driven"
@@ -21,71 +19,16 @@
  * Anchor: the section's id="experience" is stubbed in page.tsx for future nav.
  */
 
-import { motion } from "motion/react";
-import { ExternalLink } from "lucide-react";
+import { ScrollLinkedReveal } from "@/components/ScrollLinkedReveal";
 import { EXPERIENCE, type ExperienceRole } from "@/content/experience";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import {
-  DURATION_REVEAL,
-  EASE_DEVELOP,
-  REVEAL_LG,
-  REVEAL_MD,
-  REVEAL_SM,
-  STAGGER_BASE,
-  STAGGER_TIGHT,
-  VIEWPORT_REVEAL,
-  stagger,
-} from "@/lib/motion";
-
-function ScrollReveal({
-  children,
-  delay = 0,
-  distance = REVEAL_MD,
-  shouldReduce,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  distance?: number;
-  shouldReduce: boolean;
-}) {
-  if (shouldReduce) return <>{children}</>;
-
-  return (
-    <motion.div
-      // WHY: scroll reveal lets the technical record resolve as the reader
-      // reaches it, using the same develop timing across section content.
-      initial={{ opacity: 0, y: distance }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{ duration: DURATION_REVEAL, delay, ease: EASE_DEVELOP }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 function BulletItem({
   children,
-  index,
   color,
-  shouldReduce,
 }: {
   children: React.ReactNode;
-  index: number;
   color: string;
-  shouldReduce: boolean;
 }) {
-  const content = (
-    <>
-      <span
-        aria-hidden="true"
-        className="flex-shrink-0 mt-[0.45em] w-1 h-1 rounded-full"
-        style={{ background: color, opacity: 0.7 }}
-      />
-      {children}
-    </>
-  );
-
   const className = "flex gap-3 text-sm sm:text-base leading-relaxed";
   const style = {
     fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
@@ -93,30 +36,15 @@ function BulletItem({
     opacity: 0.65,
   };
 
-  if (shouldReduce) {
-    return (
-      <li className={className} style={style}>
-        {content}
-      </li>
-    );
-  }
-
   return (
-    <motion.li
-      // WHY: only true list items stagger here; dense paragraphs stay still.
-      initial={{ opacity: 0, y: REVEAL_SM }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{
-        duration: DURATION_REVEAL,
-        delay: stagger(index, STAGGER_TIGHT),
-        ease: EASE_DEVELOP,
-      }}
-      className={className}
-      style={style}
-    >
-      {content}
-    </motion.li>
+    <li className={className} style={style}>
+      <span
+        aria-hidden="true"
+        className="flex-shrink-0 mt-[0.45em] w-1 h-1 rounded-full"
+        style={{ background: color, opacity: 0.7 }}
+      />
+      {children}
+    </li>
   );
 }
 
@@ -124,37 +52,38 @@ function BulletItem({
 function RoleCard({
   role,
   index,
-  shouldReduce,
 }: {
   role: ExperienceRole;
   index: number;
-  shouldReduce: boolean;
 }) {
+  const isLast = index === EXPERIENCE.length - 1;
+
   const card = (
     <article
       className="relative"
       aria-label={`Experience: ${role.role} at ${role.company}`}
     >
-      {/* Vertical timeline rail */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 top-0 bottom-0 w-px"
-        style={{
-          background:
-            "linear-gradient(to bottom, var(--color-signal-steel) 0%, transparent 100%)",
-          opacity: 0.25,
-        }}
-      />
+      <div className="relative z-10">
+        {/* Vertical timeline rail */}
+        <div
+          aria-hidden="true"
+          className="absolute left-0 top-0 bottom-0 w-px"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--color-signal-steel) 0%, transparent 100%)",
+            opacity: "var(--timeline-opacity)",
+          }}
+        />
 
-      {/* Timeline node dot */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 top-[1.75rem] w-2 h-2 rounded-full -translate-x-[3px]"
-        style={{ background: "var(--color-signal-steel)" }}
-      />
+        {/* Timeline node dot */}
+        <div
+          aria-hidden="true"
+          className="absolute left-0 top-[1.75rem] w-2 h-2 rounded-full -translate-x-[3px]"
+          style={{ background: "var(--color-signal-steel)" }}
+        />
 
-      {/* Card body — offset from timeline */}
-      <div className="pl-8 pb-16 last:pb-0">
+        {/* Card body — offset from timeline */}
+        <div className={`pl-8 ${isLast ? "pb-0" : "pb-12 sm:pb-14 lg:pb-16"}`}>
 
         {/* ── Header ── */}
         <div className="mb-5">
@@ -201,12 +130,11 @@ function RoleCard({
           {role.techStack.map((tech) => (
             <span
               key={tech}
-              className="px-2.5 py-1 rounded text-[11px] uppercase tracking-wider border border-white/[0.08]"
+              className="px-2.5 py-1 rounded text-[11px] uppercase tracking-wider border themed-chip"
               style={{
                 fontFamily: "var(--font-jetbrains-mono), monospace",
                 color: "var(--color-ink)",
                 opacity: 0.55,
-                background: "rgba(255,255,255,0.04)",
               }}
             >
               {tech}
@@ -260,55 +188,16 @@ function RoleCard({
             Key Responsibilities
           </h4>
           <ul className="space-y-2">
-            {role.keyResponsibilities.map((item, i) => (
+            {role.keyResponsibilities.map((item) => (
               <BulletItem
-                key={i}
-                index={i}
+                key={item}
                 color="var(--color-signal-steel)"
-                shouldReduce={shouldReduce}
               >
                 {item}
               </BulletItem>
             ))}
           </ul>
         </div>
-
-        {/* ── Key Project (conditional — only DomAIyn Labs has one) ── */}
-        {role.keyProject && (
-          <div className="mb-6">
-            <h4
-              className="text-[11px] uppercase tracking-[0.15em] mb-2"
-              style={{
-                fontFamily: "var(--font-jetbrains-mono), monospace",
-                color: "var(--color-signal-gold)",
-                opacity: 0.7,
-              }}
-            >
-              Key Project
-            </h4>
-            <a
-              href={role.keyProject.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              id={`experience-${role.id}-key-project`}
-              aria-label={`${role.keyProject.name} — project detail (opens in new tab)`}
-              className="
-                inline-flex items-center gap-2
-                text-sm font-medium
-                transition-opacity motion-feedback-transition
-                hover:opacity-100
-              "
-              style={{
-                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                color: "var(--color-signal-rust)",
-                opacity: 0.85,
-              }}
-            >
-              <ExternalLink size={13} aria-hidden="true" />
-              {role.keyProject.name}
-            </a>
-          </div>
-        )}
 
         {/* ── What I Learned ── */}
         {/*
@@ -327,12 +216,10 @@ function RoleCard({
             What I Learned
           </h4>
           <ul className="space-y-2">
-            {role.whatILearned.map((item, i) => (
+            {role.whatILearned.map((item) => (
               <BulletItem
-                key={i}
-                index={i}
+                key={item}
                 color="var(--color-signal-gold)"
-                shouldReduce={shouldReduce}
               >
                 {item}
               </BulletItem>
@@ -367,25 +254,16 @@ function RoleCard({
           </p>
         </div>
 
+        </div>
       </div>
     </article>
   );
 
-  return (
-    <ScrollReveal
-      delay={stagger(index, STAGGER_BASE)}
-      distance={REVEAL_MD}
-      shouldReduce={shouldReduce}
-    >
-      {card}
-    </ScrollReveal>
-  );
+  return card;
 }
 
 /* ─── Section component ─────────────────────────────────────────────────── */
 export function Experience() {
-  const shouldReduce = useReducedMotion();
-
   const content = (
     <div className="w-full max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-20 sm:py-28">
 
@@ -419,7 +297,6 @@ export function Experience() {
             key={role.id}
             role={role}
             index={index}
-            shouldReduce={shouldReduce}
           />
         ))}
       </div>
@@ -428,8 +305,8 @@ export function Experience() {
   );
 
   return (
-    <ScrollReveal distance={REVEAL_LG} shouldReduce={shouldReduce}>
+    <ScrollLinkedReveal sceneId="experience" distance={6}>
       {content}
-    </ScrollReveal>
+    </ScrollLinkedReveal>
   );
 }

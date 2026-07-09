@@ -19,14 +19,7 @@
  * Anchor: id="contact" — target of Nav "Contact" link and Resume page CTA.
  */
 
-import { motion } from "motion/react";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import {
-  DURATION_REVEAL,
-  EASE_DEVELOP,
-  REVEAL_LG,
-  VIEWPORT_REVEAL,
-} from "@/lib/motion";
+import { ScrollLinkedReveal } from "@/components/ScrollLinkedReveal";
 
 /* ─── Contact data — verbatim from FOUNDATION.md Contact section ─────────── */
 const CONTACT = {
@@ -88,133 +81,189 @@ const CONTACT = {
 
 /* ─── Component ─────────────────────────────────────────────────────────────── */
 export function Contact() {
-  const shouldReduce = useReducedMotion();
-
   const content = (
     <div
       id="contact"
-      className="w-full max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-20"
+      data-atmosphere-scene="contact"
+      className="relative isolate w-full overflow-hidden"
     >
-      {/* Section header */}
-      <div className="mb-10">
-        <p
-          className="text-[11px] sm:text-xs uppercase tracking-[0.2em] mb-3"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono), monospace",
-            color: "var(--color-signal-steel)",
-            opacity: 0.6,
-          }}
-        >
-          Get in Touch
-        </p>
-        <h2
-          className="text-2xl sm:text-3xl font-bold tracking-tight"
-          style={{
-            fontFamily: "var(--font-fraunces), Georgia, serif",
-            color: "var(--color-ink)",
-          }}
-        >
-          Contact
-        </h2>
-      </div>
+      <div className="relative z-10 mx-auto flex min-h-[78vh] w-full max-w-5xl flex-col justify-between px-6 py-10 sm:px-10 sm:py-12 lg:px-16 lg:py-14">
+        <div className="grid gap-7 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.72fr)] lg:items-stretch">
+          <div className="flex min-w-0 flex-col justify-between rounded-xl border themed-static-panel px-5 py-5 sm:px-6 sm:py-6">
+            <div>
+              <p
+                className="mb-3 text-[11px] uppercase tracking-[0.2em] sm:text-xs"
+                style={{
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
+                  color: "var(--color-signal-steel)",
+                  opacity: 0.6,
+                }}
+              >
+                Get in Touch
+              </p>
+              <h2
+                className="text-3xl font-bold tracking-tight sm:text-4xl"
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  color: "var(--color-ink)",
+                }}
+              >
+                Contact
+              </h2>
+            </div>
 
-      {/* Email — primary contact method */}
-      {/*
-        Verbatim from FOUNDATION.md Contact: jhaharsh451@gmail.com
-        No contact form, no form backend — DECISIONS.md seed default.
-      */}
-      <div className="mb-8">
-        <p
-          className="text-[11px] uppercase tracking-[0.15em] mb-2"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono), monospace",
-            color: "var(--color-signal-gold)",
-            opacity: 0.65,
-          }}
-        >
-          Email
-        </p>
-        <a
-          href={`mailto:${CONTACT.email}`}
-          id="contact-email"
-          aria-label={`Send email to ${CONTACT.email}`}
-          className="
-            inline-flex items-center gap-2
-            text-base sm:text-lg
-            transition-opacity motion-feedback-transition
-            hover:opacity-100
-          "
-          style={{
-            fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-            color: "var(--color-signal-rust)",
-            opacity: 0.85,
-          }}
-        >
-          {CONTACT.email}
-        </a>
-      </div>
+            <div className="mt-8">
+              <p
+                className="mb-2 text-[11px] uppercase tracking-[0.15em]"
+                style={{
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
+                  color: "var(--color-signal-gold)",
+                  opacity: 0.65,
+                }}
+              >
+                Email
+              </p>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                id="contact-email"
+                aria-label={`Send email to ${CONTACT.email}`}
+                className="
+                  inline-flex max-w-full items-center gap-2 break-all
+                  text-xl leading-tight sm:text-2xl lg:text-3xl
+                  transition-opacity motion-feedback-transition
+                  hover:opacity-100
+                "
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  color: "var(--color-signal-rust)",
+                  opacity: 0.9,
+                }}
+              >
+                {CONTACT.email}
+              </a>
 
-      {/* Social links — icon + label, no form */}
-      {/*
-        Icons: inline SVG — lucide-react does not export brand icons (DECISIONS.md Part 2).
-        URLs verbatim from FOUNDATION.md Contact section.
-      */}
-      <div>
-        <p
-          className="text-[11px] uppercase tracking-[0.15em] mb-4"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono), monospace",
-            color: "var(--color-signal-gold)",
-            opacity: 0.65,
-          }}
-        >
-          Socials
-        </p>
-        <div className="flex flex-wrap gap-4">
-          {CONTACT.socials.map((social) => (
-            <a
-              key={social.id}
-              id={social.id}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${social.label} profile (opens in new tab)`}
-              className="
-                flex items-center gap-2.5
-                px-4 py-2.5 rounded-lg
-                border border-white/[0.08]
-                text-sm
-                transition-all motion-feedback-transition
-                hover:opacity-100 hover:border-white/[0.15]
-              "
+              <div className="mt-5">
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  id="contact-send-email"
+                  className="
+                    premium-action inline-flex items-center justify-center rounded-full border px-4 py-2.5
+                    text-sm font-medium
+                  "
+                  style={{
+                    borderColor: "var(--line-accent)",
+                    color: "var(--color-ink)",
+                    background: "var(--panel-muted)",
+                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                  }}
+                >
+                  Send Email
+                  <span aria-hidden="true" className="ml-2">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <aside className="rounded-xl border themed-static-panel px-5 py-5 sm:px-6 sm:py-6">
+            <p
+              className="mb-4 text-[11px] uppercase tracking-[0.15em]"
               style={{
-                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                color: "var(--color-ink)",
-                opacity: 0.6,
-                background: "rgba(255,255,255,0.03)",
+                fontFamily: "var(--font-jetbrains-mono), monospace",
+                color: "var(--color-signal-gold)",
+                opacity: 0.65,
               }}
             >
-              {social.icon}
-              <span>{social.label}</span>
-            </a>
-          ))}
+              Socials
+            </p>
+            <div className="grid gap-2.5">
+              {CONTACT.socials.map((social) => (
+                <a
+                  key={social.id}
+                  id={social.id}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${social.label} profile (opens in new tab)`}
+                  className="
+                    group flex items-center justify-between gap-4 rounded-lg border themed-panel
+                    px-4 py-3 text-sm premium-action
+                  "
+                  style={{
+                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                    color: "var(--color-ink)",
+                    opacity: 0.68,
+                  }}
+                >
+                  <span className="flex min-w-0 items-center gap-2.5">
+                    {social.icon}
+                    <span className="truncate">{social.label}</span>
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="text-xs opacity-40 transition-opacity motion-feedback-transition group-hover:opacity-80"
+                    style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}
+                  >
+                    ↗
+                  </span>
+                </a>
+              ))}
+            </div>
+          </aside>
         </div>
+
+        <footer
+          aria-label="Closing footer"
+          className="mt-7 border-t pt-5 sm:mt-8 sm:pt-6"
+          style={{ borderColor: "var(--line-muted)" }}
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p
+                className="text-sm font-semibold"
+                style={{
+                  fontFamily: "var(--font-fraunces), Georgia, serif",
+                  color: "var(--color-ink)",
+                }}
+              >
+                Harsh Kumar Jha
+              </p>
+              <p
+                className="mt-1 text-[11px] uppercase tracking-[0.16em]"
+                style={{
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
+                  color: "var(--color-ink)",
+                  opacity: 0.38,
+                }}
+              >
+                AI / ML Portfolio · © {new Date().getFullYear()}
+              </p>
+            </div>
+            <a
+              href="#"
+              id="contact-back-to-top"
+              aria-label="Back to top"
+              className="
+                self-start text-[11px] uppercase tracking-[0.12em]
+                transition-opacity motion-base-drift-transition
+                hover:opacity-80 sm:self-auto
+              "
+              style={{
+                fontFamily: "var(--font-jetbrains-mono), monospace",
+                color: "var(--color-ink)",
+                opacity: 0.36,
+              }}
+            >
+              ↑ Top
+            </a>
+          </div>
+        </footer>
       </div>
     </div>
   );
 
-  if (shouldReduce) return content;
-
   return (
-    <motion.div
-      // WHY: Contact is the final section in the journey, so it resolves once
-      // when reached rather than replaying on scroll.
-      initial={{ opacity: 0, y: REVEAL_LG }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{ duration: DURATION_REVEAL, ease: EASE_DEVELOP }}
-    >
+    <ScrollLinkedReveal sceneId="contact" distance={6}>
       {content}
-    </motion.div>
+    </ScrollLinkedReveal>
   );
 }

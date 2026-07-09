@@ -25,86 +25,34 @@
  * Anchor IDs present: #about, #skills, #education — for future nav (Part 6).
  */
 
-import { motion } from "motion/react";
+import { ScrollLinkedReveal } from "@/components/ScrollLinkedReveal";
 import { ABOUT, SKILLS, EDUCATION } from "@/content/about";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import {
-  DURATION_REVEAL,
-  EASE_DEVELOP,
-  REVEAL_LG,
-  REVEAL_MD,
-  STAGGER_BASE,
-  STAGGER_TIGHT,
-  VIEWPORT_REVEAL,
-  stagger,
-} from "@/lib/motion";
 
 /* ─── Shared fade wrapper ───────────────────────────────────────────────── */
 function FadeIn({
   children,
-  delay = 0,
-  shouldReduce,
 }: {
   children: React.ReactNode;
-  delay?: number;
-  shouldReduce: boolean;
 }) {
-  if (shouldReduce) return <>{children}</>;
-  return (
-    <motion.div
-      // WHY: inner blocks use the standard reveal distance; paragraphs are
-      // revealed as blocks, not word-by-word.
-      initial={{ opacity: 0, y: REVEAL_MD }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{ duration: DURATION_REVEAL, delay, ease: EASE_DEVELOP }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <>{children}</>;
 }
 
 function SkillChip({
   item,
-  index,
-  shouldReduce,
 }: {
   item: string;
-  index: number;
-  shouldReduce: boolean;
 }) {
-  const className = "px-2.5 py-1 rounded text-xs border border-white/[0.08]";
+  const className = "rounded border themed-chip px-2 py-0.5 text-[11px] leading-[1.35]";
   const style = {
     fontFamily: "var(--font-jetbrains-mono), monospace",
     color: "var(--color-ink)",
     opacity: 0.65,
-    background: "rgba(255,255,255,0.04)",
   };
 
-  if (shouldReduce) {
-    return (
-      <span className={className} style={style}>
-        {item}
-      </span>
-    );
-  }
-
   return (
-    <motion.span
-      // WHY: skill chips are discrete scan targets, so they use tight stagger.
-      initial={{ opacity: 0, y: REVEAL_MD }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{
-        duration: DURATION_REVEAL,
-        delay: stagger(index, STAGGER_TIGHT),
-        ease: EASE_DEVELOP,
-      }}
-      className={className}
-      style={style}
-    >
+    <span className={className} style={style}>
       {item}
-    </motion.span>
+    </span>
   );
 }
 
@@ -115,18 +63,20 @@ function SectionShell({
   eyebrow,
   heading,
   children,
-  shouldReduce,
+  containerClassName = "max-w-5xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16",
+  headerClassName = "mb-10 sm:mb-12",
 }: {
   id: string;
   eyebrow: string;
   heading: string;
   children: React.ReactNode;
-  shouldReduce: boolean;
+  containerClassName?: string;
+  headerClassName?: string;
 }) {
   const content = (
-    <div id={id} className="w-full max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-20">
+    <div id={id} className={`w-full mx-auto ${containerClassName}`}>
       {/* Section header — intentionally smaller than Projects/Experience (prd.md §5.4) */}
-      <div className="mb-10 sm:mb-12">
+      <div className={headerClassName}>
         <p
           className="text-[11px] sm:text-xs uppercase tracking-[0.2em] mb-3"
           style={{
@@ -151,19 +101,10 @@ function SectionShell({
     </div>
   );
 
-  if (shouldReduce) return content;
-
   return (
-    <motion.div
-      // WHY: these compact sections resolve at section level first, then
-      // their discrete blocks use the shared inner reveal below.
-      initial={{ opacity: 0, y: REVEAL_LG }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT_REVEAL}
-      transition={{ duration: DURATION_REVEAL, ease: EASE_DEVELOP }}
-    >
+    <ScrollLinkedReveal sceneId={id} distance={6}>
       {content}
-    </motion.div>
+    </ScrollLinkedReveal>
   );
 }
 
@@ -173,18 +114,17 @@ function SectionShell({
  * Shows: identity row, core message, vision, philosophy pairs, values tags.
  * Nothing added beyond what FOUNDATION.md Part 1 states.
  */
-function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
+function AboutSection() {
   return (
     <SectionShell
       id="about"
       eyebrow="Who I Am"
       heading="About"
-      shouldReduce={shouldReduce}
     >
       <div className="space-y-8 sm:space-y-10">
 
         {/* Identity row — compact, de-emphasized */}
-        <FadeIn shouldReduce={shouldReduce}>
+        <FadeIn>
           <div
             className="flex flex-wrap gap-x-6 gap-y-1 text-sm"
             style={{
@@ -200,7 +140,7 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
         </FadeIn>
 
         {/* Core message — verbatim from FOUNDATION.md Part 1 line 50 */}
-        <FadeIn delay={stagger(1, STAGGER_BASE)} shouldReduce={shouldReduce}>
+        <FadeIn>
           <p
             className="text-lg sm:text-xl leading-relaxed max-w-2xl"
             style={{
@@ -214,7 +154,7 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
         </FadeIn>
 
         {/* Vision block */}
-        <FadeIn delay={stagger(2, STAGGER_BASE)} shouldReduce={shouldReduce}>
+        <FadeIn>
           <div>
             <p
               className="text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -261,11 +201,10 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
               {ABOUT.vision.focusAreas.map((area) => (
                 <span
                   key={area}
-                  className="px-2.5 py-1 rounded text-[11px] border border-white/[0.07]"
+                  className="px-2.5 py-1 rounded text-[11px] border themed-chip-steel"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono), monospace",
                     color: "var(--color-signal-steel)",
-                    background: "rgba(92,122,153,0.08)",
                     opacity: 0.85,
                   }}
                 >
@@ -282,7 +221,7 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
           "Products over isolated models" etc — the "over" is the exact wording.
           Displayed as contrast pairs to preserve the intent of the original list.
         */}
-        <FadeIn delay={stagger(3, STAGGER_BASE)} shouldReduce={shouldReduce}>
+        <FadeIn>
           <div>
             <p
               className="text-[11px] uppercase tracking-[0.15em] mb-4"
@@ -298,8 +237,7 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
               {ABOUT.philosophy.map(({ over, under }) => (
                 <div
                   key={over}
-                  className="flex flex-col gap-0.5 px-3 py-2.5 rounded border border-white/[0.06]"
-                  style={{ background: "rgba(255,255,255,0.025)" }}
+                  className="flex flex-col gap-0.5 px-3 py-2.5 rounded border themed-static-panel"
                 >
                   <span
                     className="text-sm font-medium"
@@ -328,7 +266,7 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
         </FadeIn>
 
         {/* Core values — plain tags, verbatim from FOUNDATION.md Part 1 lines 82–91 */}
-        <FadeIn delay={stagger(4, STAGGER_BASE)} shouldReduce={shouldReduce}>
+        <FadeIn>
           <div>
             <p
               className="text-[11px] uppercase tracking-[0.15em] mb-3"
@@ -344,12 +282,11 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
               {ABOUT.values.map((value) => (
                 <span
                   key={value}
-                  className="px-3 py-1.5 rounded-full text-xs border border-white/[0.08]"
+                  className="px-3 py-1.5 rounded-full text-xs border themed-chip"
                   style={{
                     fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                     color: "var(--color-ink)",
                     opacity: 0.55,
-                    background: "rgba(255,255,255,0.035)",
                   }}
                 >
                   {value}
@@ -369,29 +306,28 @@ function AboutSection({ shouldReduce }: { shouldReduce: boolean }) {
  * NO bars, NO percentages, NO proficiency indicators of any kind.
  * Source: rules.md §1, prd.md §5.5 — "banned outright."
  */
-function SkillsSection({ shouldReduce }: { shouldReduce: boolean }) {
+function SkillsSection() {
   return (
     <SectionShell
       id="skills"
       eyebrow="Capabilities"
       heading="Skills"
-      shouldReduce={shouldReduce}
+      containerClassName="max-w-4xl px-6 py-10 sm:px-8 sm:py-12 lg:px-10"
+      headerClassName="mb-6 sm:mb-7"
     >
       {/*
         Display: plain grouped tag lists. No bars. No percentage numbers. No star ratings.
         BANNED: skill percentage bars, proficiency ratings, progress indicators.
         (rules.md §1, prd.md §5.5)
       */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-        {SKILLS.map((group, index) => (
+      <div className="grid grid-cols-1 gap-y-5 sm:max-w-3xl sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)] sm:gap-x-12 sm:gap-y-6 lg:gap-x-14">
+        {SKILLS.map((group) => (
           <FadeIn
             key={group.group}
-            delay={stagger(index, STAGGER_BASE)}
-            shouldReduce={shouldReduce}
           >
             <div>
               <p
-                className="text-[11px] uppercase tracking-[0.2em] mb-3"
+                className="mb-2 text-[11px] uppercase tracking-[0.2em]"
                 style={{
                   fontFamily: "var(--font-jetbrains-mono), monospace",
                   color: "var(--color-signal-gold)",
@@ -400,13 +336,11 @@ function SkillsSection({ shouldReduce }: { shouldReduce: boolean }) {
               >
                 {group.group}
               </p>
-              <div className="flex flex-wrap gap-2">
-                {group.items.map((item, itemIndex) => (
+              <div className="flex flex-wrap gap-x-1.5 gap-y-1.5">
+                {group.items.map((item) => (
                   <SkillChip
                     key={item}
                     item={item}
-                    index={itemIndex}
-                    shouldReduce={shouldReduce}
                   />
                 ))}
               </div>
@@ -423,15 +357,16 @@ function SkillsSection({ shouldReduce }: { shouldReduce: boolean }) {
  * Verbatim from FOUNDATION.md Part 3 lines 270–274 and Part 1 line 37.
  * Simple and dignified — no fabricated achievements, no invented honors.
  */
-function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
+function EducationSection() {
   return (
     <SectionShell
       id="education"
       eyebrow="Academic Background"
       heading="Education"
-      shouldReduce={shouldReduce}
+      containerClassName="max-w-4xl px-6 pt-6 pb-8 sm:px-8 sm:pt-8 sm:pb-10 lg:px-10"
+      headerClassName="mb-5 sm:mb-6"
     >
-      <FadeIn shouldReduce={shouldReduce}>
+      <FadeIn>
         {/*
           Verbatim: MSIT, B.Tech Electronics & Communication Engineering,
           CGPA 8.59, graduating 2029.
@@ -439,15 +374,14 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
         */}
         <div
           className="
-            flex flex-col sm:flex-row sm:items-start gap-6
-            px-6 py-6 rounded-xl border border-white/[0.07]
+            flex flex-col gap-4 rounded-xl border themed-static-panel
+            px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6
           "
-          style={{ background: "rgba(255,255,255,0.025)" }}
         >
           {/* Institution + degree */}
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <div
-              className="text-[11px] uppercase tracking-[0.2em] mb-2"
+              className="mb-1.5 text-[11px] uppercase tracking-[0.2em]"
               style={{
                 fontFamily: "var(--font-jetbrains-mono), monospace",
                 color: "var(--color-signal-steel)",
@@ -457,7 +391,7 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
               {EDUCATION.institutionShort}
             </div>
             <h3
-              className="text-lg sm:text-xl font-semibold leading-snug mb-1"
+              className="mb-1 text-lg font-semibold leading-snug sm:text-xl"
               style={{
                 fontFamily: "var(--font-fraunces), Georgia, serif",
                 color: "var(--color-ink)",
@@ -478,7 +412,7 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
           </div>
 
           {/* Stats — CGPA + graduation year */}
-          <div className="flex sm:flex-col gap-6 sm:gap-4 sm:text-right">
+          <div className="grid grid-cols-2 gap-4 sm:min-w-[14rem] sm:gap-5 sm:text-right">
             <div>
               <div
                 className="text-[10px] uppercase tracking-wider mb-0.5"
@@ -491,7 +425,7 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
                 CGPA
               </div>
               <div
-                className="text-xl font-semibold"
+                className="text-lg font-semibold sm:text-xl"
                 style={{
                   fontFamily: "var(--font-fraunces), Georgia, serif",
                   color: "var(--color-signal-gold)",
@@ -512,7 +446,7 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
                 Graduating
               </div>
               <div
-                className="text-xl font-semibold"
+                className="text-lg font-semibold sm:text-xl"
                 style={{
                   fontFamily: "var(--font-fraunces), Georgia, serif",
                   color: "var(--color-ink)",
@@ -539,12 +473,13 @@ function EducationSection({ shouldReduce }: { shouldReduce: boolean }) {
  *   (#about, #skills, #education) for Part 6 nav.
  */
 export function AboutSkillsEducation() {
-  const shouldReduce = useReducedMotion();
   return (
-    <>
-      <AboutSection shouldReduce={shouldReduce} />
-      <SkillsSection shouldReduce={shouldReduce} />
-      <EducationSection shouldReduce={shouldReduce} />
-    </>
+    <div className="relative overflow-visible">
+      <div className="relative z-10">
+        <AboutSection />
+        <SkillsSection />
+        <EducationSection />
+      </div>
+    </div>
   );
 }

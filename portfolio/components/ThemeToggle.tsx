@@ -48,12 +48,14 @@ export function ThemeToggle() {
       aria-label="Color theme: Darkroom or Lightbox"
       className="
         relative flex shrink-0 items-center
-        rounded-full border border-white/[0.12]
+        rounded-full border
         p-0.5 gap-0
         select-none
       "
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: "var(--toggle-surface)",
+        borderColor: "var(--toggle-line)",
+        boxShadow: "var(--toggle-shadow)",
         fontFamily: "var(--font-jetbrains-mono), monospace",
       }}
     >
@@ -68,11 +70,11 @@ export function ThemeToggle() {
         style={{
           left: isDark ? "2px" : "calc(50%)",
           background: isDark
-            ? "rgba(92,122,153,0.25)"   // steel tint — Darkroom
-            : "rgba(201,169,97,0.2)",   // gold tint — Lightbox
+            ? "var(--toggle-dark-pill)"   // steel tint — Darkroom
+            : "var(--toggle-light-pill)", // gold tint — Lightbox
           boxShadow: isDark
-            ? "0 0 8px rgba(92,122,153,0.2)"
-            : "0 0 8px rgba(201,169,97,0.15)",
+            ? "var(--toggle-dark-shadow)"
+            : "var(--toggle-light-shadow)",
         }}
       />
 

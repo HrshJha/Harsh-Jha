@@ -24,6 +24,7 @@
  * When reduced, connectors are fully drawn (no animation), nodes are static.
  */
 
+import { useId } from "react";
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
@@ -263,11 +264,37 @@ function NodeCircle({ cx, cy, r, color, label, marker, index, shouldReduce, isVe
 }
 
 /* ─── Desktop SVG (horizontal) ────────────────────────────────────────────── */
-function DesktopSVG({ shouldReduce }: { shouldReduce: boolean }) {
+function DesktopSVG({
+  gradientIdPrefix,
+  shouldReduce,
+}: {
+  gradientIdPrefix: string;
+  shouldReduce: boolean;
+}) {
   const nodePositions = NODES.map((_, i) => ({
     cx: FIRST_X + i * NODE_SPACING,
     cy: NODE_Y,
   }));
+  const stageFields = [
+    {
+      id: `${gradientIdPrefix}-input-field`,
+      cx: FIRST_X + NODE_SPACING * 0.5,
+      rx: NODE_SPACING * 1.45,
+      color: TOKEN.steel,
+    },
+    {
+      id: `${gradientIdPrefix}-process-field`,
+      cx: FIRST_X + NODE_SPACING * 2.55,
+      rx: NODE_SPACING * 1.55,
+      color: TOKEN.gold,
+    },
+    {
+      id: `${gradientIdPrefix}-output-field`,
+      cx: FIRST_X + NODE_SPACING * 4.62,
+      rx: NODE_SPACING * 1.62,
+      color: TOKEN.rust,
+    },
+  ];
 
   return (
     <svg
@@ -276,19 +303,31 @@ function DesktopSVG({ shouldReduce }: { shouldReduce: boolean }) {
       aria-label="Signal Core pipeline: Research, Parse, Rank, Repair, Verify, Feedback"
       role="img"
     >
-      {/* Stage background bands — subtle grouping of the three stages */}
-      {[
-        { x: FIRST_X - 48, w: NODE_SPACING * 2, color: TOKEN.steel },
-        { x: FIRST_X + NODE_SPACING * 2 - 48, w: NODE_SPACING * 2, color: TOKEN.gold },
-        { x: FIRST_X + NODE_SPACING * 4 - 48, w: NODE_SPACING * 2 + 20, color: TOKEN.rust },
-      ].map((band, i) => (
-        <rect
-          key={i}
-          x={band.x} y={NODE_Y - NODE_R - 52}
-          width={band.w} height={(NODE_R + 52) * 2}
-          fill={band.color}
-          fillOpacity={0.04}
-          rx={8}
+      <defs>
+        {stageFields.map((field) => (
+          <radialGradient
+            key={field.id}
+            id={field.id}
+            cx="50%"
+            cy="50%"
+            r="50%"
+          >
+            <stop offset="0%" stopColor={field.color} stopOpacity="0.12" />
+            <stop offset="46%" stopColor={field.color} stopOpacity="0.045" />
+            <stop offset="100%" stopColor={field.color} stopOpacity="0" />
+          </radialGradient>
+        ))}
+      </defs>
+
+      {/* Stage illumination — feathered fields, not rectangular panels. */}
+      {stageFields.map((field) => (
+        <ellipse
+          key={field.id}
+          cx={field.cx}
+          cy={NODE_Y}
+          rx={field.rx}
+          ry={78}
+          fill={`url(#${field.id})`}
         />
       ))}
 
@@ -390,12 +429,16 @@ const STAGE_LEGEND = [
 /* ─── Main export ─────────────────────────────────────────────────────────── */
 export function SignalCore() {
   const shouldReduce = useReducedMotion();
+  const gradientIdPrefix = useId().replace(/:/g, "");
 
   return (
     <div className="w-full select-none">
       {/* Desktop layout (hidden on small screens) */}
       <div className="hidden sm:block w-full px-4">
-        <DesktopSVG shouldReduce={shouldReduce} />
+        <DesktopSVG
+          gradientIdPrefix={gradientIdPrefix}
+          shouldReduce={shouldReduce}
+        />
       </div>
 
       {/* Mobile layout (shown only on small screens) */}

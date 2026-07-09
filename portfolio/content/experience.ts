@@ -25,7 +25,6 @@ export interface ExperienceRole {
   techStack: string[]; // listed exactly as in FOUNDATION.md
   aboutTheRole: string; // verbatim paragraph from FOUNDATION.md
   keyResponsibilities: string[]; // verbatim list items from FOUNDATION.md
-  keyProject: { name: string; url: string } | null;
   whatILearned: string[]; // verbatim list items from FOUNDATION.md
   impact: string; // verbatim sentence from FOUNDATION.md
 }
@@ -55,11 +54,6 @@ export const EXPERIENCE: ExperienceRole[] = [
       "Used FastAPI as the documented backend technology in this experience area.",
       "Connected evaluation work to source-backed portfolio themes around AI reliability.",
     ],
-    // Key project: verbatim from FOUNDATION.md Part 3 (lines 230–231).
-    keyProject: {
-      name: "Hallucination Hunter",
-      url: "https://hrshjha.vercel.app/projects/hallucination-hunter",
-    },
     // What I Learned: verbatim from FOUNDATION.md Part 3 (lines 234–236).
     whatILearned: [
       "LLM outputs need evaluation methods that make failures inspectable.",
@@ -88,7 +82,6 @@ export const EXPERIENCE: ExperienceRole[] = [
       "Supported content validation for technical education material.",
       "Contributed to dataset organization for structured question workflows.",
     ],
-    keyProject: null, // No key project supplied for MathonGo in FOUNDATION.md.
     // What I Learned: verbatim from FOUNDATION.md Part 3 (lines 260–262).
     whatILearned: [
       "AI-assisted workflows still require domain validation and structured review.",

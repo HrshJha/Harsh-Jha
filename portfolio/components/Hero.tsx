@@ -14,7 +14,7 @@
  *   Hero stmt:    "Turning ideas into intelligent products through machine learning
  *                  and engineering."
  *   Primary CTA:  "View Projects" → /#projects (Featured Projects section, Part 3)
- *   Secondary CTA:"Resume"        → /resume (Part 6; graceful 404 until then)
+ *   Secondary CTA:"Resume"        → /resume (CV preview + PDF actions)
  *   Social:       GitHub / LinkedIn / X — exact URLs from FOUNDATION.md Contact
  *
  * Signal Core is imported AS-IS from components/SignalCore.tsx — not patched here.
@@ -26,7 +26,8 @@ import { SignalCore } from "@/components/SignalCore";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { motion } from "motion/react";
 import {
-  DURATION_REVEAL,
+  CLARITY_BLUR,
+  DURATION_DEVELOP,
   EASE_DEVELOP,
   REVEAL_MD,
   REVEAL_SM,
@@ -112,9 +113,9 @@ function RevealBlock({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: distance }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: DURATION_REVEAL, delay, ease: EASE_DEVELOP }}
+      initial={{ opacity: 0, y: distance, filter: `blur(${CLARITY_BLUR}px)` }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: DURATION_DEVELOP, delay, ease: EASE_DEVELOP }}
     >
       {children}
     </motion.div>
@@ -137,13 +138,23 @@ function LineReveal({
   }
 
   return (
-    <span className="block overflow-hidden">
+    <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
       <motion.span
         className={className}
         style={{ display: "block" }}
-        initial={{ opacity: 0, y: REVEAL_SM, clipPath: "inset(0 0 100% 0)" }}
-        animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
-        transition={{ duration: DURATION_REVEAL, delay, ease: EASE_DEVELOP }}
+        initial={{
+          opacity: 0,
+          y: REVEAL_SM,
+          filter: `blur(${CLARITY_BLUR}px)`,
+          clipPath: "inset(0 0 100% 0)",
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          clipPath: "inset(0 0 0% 0)",
+        }}
+        transition={{ duration: DURATION_DEVELOP, delay, ease: EASE_DEVELOP }}
       >
         {children}
       </motion.span>
@@ -157,44 +168,17 @@ export function Hero() {
 
   return (
     <section
+      data-atmosphere-scene="hero"
+      data-scroll-scene="hero"
       aria-label="Hero — Harsh Kumar Jha portfolio introduction"
       className="
         relative w-full min-h-screen
         flex flex-col items-center justify-center
         px-6 sm:px-10 lg:px-16
-        py-20 sm:py-24
-        overflow-hidden
+        py-20 sm:py-24 lg:py-28
+        overflow-visible
       "
     >
-      {/*
-        Atmospheric glow — sits behind everything.
-        Functional reason: the dark surface should feel like "a darkened room
-        with something glowing in it" (FOUNDATION.md Part 5).
-        Two subtle radial gradients anchored at the top-center (steel) and
-        bottom-right (rust) — directional light, not flat fill.
-        CSS radial-gradient + filter: blur(), no shader library (tech.md §8).
-      */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Steel glow — top-center, input stage warmth */}
-        <div
-          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full"
-          style={{
-            background: "radial-gradient(ellipse at center, var(--color-signal-steel) 0%, transparent 70%)",
-            opacity: 0.06,
-            filter: "blur(60px)",
-          }}
-        />
-        {/* Rust glow — bottom-right, output stage warmth */}
-        <div
-          className="absolute bottom-0 right-0 w-[500px] h-[350px] rounded-full"
-          style={{
-            background: "radial-gradient(ellipse at center, var(--color-signal-rust) 0%, transparent 70%)",
-            opacity: 0.05,
-            filter: "blur(80px)",
-          }}
-        />
-      </div>
-
       {/* ── Content column ── */}
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-0">
 
@@ -242,6 +226,7 @@ export function Hero() {
         */}
         <div className="w-full text-center">
           <h1
+            aria-label="Building AI Products, Open Source and Real-World Solutions"
             className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.08] tracking-tight"
             style={{
               fontFamily: "var(--font-fraunces), Georgia, serif",
@@ -291,7 +276,7 @@ export function Hero() {
           CTAs — Primary: View Projects, Secondary: Resume
           Per FOUNDATION.md Part 2 Hero and prd.md §5.1.
           View Projects → /#projects (Featured Projects section, Part 3 will anchor this)
-          Resume → /resume (Part 6 — currently a graceful 404; noted in DECISIONS.md)
+          Resume → /resume (CV preview + PDF actions)
         */}
         <RevealBlock
           delay={CTA_DELAY}
@@ -307,6 +292,7 @@ export function Hero() {
               px-7 py-3.5
               rounded-full
               text-sm font-medium tracking-wide
+              premium-action
               hover:opacity-90
               press-scale-control
             "
@@ -314,6 +300,7 @@ export function Hero() {
               fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
               background: "var(--color-signal-gold)",
               color: "var(--color-ink-light)",
+              boxShadow: "var(--cta-shadow)",
             }}
           >
             View Projects
@@ -321,10 +308,8 @@ export function Hero() {
 
           {/*
             Secondary CTA — Resume.
-            /resume route does not exist until Part 6.
-            Per DECISIONS.md: "graceful 404 until Part 6 lands."
-            Using an anchor tag with /resume — Next.js will serve the 404 page,
-            which is clean (no crash, no broken link indicator in the browser).
+            The /resume route previews the supplied CV PDF and exposes
+            direct open/download actions.
           */}
           <Link
             href="/resume"
@@ -335,12 +320,14 @@ export function Hero() {
               rounded-full
               text-sm font-medium tracking-wide
               border
+              premium-action
               hover:opacity-80
               press-scale-control
             "
             style={{
               fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-              borderColor: "var(--color-ink)",
+              background: "var(--panel-muted)",
+              borderColor: "var(--line-strong)",
               color: "var(--color-ink)",
               opacity: 0.85,
             }}
@@ -372,13 +359,16 @@ export function Hero() {
               className="
                 inline-flex items-center justify-center
                 w-10 h-10 rounded-full
+                premium-action
                 transition-all motion-feedback-transition
                 hover:opacity-100
               "
               style={{
                 color: "var(--color-ink)",
                 opacity: 0.5,
-                border: "1px solid color-mix(in srgb, var(--color-ink) 25%, transparent)",
+                background: "var(--panel-muted)",
+                border: "1px solid var(--line-strong)",
+                boxShadow: "var(--panel-shadow)",
               }}
             >
               <Icon size={18} aria-hidden="true" />

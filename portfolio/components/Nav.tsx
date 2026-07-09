@@ -51,11 +51,13 @@ export function Nav() {
       aria-label="Site header"
       className="
         sticky top-0 z-50 w-full max-w-[100vw]
-        border-b border-white/[0.06]
+        border-b
         overflow-x-clip
       "
       style={{
-        background: "rgba(16,13,11,0.85)",
+        background: "var(--nav-surface)",
+        borderColor: "var(--line)",
+        boxShadow: "var(--nav-shadow)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
@@ -131,7 +133,7 @@ export function Nav() {
       </div>
 
       {/* Mobile nav — full-width row of links below the header bar */}
-      <div className="sm:hidden border-t border-white/[0.06]">
+      <div className="sm:hidden border-t" style={{ borderColor: "var(--line)" }}>
         <nav
           aria-label="Mobile navigation"
           className="
